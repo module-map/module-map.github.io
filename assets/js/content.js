@@ -28,6 +28,7 @@ function updateStartYear() {
             const name = document.createElement("span");
             name.innerHTML = module["Module name"];
             name.classList.add("module-name");
+            text.classList.add("module-text");
             text.appendChild(code);
             text.appendChild(name);
             box.appendChild(text);

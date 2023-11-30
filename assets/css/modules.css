@@ -1,0 +1,49 @@
+h2 {
+  text-align: center;
+  line-height: 24px;
+}
+
+.module-box {
+  background-color: #A5C8D0;
+  border-radius: 4px;
+  margin: 8px;
+  height: 48px;
+  display: table;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.module-box .required {
+  background-color: #AFA961;
+}
+
+.module-box input[type="checkbox"] {
+  display: table-cell;
+  transform: scale(2);
+  width: 13%;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #68246D;
+  border-color: #68246D;
+}
+
+.module-text {
+  display: table-cell;
+  text-align: center;
+  width: 87%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.module-code, .module-name {
+  display: block;
+  width: 87%;
+  line-height: 24px;
+  height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
