@@ -1,5 +1,6 @@
 "use strict";
 const startYear = document.getElementById("startYear");
+const degree = document.getElementById("degree");
 
 function yearFile(year, plus = 0) {
   const y = parseInt(year) + plus;
@@ -14,11 +15,37 @@ function updateStartYear() {
       .then(data => {
         data.forEach(module => {
           if (module.Level == level) {
+            const required = (module[degree.value] === undefined ?
+              false : module[degree.value].toUpperCase());
+            console.log(module["Module code"] + " - " + required);
             const box = document.createElement("div");
             box.classList.add("module-box");
+            if (module.Credits == 40) {
+              box.classList.add("double");
+            } else if (module.Credits == 60) {
+              box.classList.add("triple");
+            } else if (module.Credits == 10) {
+              if (module.Epip) {
+                box.classList.add("epip")
+              } else if (module.Mich) {
+                box.classList.add("mich")
+              }
+            }
+            if (required == "X") {
+              box.classList.add("required");
+            } else if (required == "O") {
+              box.classList.add("unavailable");
+            }
+
             const check = document.createElement("input");
             check.type = "checkbox";
             check.id = module["Module code"];
+            if (required == "X") {
+              check.checked = "checked";
+              check.disabled = "disabled";
+            }
+
+
             box.appendChild(check);
 
             const text = document.createElement("div");
@@ -29,8 +56,8 @@ function updateStartYear() {
             name.innerHTML = module["Module name"];
             name.classList.add("module-name");
             text.classList.add("module-text");
-            text.appendChild(code);
             text.appendChild(name);
+            text.appendChild(code);
             box.appendChild(text);
             document.getElementById("level" + module.Level).appendChild(box);
           }

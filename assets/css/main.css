@@ -101,7 +101,6 @@ input::-moz-focus-inner {
 	h1, h2, h3, h4, h5, h6 {
 		font-weight: 600;
 		text-transform: uppercase;
-		color: #888;
 	}
 
 	h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
@@ -1902,18 +1901,11 @@ input::-moz-focus-inner {
 	}
 
 		#header > .container {
-			padding: 14em 0 7em 0;
-			border-bottom: solid 2px #e5e5e5;
-			box-shadow: inset 0px -8px 0px 0px #fff, inset 0px -10px 0px 0px #e5e5e5;
+			padding: 1em 0 1em 0;
 		}
 
 		#header h1 {
-			font-family: 'Arvo';
-			font-weight: 700;
-			color: #ed786a;
-			text-shadow: 0.05em 0.075em 0 rgba(0, 0, 0, 0.1);
 			font-size: 3em;
-			letter-spacing: 13px;
 		}
 
 			#header h1 a {
@@ -2077,7 +2069,7 @@ input::-moz-focus-inner {
 		overflow: hidden;
 		background: #fff;
 		text-align: center;
-		padding: 6em 0;
+		padding: 2em 0;
 	}
 
 		#features p {
@@ -2269,10 +2261,6 @@ input::-moz-focus-inner {
 
 		/* Header */
 
-			#header > .container {
-				padding: 12em 0 5em 0;
-			}
-
 			#header h1 {
 				font-size: 2.5em;
 			}
@@ -2281,12 +2269,6 @@ input::-moz-focus-inner {
 
 			#nav > ul > li {
 				padding-right: 1.25em;
-			}
-
-		/* Features */
-
-			#features {
-				padding: 4em 0;
 			}
 
 		/* Banner */
@@ -2302,18 +2284,6 @@ input::-moz-focus-inner {
 					#banner > .container br {
 						display: none;
 					}
-
-		/* Main */
-
-			#main {
-				padding: 4em 0;
-			}
-
-		/* Footer */
-
-			#footer {
-				padding: 4em 0;
-			}
 
 		/* Copyright */
 
