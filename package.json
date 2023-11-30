@@ -1,0 +1,15 @@
+{
+  "name": "module-map",
+  "version": "1.0.0",
+  "description": "This repository will contain an automatically generated navigable flowchart of Earth Sciences modules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
