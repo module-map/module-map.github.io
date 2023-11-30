@@ -68,3 +68,12 @@ input[type="checkbox"]:checked {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.note {
+  color: #BE1E2D;
+}
+
+.note .invalid{
+  font-weight: bolder;
+  background: #FFD53A;
+}
