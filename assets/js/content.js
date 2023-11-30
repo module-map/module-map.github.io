@@ -30,7 +30,7 @@ function updateChoices() {
           } else if (mod.epip) {
             epipCredits += mod.credits;
           } else {
-            console.error("Module seems not to run in either term: ", i);
+            console.error("Module seems not to run in either term: ", code);
           }
         }
       }
@@ -67,7 +67,13 @@ function setTerm(box, term) {
 
 function choose(box, chosen = true) {
   const code = $(box).attr("id");
-  modules[code].selected = chosen;
+  const mod = modules[code]
+  if (!mod.available) {
+    chosen = false;
+  } else if (mod.required) {
+    chosen = true;
+  }
+  mod.selected = chosen;
   document.getElementById("check" + code).checked = chosen;
   updateChoices();
 }
@@ -77,6 +83,7 @@ function makeAvailable(box, avail = true) {
     box.classList.remove("unavailable");
   } else {
     box.classList.add("unavailable");
+    makeRequired(box, false);
     choose(box, false);
   }
 }
@@ -85,19 +92,34 @@ function makeRequired(box, req = true) {
   if (req) {
     makeAvailable(box);
     box.classList.add("required");
-    box.getElementsByTagName("input").disabled = true;
+    box.getElementsByTagName("input")[0].disabled = true;
     choose(box);
   } else {
     box.classList.remove("required");
-    box.getElementsByTagName("input").disabled = false;
+    box.getElementsByTagName("input")[0].disabled = false;
   }
 }
 
 async function updateParams() {
   for (const level of [1, 2, 3, 4]) {
+    const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
+      if (value.level === level) {
+        result[key] = value;
+      }
+      return result;
+    }, {});
     await fetch(yearFile(startYear.value, level - 1))
       .then(response => response.json())
       .then(data => {
+        const dataCodes = Object.values(data).map(item => item["Module code"]);
+        for (const code in levelMods) {
+          if (!(code in dataCodes)) {
+            makeAvailable(levelMods[code].box, false);
+            modules[code].required = "O";
+            modules[code].selected = false;
+          }
+        }
+
         data.forEach(module => {
           if (module.Level == level) {
             let required = (module[degree.value] === undefined ?
@@ -131,6 +153,7 @@ async function updateParams() {
                 if (e.srcElement != check && !check.disabled) {
                   check.checked = !check.checked;
                 }
+                console.log("Clicked " + box.getAttribute("id"));
                 choose(box, check.checked);
                 updateChoices();
               })
@@ -150,6 +173,7 @@ async function updateParams() {
               document.getElementById("level" + module.Level).appendChild(box);
             }
 
+            const selected = module.selected || false;
 
             modules[module["Module code"]] = {
               available: required != "O",
@@ -158,10 +182,12 @@ async function updateParams() {
               level: module.Level,
               mich: module.Mich,
               epip: module.Epip,
+              selected: selected,
               req: module.Requisites,
               box: box
             }
 
+            box.getElementsByTagName("input")[0].checked = selected;
             if (module.Credits == 10) {
               if (module.Epip) {
                 setTerm(box, "epip")
@@ -169,22 +195,20 @@ async function updateParams() {
                 setTerm(box, "mich")
               }
             }
-            if (required == "X") {
-              makeRequired(box)
-            } else if (required == "O") {
-              makeAvailable(box, false);
-            }
+            makeRequired(box, required == "X")
+            makeAvailable(box, required != "O")
           }
         })
       });
   };
+
   updateChoices();
 }
 
 fetch("data/years.json")
   .then(response => response.json())
   .then(data => {
-    data.slice(0, -2).forEach(year => {
+    data.slice(0, -3).forEach(year => {
       const option = document.createElement("option");
       option.textContent = year.replace("-", "/");
       option.value = year.substring(0, 4);
