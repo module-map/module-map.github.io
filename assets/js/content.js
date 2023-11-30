@@ -7,6 +7,10 @@ function yearFile(year, plus = 0) {
   return "data/" + y + "-" + (y - 2000 + 1) + ".json";
 }
 
+function updateChoices() {
+  console.log("Whooo");
+}
+
 function updateStartYear() {
   [1, 2, 3, 4].forEach(level => {
     $("#level" + level + " > div").remove();
@@ -47,6 +51,11 @@ function updateStartYear() {
 
 
             box.appendChild(check);
+            box.addEventListener("click", function(e) {
+              if (e.srcElement != check && !check.disabled) {
+                check.checked = !check.checked;
+              }
+            })
 
             const text = document.createElement("div");
             const code = document.createElement("span");
