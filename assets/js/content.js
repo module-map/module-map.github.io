@@ -61,8 +61,24 @@ function updateChoices() {
 }
 
 function setTerm(box, term) {
-  box.classList.remove(term == "mich" ? "epip" : "mich");
   box.classList.add(term);
+  if (term == "mich") {
+    box.classList.remove("epip");
+    const check = box.getElementsByTagName("input")[0];
+    const text = check.previousElementSibling;
+    if (check && text) {
+      const container = check.parentNode;
+      container.insertBefore(check, text);
+    }
+  } else {
+    box.classList.remove("mich");
+    const check = box.getElementsByTagName("input")[0];
+    const text = check.nextElementSibling;
+    if (check && text) {
+      const container = check.parentNode;
+      container.insertBefore(text, check);
+    }
+  }
 }
 
 function choose(box, chosen = true) {

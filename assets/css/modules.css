@@ -26,14 +26,51 @@ h2 {
   height: 96px;
 }
 
-.module-box.mich {
-  width: 80%;
+.module-box.epip .module-code, .module-box.epip .module-name,
+.module-box.mich .module-code, .module-box.mich .module-name {
+  width: 100%;
 }
 
-.module-box.epip {
-  margin-left: 20%;
+.module-box.mich {
   width: 80%;
+  padding-right: 16px;
+  position: relative;
 }
+
+.module-box.mich::after {
+    content: "";
+    position: absolute;
+    top: 48px;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 48px 24px 0;
+    border-color: transparent #fff transparent transparent;
+    transform-origin: 100% 0;
+    transform: rotate(90deg);
+  }
+
+.module-box.epip {
+  margin-left: 15%;
+  padding-left: 24px;
+  width: 85%;
+  position: relative;
+}
+
+.module-box.epip::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -48px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 48px 24px 0;
+    border-color: transparent #fff transparent transparent;
+    transform-origin: 100% 0;
+    transform: rotate(270deg);
+  }
 
 .module-box.triple {
   height: 144px;
