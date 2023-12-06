@@ -11,6 +11,12 @@ function yearFile(year, plus = 0) {
   return "data/" + y + "-" + (y - 2000 + 1) + ".json";
 }
 
+function markReq(requirer, requirement, i = 0) {
+  document.getElementById(requirer).addClass("requires-" + i);
+  document.getElementById(requirement).addClass("requiredBy-" + i);
+  return ++i;
+}
+
 function updateChoices() {
   for (const level of [1, 2, 3]) {
     let credits = 0;
@@ -20,6 +26,8 @@ function updateChoices() {
       if (modules.hasOwnProperty(code)) {
         const mod = modules[code];
         if (mod.level == level && mod.selected) {
+
+          // Count credit splits
           const modCreds = mod.credits;
           credits += mod.credits;
           if (mod.mich && mod.epip) {
@@ -116,14 +124,31 @@ function makeRequired(box, req = true) {
   }
 }
 
+function mandatory(code) {
+  return modules.hasOwnProperty(code) && modules[code].required;
+}
+
 async function updateParams() {
+  // Reset box classes
+  const regex = /requires\-GEOL\d+/;
+  $(".module-box").each(function () {
+    var classes = $(this).attr('class').split(" ");
+    var filteredClasses = classes.filter(function (className) {
+      return !regex.test(className);
+    });
+
+    $(this).attr("class", filteredClasses.join(" "));
+  })
+
   for (const level of [1, 2, 3, 4]) {
+    // Get modules available at this level
     const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
       if (value.level === level) {
         result[key] = value;
       }
       return result;
     }, {});
+
     await fetch(yearFile(startYear.value, level - 1))
       .then(response => response.json())
       .then(data => {
@@ -136,6 +161,8 @@ async function updateParams() {
           }
         }
 
+        var requisite = {};
+        // Work through each module available this year at this level
         data.forEach(module => {
           if (module.Level == level) {
             let required = (module[degree.value] === undefined ?
@@ -189,6 +216,16 @@ async function updateParams() {
               document.getElementById("level" + module.Level).appendChild(box);
             }
 
+
+            // Mark module requirements
+            const modReq = module.Requisites;
+            const requireAll = modReq ? modReq.match("&") : null;
+            const reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
+            if (modReq) reqs.forEach(function (req) {
+              box.classList.add("requires-" + req);
+              requisite[req] = true;
+            })
+
             const selected = module.selected || false;
 
             modules[module["Module code"]] = {
@@ -199,7 +236,8 @@ async function updateParams() {
               mich: module.Mich,
               epip: module.Epip,
               selected: selected,
-              req: module.Requisites,
+              req: reqs,
+              allReqs: requireAll,
               box: box
             }
 
@@ -215,6 +253,15 @@ async function updateParams() {
             makeAvailable(box, required != "O")
           }
         })
+
+        console.log(requisite);
+        for (const req in requisite) {
+          console.log(req)
+          if (!mandatory(req)) {
+            $("#" + req).css("border-right", "solid 2px red");
+            $(".requires-" + req).css("border-left", "solid 3px red");
+          }
+        }
       });
   };
 
