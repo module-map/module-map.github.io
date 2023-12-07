@@ -400,7 +400,9 @@ async function updateParams() {
               }
             }
 
-            const selected = (modules[code] && modules[code].selected) || false;
+            const selected = (modules[code] &&
+               modules[code].selected &&
+               modules[code].required != "X") || false;
             modules[code] = {
               available: available,
               required: required,
@@ -438,10 +440,6 @@ async function updateParams() {
     // Reset side paint
     $("#" + code).css("box-shadow", "none");
     $(".requires-" + code).css("box-shadow", "none");
-    if (code == "GEOL2MM7") {
-      console.log($("#" + code).css("box-shadow"));
-      console.log($(".requires-" + code).css("box-shadow"));
-    }
   }
 
   var n = 0;
@@ -461,7 +459,6 @@ async function updateParams() {
     delete requisite.Chemistry;
   }
 
-  console.log(requisite);
   for (var req in requisite) {
     if (!mandatory(req)) {
       paintSide("#" + req, 0, palette[n]);
