@@ -95,6 +95,14 @@ function updateChoices() {
             }
           }
 
+          // Check for excluded combinations
+          if (mod.excludes) {
+            if (moduleChosen(mod.excludes)) {
+              addNote(note,
+                "Cannot take " + mod.excludes + " with " + code);
+            }
+          }
+
           // Count credit splits
           const modCreds = mod.credits;
           credits += mod.credits;
@@ -132,6 +140,8 @@ function updateChoices() {
                        " Michaelmas; ", epipTot, " Epiphany)");
     $(note).prepend(credNote);
   }
+
+  // Check that one-of-this-list criteria are met
   for (const i in chooseFrom) {
     const el = chooseFrom[i];
     if (!el.some(moduleChosen)) {
@@ -228,7 +238,10 @@ async function updateParams() {
     $(this).attr("class", filteredClasses.join(" "));
   })
 
+  // Reset pathway requirements
+  chooseFrom = {};
   var requisite = {};
+
   for (const level of [1, 2, 3, 4]) {
     // Get modules available at this level
     const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
@@ -346,6 +359,7 @@ async function updateParams() {
             modules[code] = {
               available: available,
               required: required,
+              excludes: module["Excluded Combn"],
               credits: module.Credits,
               level: module.Level,
               mich: module.Mich,
