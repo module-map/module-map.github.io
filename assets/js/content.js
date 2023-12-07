@@ -16,12 +16,6 @@ function yearFile(year, plus = 0) {
   return "data/" + y + "-" + (y - 2000 + 1) + ".json";
 }
 
-function markReq(requirer, requirement, i = 0) {
-  document.getElementById(requirer).addClass("requires-" + i);
-  document.getElementById(requirement).addClass("requiredBy-" + i);
-  return ++i;
-}
-
 function hexToRgb(hex) {
     const bigint = parseInt(hex.substr(1, 7), 16);
     return "rgb(" + [
@@ -33,7 +27,7 @@ function hexToRgb(hex) {
 function paintSide(selector, left, col) {
   const existing = $(selector).css("box-shadow");
   if (!existing) {
-    console.warn("Selector does not exist:" + selector);
+    console.warn("Selector does not exist: " + selector);
     return;
   }
   if (existing.includes(hexToRgb(col))) return;
@@ -58,10 +52,10 @@ function hasChemistry() {
 
 function moduleChosen(code) {
   if (code == "Maths") {
-    return hasMaths ? true : moduleChosen("GEOL1061");
+    return hasMaths() ? true : moduleChosen("GEOL1061");
   }
   if (code == "Chemistry") {
-    return hasChemistry ? true : moduleChosen("GEOL2171");
+    return hasChemistry() ? true : moduleChosen("GEOL2171");
   }
   return $("#" + code + " > input").is(":checked");
 }
@@ -211,8 +205,9 @@ function choose(id, chosen = true) {
   } else if (mandatory(mod)) {
     chosen = true;
   }
-  mod.selected = chosen;
+  modules[code].selected = chosen;
   document.getElementById("check" + code).checked = chosen;
+
   updateChoices();
 }
 
@@ -275,6 +270,7 @@ async function updateParams() {
 
   for (const level of [1, 2, 3, 4]) {
     // Get modules available at this level
+    // Get modules available at this level
     const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
       if (value.level === level) {
         result[key] = value;
@@ -287,7 +283,7 @@ async function updateParams() {
       .then(data => {
         const dataCodes = Object.values(data).map(item => item["Module code"]);
         for (const code in levelMods) {
-          if (!(code in dataCodes)) {
+          if (!(dataCodes.includes(code))) {
             makeAvailable(levelMods[code].box, false);
             modules[code].required = "O";
             modules[code].selected = false;
@@ -359,9 +355,25 @@ async function updateParams() {
 
 
             // Mark module requirements
-            const modReq = module.Requisites;
+            var modReq = module.Requisites;
             const requireAll = modReq ? modReq.includes("&") : null;
             var reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
+            if (reqs) {
+                reqs = reqs.map(r => {
+                if (r == "Chemistry") {
+                  return hasChemistry() ? undefined : "GEOL2171";
+                }
+                if (r == "Maths") {
+                  return hasMaths() ? undefined : "GEOL1061";
+                }
+                return r;
+              }).filter(el => el !== undefined);
+              if (!reqs.length) {
+                reqs = null;
+                modReq = false;
+              }
+            }
+
             if (modReq) {
               if (requireAll) {
                 if (!reqs.every(modAvailable)) {
@@ -388,7 +400,7 @@ async function updateParams() {
               }
             }
 
-            const selected = module.selected || false;
+            const selected = (modules[code] && modules[code].selected) || false;
             modules[code] = {
               available: available,
               required: required,
@@ -428,25 +440,26 @@ async function updateParams() {
   }
 
   var n = 0;
+  if (requisite.Maths) {
+    if (!hasMaths()) {
+      requisite.GEOL1061 = true;
+      $(".requires-Maths").addClass("requires-GEOL1061");
+    }
+    delete requisite.Maths;
+  }
+
+  if (requisite.Chemistry) {
+    if (!hasChemistry()) {
+      requisite.GEOL2171 = true;
+      $(".requires-Chemistry").addClass("requires-GEOL2171");
+    }
+    delete requisite.Chemistry;
+  }
+
   for (var req in requisite) {
-    if (req == "Maths") {
-      if (hasMaths()) {
-        continue;
-      } else {
-        req = "GEOL1061"; // Mathematical Methods in Geoscience
-      }
-    }
-    if (req == "Chemistry") {
-      if (hasChemistry()) {
-        continue;
-      } else {
-        req = "GEOL2171";
-      }
-    }
     if (!mandatory(req)) {
       paintSide("#" + req, 0, palette[n]);
       paintSide(".requires-" + req, 1, palette[n]);
-      console.log(n + ": " + req);
       ++n;
     }
   }
