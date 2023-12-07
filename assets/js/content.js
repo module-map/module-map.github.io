@@ -65,12 +65,17 @@ function moduleChosen(code) {
   return $("#" + code + " > input").is(":checked");
 }
 
+function modAvailable(code) {
+  if (code == "Maths" || code == "Chemistry") return true;
+  return modules.hasOwnProperty(code) && modules[code].available;
+}
+
 function addNote(element, note) {
   $(element).append("<p class='invalid'>" + note + "</p>");
 }
 
 function addModuleSpan(code) {
-  return "<span onclick='choose(" + code + ");'>" + code + " [add]</span>";
+  return "<span onclick=\"choose(\'" + code + "\');\">" + code + " [add]</span>";
 }
 
 function updateChoices() {
@@ -156,8 +161,15 @@ function updateChoices() {
   for (const i in chooseFrom) {
     const el = chooseFrom[i];
     if (!el.some(moduleChosen)) {
-      addNote($("#note" + modules[el[0]].level),
-       "Must select one of " + el.sort(moduleCompare).join("; "));
+      const filtered = el.filter(modAvailable).sort(moduleCompare);
+      if (filtered.length > 1) {
+        addNote($("#note" + modules[el[0]].level),
+                "Must select one of " +
+                filtered.map(addModuleSpan).join("; ")
+        );
+      } else {
+        makeRequired(modules[filtered].box);
+      }
     }
   }
 }
@@ -183,9 +195,18 @@ function setTerm(box, term) {
   }
 }
 
-function choose(box, chosen = true) {
-  const code = $(box).attr("id");
+function choose(id, chosen = true) {
+  var code, box;
+  if (typeof(id) === "string") {
+    code = id;
+    box = modules[code].box;
+  } else {
+    box = id;
+    code = $(box).attr("id");
+  }
   const mod = modules[code];
+  console.log(code);
+  console.log(mod);
   if (!mod.available) {
     chosen = false;
   } else if (mandatory(mod)) {
@@ -329,11 +350,6 @@ async function updateParams() {
 
 
             var available = required != "O";
-
-            function modAvailable (code) {
-              if (code == "Maths" || code == "Chemistry") return true;
-              return modules.hasOwnProperty(code) && modules[code].available;
-            }
 
             // Mark module requirements
             const modReq = module.Requisites;
