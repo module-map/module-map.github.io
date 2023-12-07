@@ -152,6 +152,7 @@ async function updateParams() {
     $(this).attr("class", filteredClasses.join(" "));
   })
 
+  var requisite = {};
   for (const level of [1, 2, 3, 4]) {
     // Get modules available at this level
     const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
@@ -173,7 +174,6 @@ async function updateParams() {
           }
         }
 
-        var requisite = {};
         // Work through each module available this year at this level
         data.forEach(module => {
           if (module.Level == level) {
@@ -265,18 +265,18 @@ async function updateParams() {
             makeAvailable(box, required != "O")
           }
         })
-
-        console.log(requisite);
-        var n = 0;
-        for (const req in requisite) {
-          if (!mandatory(req)) {
-            paintSide("#" + req, 0, palette[n]);
-            paintSide(".requires-" + req, 1, palette[n]);
-            ++n;
-          }
-        }
       });
+
   };
+  console.log(requisite);
+  var n = 0;
+  for (const req in requisite) {
+    if (!mandatory(req)) {
+      paintSide("#" + req, 0, palette[n]);
+      paintSide(".requires-" + req, 1, palette[n]);
+      ++n;
+    }
+  }
 
   updateChoices();
 }
