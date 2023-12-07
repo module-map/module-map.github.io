@@ -162,7 +162,7 @@ function updateChoices() {
         );
       }
     } else {
-      makeRequired(modules[filtered].box);
+      console.warn("Uncaught singleton");
     }
   }
 }
@@ -188,7 +188,7 @@ function setTerm(box, term) {
   }
 }
 
-function choose(id, chosen = true) {
+function choose(id, chosen = true, requiresUpdate = true) {
   var code, box;
   if (typeof(id) === "string") {
     code = id;
@@ -207,25 +207,25 @@ function choose(id, chosen = true) {
   modules[code].selected = chosen;
   document.getElementById("check" + code).checked = chosen;
 
-  if (start != chosen) updateChoices();
+  if (start != chosen && requiresUpdate) updateChoices();
 }
 
-function makeAvailable(box, avail = true) {
+function makeAvailable(box, avail = true, update = true) {
   if (avail) {
     box.classList.remove("unavailable");
   } else {
     box.classList.add("unavailable");
-    makeRequired(box, false);
-    choose(box, false);
+    makeRequired(box, false, false);
+    choose(box, false, update);
   }
 }
 
-function makeRequired(box, req = true) {
+function makeRequired(box, req = true, update = true) {
   if (req) {
     makeAvailable(box);
     box.classList.add("required");
     box.getElementsByTagName("input")[0].disabled = true;
-    choose(box);
+    choose(box, undefined, update);
   } else {
     box.classList.remove("required");
     box.getElementsByTagName("input")[0].disabled = false;
@@ -283,7 +283,7 @@ async function updateParams() {
         const dataCodes = Object.values(data).map(item => item["Module code"]);
         for (const code in levelMods) {
           if (!(dataCodes.includes(code))) {
-            makeAvailable(levelMods[code].box, false);
+            makeAvailable(levelMods[code].box, false, false);
             modules[code].required = "O";
             modules[code].selected = false;
           }
@@ -425,8 +425,8 @@ async function updateParams() {
                 setTerm(box, "mich")
               }
             }
-            makeRequired(box, required == "X")
-            makeAvailable(box, available)
+            makeRequired(box, required == "X", false)
+            makeAvailable(box, available, false)
           }
         })
       });
@@ -466,6 +466,17 @@ async function updateParams() {
       ++n;
     }
   }
+
+    chooseFrom = Object.fromEntries(
+    Object.entries(chooseFrom).map(([i, el]) => {
+      const filtered = el.filter(modAvailable).sort(moduleCompare);
+      if (filtered.length == 1) {
+        makeRequired(modules[filtered].box, update = false);
+        return undefined;
+      }
+      return [i, filtered];
+    })
+  );
 
   updateChoices();
 }
