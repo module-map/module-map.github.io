@@ -1,6 +1,22 @@
 h2 {
   text-align: center;
   line-height: 24px;
+  margin: 0 0 12px 0;
+}
+
+.note {
+  line-height: 24px;
+  height: 8em;
+}
+
+.note p {
+  margin-bottom: 0;
+}
+
+.note .invalid{
+  font-weight: bold;
+  background: #FFD53A;
+  color: #BE1E2D;
 }
 
 .module-box {
@@ -104,13 +120,4 @@ input[type="checkbox"]:checked {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.note {
-  color: #BE1E2D;
-}
-
-.note .invalid{
-  font-weight: bold;
-  background: #FFD53A;
 }
