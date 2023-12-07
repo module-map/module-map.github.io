@@ -270,7 +270,20 @@ async function updateParams() {
   };
   console.log(requisite);
   var n = 0;
-  for (const req in requisite) {
+  for (var req in requisite) {
+    if (req == "Maths") {
+      if (document.getElementById("maths").checked) {
+        continue;
+      } else {
+        req = "GEOL1061"; // Mathematical Methods in Geoscience
+      }
+    }
+    if (req == "Chemistry") {
+      continue; // Need to establish how this requisite will look in future
+      if (document.getElementById("chem").checked) {
+        continue;
+      }
+    }
     if (!mandatory(req)) {
       paintSide("#" + req, 0, palette[n]);
       paintSide(".requires-" + req, 1, palette[n]);
