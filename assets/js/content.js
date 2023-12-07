@@ -25,7 +25,7 @@ function paintSide(selector, right, col) {
   $(selector).css(
     "box-shadow",
      (existing == "none" ? "" : existing + ", ") +
-     "inset " + (right ? "" : "-") + "18px 0 0 0 "
+     "inset " + (right ? "" : "-") + "20px 0 0 0 "
      + col);
 }
 
