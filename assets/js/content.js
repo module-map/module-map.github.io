@@ -31,6 +31,10 @@ function hexToRgb(hex) {
 
 function paintSide(selector, left, col) {
   const existing = $(selector).css("box-shadow");
+  if (!existing) {
+    console.warn("Selector does not exist:" + selector);
+    return;
+  }
   if (existing.includes(hexToRgb(col))) return;
 
   const existingWidth = existing.match(/\) (\d)0px /);
