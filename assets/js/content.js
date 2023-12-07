@@ -65,7 +65,6 @@ function updateChoices() {
           // Check requisites
           if (mod.req) {
             if (mod.allReqs) {
-              console.log(mod.req)
               if (!mod.req.every(moduleChosen)) {
                 addNote(note,
                   code + " requires " +
@@ -246,7 +245,6 @@ async function updateParams() {
                 if (e.srcElement != check && !check.disabled) {
                   check.checked = !check.checked;
                 }
-                console.log("Clicked " + box.getAttribute("id"));
                 choose(box, check.checked);
                 updateChoices();
               })
@@ -306,7 +304,7 @@ async function updateParams() {
       });
 
   };
-  console.log(requisite);
+
   var n = 0;
   for (var req in requisite) {
     if (req == "Maths") {
