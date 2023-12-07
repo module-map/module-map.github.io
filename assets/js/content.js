@@ -4,8 +4,9 @@ const degree = document.getElementById("degree");
 const maths = document.getElementById("maths");
 const chem = document.getElementById("chem");
 const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
-  "#CBA8B1", "#DACDA2", "#A5C8D0", "#B6AAA7", "#B3BDB1",
-  "#ffffff", "#333132", "#002A41"];
+  "#CBA8B1", "#DACDA2", // sky: "#A5C8D0",
+  "#B6AAA7", "#B3BDB1", // white: "#ffffff",
+  "#333132", "#002A41"];
 
 var modules = [];
 var chooseFrom = {};
@@ -60,7 +61,7 @@ function moduleChosen(code) {
     return hasMaths ? true : moduleChosen("GEOL1061");
   }
   if (code == "Chemistry") {
-    return hasChemistry ? true : true; // Update once chemistry req is defined
+    return hasChemistry ? true : moduleChosen("GEOL2171");
   }
   return $("#" + code + " > input").is(":checked");
 }
@@ -347,7 +348,15 @@ async function updateParams() {
             }
 
 
+            const code = module["Module code"];
             var available = required != "O";
+            if (code == "GEOL1061" && maths.checked) { // Mathemetical methods
+              available = false;
+            }
+            if (code == "GEOL1081" && !maths.checked) { // Further maths
+              available = false;
+            }
+
 
             // Mark module requirements
             const modReq = module.Requisites;
@@ -370,7 +379,6 @@ async function updateParams() {
               })
             }
 
-            const code = module["Module code"];
             // Pathway one-of requirement lists
             if (required && required != "X" && required != "O") {
               if (chooseFrom.hasOwnProperty(required)) {
@@ -429,14 +437,16 @@ async function updateParams() {
       }
     }
     if (req == "Chemistry") {
-      continue; // Need to establish how this requisite will look in future
-      if (document.getElementById("chem").checked) {
+      if (hasChemistry()) {
         continue;
+      } else {
+        req = "GEOL2171";
       }
     }
     if (!mandatory(req)) {
       paintSide("#" + req, 0, palette[n]);
       paintSide(".requires-" + req, 1, palette[n]);
+      console.log(n + ": " + req);
       ++n;
     }
   }
