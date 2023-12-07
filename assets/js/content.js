@@ -29,15 +29,40 @@ function paintSide(selector, right, col) {
      + col);
 }
 
+function moduleChosen(code) {
+  return $("#" + code + " > input").is(":checked");
+}
+
+function addNote(element, note) {
+  $(element).append("<p class='invalid'>" + note + "</p>");
+}
+
 function updateChoices() {
   for (const level of [1, 2, 3]) {
     let credits = 0;
     let michCredits = 0;
     let epipCredits = 0;
+    const note = document.getElementById("note" + level);
+    $(note).empty();
     for (const code in modules) {
       if (modules.hasOwnProperty(code)) {
         const mod = modules[code];
         if (mod.level == level && mod.selected) {
+          // Check requisites
+          if (mod.req) {
+            if (mod.allReqs) {
+              console.log(mod.req)
+              if (!mod.req.every(moduleChosen)) {
+                addNote(note,
+                  code + " requires " + mod.req.filter(moduleChosen).join(" + "))
+              }
+            } else {
+              if (!mod.req.some(moduleChosen)) {
+                addNote(note,
+                  code + " requires " + mod.req.join(" or "))
+              }
+            }
+          }
 
           // Count credit splits
           const modCreds = mod.credits;
@@ -55,8 +80,6 @@ function updateChoices() {
         }
       }
     }
-    const note = document.getElementById("note" + level);
-    $(note).empty();
     const credNote = document.createElement("p");
     const credTot = document.createElement("span");
     credTot.innerHTML = credits + "/120";
@@ -74,9 +97,9 @@ function updateChoices() {
       epipTot.classList.add("invalid");
     }
 
-    $(credNote).append(credTot, "&nbsp;credits (", michTot,
+    $(credNote).prepend(credTot, "&nbsp;credits (", michTot,
                        " Michaelmas; ", epipTot, " Epiphany)");
-    note.appendChild(credNote);
+    $(note).prepend(credNote);
   }
 }
 
