@@ -205,8 +205,6 @@ function choose(id, chosen = true) {
     code = $(box).attr("id");
   }
   const mod = modules[code];
-  console.log(code);
-  console.log(mod);
   if (!mod.available) {
     chosen = false;
   } else if (mandatory(mod)) {
