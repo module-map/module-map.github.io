@@ -65,6 +65,10 @@ function addNote(element, note) {
   $(element).append("<p class='invalid'>" + note + "</p>");
 }
 
+function addModuleSpan(code) {
+  return "<span onclick='choose(" + code + ");'>" + code + " [add]</span>";
+}
+
 function updateChoices() {
   for (const level of [1, 2, 3]) {
     let credits = 0;
@@ -84,13 +88,16 @@ function updateChoices() {
                   code + " requires " +
                   mod.req.filter(m => !moduleChosen(m))
                     .sort(moduleCompare)
+                    .map(addModuleSpan)
                     .join(" + "));
               }
             } else {
               if (!mod.req.some(moduleChosen)) {
                 addNote(note,
                   code + " requires " +
-                  mod.req.sort(moduleCompare).join(" or "));
+                  mod.req.sort(moduleCompare)
+                  .map(addModuleSpan)
+                  .join(" or "));
               }
             }
           }
