@@ -40,7 +40,7 @@ h2 {
 }
 
 .module-box.double {
-  height: 96px;
+  height: 72px;
 }
 
 .module-box.epip .module-code, .module-box.epip .module-name,
@@ -90,7 +90,7 @@ h2 {
   }
 
 .module-box.triple {
-  height: 144px;
+  height: 108px;
 }
 
 .module-box input[type="checkbox"] {
