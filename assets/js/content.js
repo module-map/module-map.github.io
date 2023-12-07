@@ -8,6 +8,7 @@ const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
   "#ffffff", "#333132", "#002A41"];
 
 var modules = [];
+var chooseFrom = {};
 
 function yearFile(year, plus = 0) {
   const y = parseInt(year) + plus;
@@ -30,9 +31,6 @@ function hexToRgb(hex) {
 
 function paintSide(selector, left, col) {
   const existing = $(selector).css("box-shadow");
-
-  console.log(selector);
-  console.log(existing + " += " + hexToRgb(col));
   if (existing.includes(hexToRgb(col))) return;
 
   const existingWidth = existing.match(/\) (\d)0px /);
@@ -84,12 +82,15 @@ function updateChoices() {
               if (!mod.req.every(moduleChosen)) {
                 addNote(note,
                   code + " requires " +
-                  mod.req.filter(m => !moduleChosen(m)).join(" + "))
+                  mod.req.filter(m => !moduleChosen(m))
+                    .sort(moduleCompare)
+                    .join(" + "));
               }
             } else {
               if (!mod.req.some(moduleChosen)) {
                 addNote(note,
-                  code + " requires " + mod.req.join(" or "))
+                  code + " requires " +
+                  mod.req.sort(moduleCompare).join(" or "));
               }
             }
           }
@@ -131,6 +132,13 @@ function updateChoices() {
                        " Michaelmas; ", epipTot, " Epiphany)");
     $(note).prepend(credNote);
   }
+  for (const i in chooseFrom) {
+    const el = chooseFrom[i];
+    if (!el.some(moduleChosen)) {
+      addNote($("#note" + modules[el[0]].level),
+       "Must select one of " + el.sort(moduleCompare).join("; "));
+    }
+  }
 }
 
 function setTerm(box, term) {
@@ -156,10 +164,10 @@ function setTerm(box, term) {
 
 function choose(box, chosen = true) {
   const code = $(box).attr("id");
-  const mod = modules[code]
+  const mod = modules[code];
   if (!mod.available) {
     chosen = false;
-  } else if (mod.required) {
+  } else if (mandatory(mod)) {
     chosen = true;
   }
   mod.selected = chosen;
@@ -194,8 +202,10 @@ function mandatory(code) {
 }
 
 function moduleCompare(a, b) {
-  const ma = modules[a.id];
-  const mb = modules[b.id];
+  const idA = typeof(a) === "string" ? a : a.id;
+  const idB = typeof(b) === "string" ? b : b.id;
+  const ma = modules[idA];
+  const mb = modules[idB];
   if (ma.credits != mb.credits) {
     return ma.credits < mb.credits ? 1 : -1;
   }
@@ -203,7 +213,7 @@ function moduleCompare(a, b) {
     if (ma.mich && !mb.mich) return -1;
     if (mb.mich && !ma.mich) return 1;
   }
-  return a.id.localeCompare(b.id);
+  return idA.localeCompare(idB);
 }
 
 async function updateParams() {
@@ -322,9 +332,18 @@ async function updateParams() {
               })
             }
 
-            const selected = module.selected || false;
+            const code = module["Module code"];
+            // Pathway one-of requirement lists
+            if (required && required != "X" && required != "O") {
+              if (chooseFrom.hasOwnProperty(required)) {
+                chooseFrom[required].push(code);
+              } else {
+                chooseFrom[required] = [code];
+              }
+            }
 
-            modules[module["Module code"]] = {
+            const selected = module.selected || false;
+            modules[code] = {
               available: available,
               required: required,
               credits: module.Credits,
@@ -362,7 +381,6 @@ async function updateParams() {
   }
 
   var n = 0;
-  console.log(requisite);
   for (var req in requisite) {
     if (req == "Maths") {
       if (hasMaths()) {
@@ -378,7 +396,6 @@ async function updateParams() {
       }
     }
     if (!mandatory(req)) {
-      console.log(n)
       paintSide("#" + req, 0, palette[n]);
       paintSide(".requires-" + req, 1, palette[n]);
       ++n;
