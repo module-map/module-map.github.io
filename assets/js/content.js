@@ -3,6 +3,9 @@ const startYear = document.getElementById("startYear");
 const degree = document.getElementById("degree");
 const maths = document.getElementById("maths");
 const chem = document.getElementById("chem");
+const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
+  "#CBA8B1", "#DACDA2", "#A5C8D0", "#B6AAA7", "#B3BDB1",
+  "#ffffff", "#333132", "#002A41"];
 
 var modules = [];
 
@@ -15,6 +18,15 @@ function markReq(requirer, requirement, i = 0) {
   document.getElementById(requirer).addClass("requires-" + i);
   document.getElementById(requirement).addClass("requiredBy-" + i);
   return ++i;
+}
+
+function paintSide(selector, right, col) {
+  const existing = $(selector).css("box-shadow");
+  $(selector).css(
+    "box-shadow",
+     (existing == "none" ? "" : existing + ", ") +
+     "inset " + (right ? "" : "-") + "24px 0 0 0 "
+     + col);
 }
 
 function updateChoices() {
@@ -255,11 +267,12 @@ async function updateParams() {
         })
 
         console.log(requisite);
+        var n = 0;
         for (const req in requisite) {
-          console.log(req)
           if (!mandatory(req)) {
-            $("#" + req).css("border-right", "solid 2px red");
-            $(".requires-" + req).css("border-left", "solid 3px red");
+            paintSide("#" + req, 0, palette[n]);
+            paintSide(".requires-" + req, 1, palette[n]);
+            ++n;
           }
         }
       });
