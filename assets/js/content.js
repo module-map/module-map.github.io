@@ -20,13 +20,29 @@ function markReq(requirer, requirement, i = 0) {
   return ++i;
 }
 
-function paintSide(selector, right, col) {
+function hexToRgb(hex) {
+    const bigint = parseInt(hex.substr(1, 7), 16);
+    return "rgb(" + [
+       (bigint >> 16) & 255,
+       (bigint >> 8) & 255,
+       bigint & 255].join(", ") + ")";
+}
+
+function paintSide(selector, left, col) {
   const existing = $(selector).css("box-shadow");
+
+  console.log(selector);
+  console.log(existing + " += " + hexToRgb(col));
+  if (existing.includes(hexToRgb(col))) return;
+
+  const existingWidth = existing.match(/\) (\d)0px /);
   $(selector).css(
     "box-shadow",
      (existing == "none" ? "" : existing + ", ") +
-     "inset " + (right ? "" : "-") + "20px 0 0 0 "
-     + col);
+     "inset " + (left ? "" : "-") +
+     (left && existingWidth ? parseInt(existingWidth[1]) + 2 : "2") +
+     "0px 0 0 0 " +
+     col);
 }
 
 function hasMaths() {
@@ -177,6 +193,19 @@ function mandatory(code) {
   return modules.hasOwnProperty(code) && modules[code].required;
 }
 
+function moduleCompare(a, b) {
+  const ma = modules[a.id];
+  const mb = modules[b.id];
+  if (ma.credits != mb.credits) {
+    return ma.credits < mb.credits ? 1 : -1;
+  }
+  if (ma.credits == 10) {
+    if (ma.mich && !mb.mich) return -1;
+    if (mb.mich && !ma.mich) return 1;
+  }
+  return a.id.localeCompare(b.id);
+}
+
 async function updateParams() {
   // Reset box classes
   const regex = /requires\-GEOL\d+/;
@@ -277,15 +306,12 @@ async function updateParams() {
             const requireAll = modReq ? modReq.includes("&") : null;
             var reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
             if (modReq) {
-              console.log(module["Module code"] + ": " + reqs);
               if (requireAll) {
                 if (!reqs.every(modAvailable)) {
-                  console.log("Not alla vailable")
                   available = false;
                 }
               } else {
                 if (!reqs.some(modAvailable)) {
-                  console.log("None a vailable")
                   available = false;
                 }
                 reqs = reqs.filter(modAvailable)
@@ -326,24 +352,17 @@ async function updateParams() {
       });
 
       const levelDiv = $("#level" + level);
-      const sortedModules = levelDiv.children().sort(function(a, b) {
-        const ma = modules[a.id];
-        const mb = modules[b.id];
-        console.log(ma);
-        console.log(mb);
-        if (ma.credits != mb.credits) {
-          return ma.credits < mb.credits ? 1 : -1;
-        }
-        if (ma.credits == 10) {
-          if (ma.mich && !mb.mich) return -1;
-          if (mb.mich && !ma.mich) return 1;
-        }
-        return a.id.localeCompare(b.id);
-      });
+      const sortedModules = levelDiv.children().sort(moduleCompare);
       levelDiv.append(sortedModules);
   };
 
+  for (const code in modules) {
+    // Reset side paint
+    $("#" + code).css("box-shadow", "none");
+  }
+
   var n = 0;
+  console.log(requisite);
   for (var req in requisite) {
     if (req == "Maths") {
       if (hasMaths()) {
@@ -359,6 +378,7 @@ async function updateParams() {
       }
     }
     if (!mandatory(req)) {
+      console.log(n)
       paintSide("#" + req, 0, palette[n]);
       paintSide(".requires-" + req, 1, palette[n]);
       ++n;
