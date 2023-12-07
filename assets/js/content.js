@@ -25,21 +25,19 @@ function hexToRgb(hex) {
 }
 
 function paintSide(selector, left, col) {
-  const existing = $(selector).css("box-shadow");
-  if (!existing) {
-    console.warn("Selector does not exist: " + selector);
-    return;
-  }
-  if (existing.includes(hexToRgb(col))) return;
+  $(selector).each(function() {
+    const existing = $(this).css("box-shadow");
+    if (existing.includes(hexToRgb(col))) return;
 
-  const existingWidth = existing.match(/\) (\d)0px /);
-  $(selector).css(
-    "box-shadow",
-     (existing == "none" ? "" : existing + ", ") +
-     "inset " + (left ? "" : "-") +
-     (left && existingWidth ? parseInt(existingWidth[1]) + 2 : "2") +
-     "0px 0 0 0 " +
-     col);
+    const existingWidth = existing.match(/\) (\d)0px /);
+    $(this).css(
+      "box-shadow",
+       (existing == "none" ? "" : existing + ", ") +
+       "inset " + (left ? "" : "-") +
+       (left && existingWidth ? parseInt(existingWidth[1]) + 2 : "2") +
+       "0px 0 0 0 " +
+       col);
+  });
 }
 
 function hasMaths() {
@@ -439,6 +437,11 @@ async function updateParams() {
   for (const code in modules) {
     // Reset side paint
     $("#" + code).css("box-shadow", "none");
+    $(".requires-" + code).css("box-shadow", "none");
+    if (code == "GEOL2MM7") {
+      console.log($("#" + code).css("box-shadow"));
+      console.log($(".requires-" + code).css("box-shadow"));
+    }
   }
 
   var n = 0;
@@ -458,6 +461,7 @@ async function updateParams() {
     delete requisite.Chemistry;
   }
 
+  console.log(requisite);
   for (var req in requisite) {
     if (!mandatory(req)) {
       paintSide("#" + req, 0, palette[n]);
