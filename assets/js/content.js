@@ -155,16 +155,16 @@ function updateChoices() {
   // Check that one-of-this-list criteria are met
   for (const i in chooseFrom) {
     const el = chooseFrom[i];
-    if (!el.some(moduleChosen)) {
-      const filtered = el.filter(modAvailable).sort(moduleCompare);
-      if (filtered.length > 1) {
+    const filtered = el.filter(modAvailable).sort(moduleCompare);
+    if (filtered.length > 1) {
+      if (!filtered.some(moduleChosen)) {
         addNote($("#note" + modules[el[0]].level),
                 "Must select one of " +
                 filtered.map(addModuleSpan).join("; ")
         );
-      } else {
-        makeRequired(modules[filtered].box);
       }
+    } else {
+      makeRequired(modules[filtered].box);
     }
   }
 }
@@ -200,6 +200,7 @@ function choose(id, chosen = true) {
     code = $(box).attr("id");
   }
   const mod = modules[code];
+  const start = modules[code].selected;
   if (!mod.available) {
     chosen = false;
   } else if (mandatory(mod)) {
@@ -208,7 +209,7 @@ function choose(id, chosen = true) {
   modules[code].selected = chosen;
   document.getElementById("check" + code).checked = chosen;
 
-  updateChoices();
+  if (start != chosen) updateChoices();
 }
 
 function makeAvailable(box, avail = true) {
@@ -293,17 +294,18 @@ async function updateParams() {
         // Work through each module available this year at this level
         data.forEach(module => {
           if (module.Level == level) {
+            const code = module["Module code"];
             let required = (module[degree.value] === undefined ?
               false : module[degree.value].toUpperCase());
             // Maths / further maths
-            if (module["Module code"] == "GEOL1061" && required) {
+            if (code == "GEOL1061" && required) {
               required = maths.checked ? "O" : "X";
-            } else if (module["Module code"] == "GEOL1081" && required) {
+            } else if (code == "GEOL1081" && required) {
               required = maths.checked ? "X" : "O";
             }
 
-            const moduleExists = modules.hasOwnProperty(module["Module code"]);
-            const box = moduleExists ? modules[module["Module code"]].box :
+            const moduleExists = modules.hasOwnProperty(code);
+            const box = moduleExists ? modules[code].box :
                         document.createElement("div");
 
             if (!moduleExists) {
@@ -314,6 +316,7 @@ async function updateParams() {
               } else if (module.Credits == 60) {
                 box.classList.add("triple");
               }
+              box.setAttribute("title", module["Module name"]);
 
               const check = document.createElement("input");
               check.type = "checkbox";
@@ -344,7 +347,6 @@ async function updateParams() {
             }
 
 
-            const code = module["Module code"];
             var available = required != "O";
             if (code == "GEOL1061" && maths.checked) { // Mathemetical methods
               available = false;
