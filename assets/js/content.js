@@ -231,7 +231,7 @@ async function updateParams() {
 
             // Mark module requirements
             const modReq = module.Requisites;
-            const requireAll = modReq ? modReq.match("&") : null;
+            const requireAll = modReq ? modReq.includes("&") : null;
             const reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
             if (modReq) reqs.forEach(function (req) {
               box.classList.add("requires-" + req);
