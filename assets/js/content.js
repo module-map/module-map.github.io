@@ -25,11 +25,25 @@ function paintSide(selector, right, col) {
   $(selector).css(
     "box-shadow",
      (existing == "none" ? "" : existing + ", ") +
-     "inset " + (right ? "" : "-") + "24px 0 0 0 "
+     "inset " + (right ? "" : "-") + "18px 0 0 0 "
      + col);
 }
 
+function hasMaths() {
+  return document.getElementById("maths").checked;
+}
+
+function hasChemistry() {
+  return document.getElementById("chem").checked;
+}
+
 function moduleChosen(code) {
+  if (code == "Maths") {
+    return hasMaths ? true : moduleChosen("GEOL1061");
+  }
+  if (code == "Chemistry") {
+    return hasChemistry ? true : true; // Update once chemistry req is defined
+  }
   return $("#" + code + " > input").is(":checked");
 }
 
@@ -54,7 +68,8 @@ function updateChoices() {
               console.log(mod.req)
               if (!mod.req.every(moduleChosen)) {
                 addNote(note,
-                  code + " requires " + mod.req.filter(moduleChosen).join(" + "))
+                  code + " requires " +
+                  mod.req.filter(m => !moduleChosen(m)).join(" + "))
               }
             } else {
               if (!mod.req.some(moduleChosen)) {
@@ -295,7 +310,7 @@ async function updateParams() {
   var n = 0;
   for (var req in requisite) {
     if (req == "Maths") {
-      if (document.getElementById("maths").checked) {
+      if (hasMaths()) {
         continue;
       } else {
         req = "GEOL1061"; // Mathematical Methods in Geoscience
