@@ -265,19 +265,41 @@ async function updateParams() {
             }
 
 
+            var available = required != "O";
+
+            function modAvailable (code) {
+              if (code == "Maths" || code == "Chemistry") return true;
+              return modules.hasOwnProperty(code) && modules[code].available;
+            }
+
             // Mark module requirements
             const modReq = module.Requisites;
             const requireAll = modReq ? modReq.includes("&") : null;
-            const reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
-            if (modReq) reqs.forEach(function (req) {
-              box.classList.add("requires-" + req);
-              requisite[req] = true;
-            })
+            var reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
+            if (modReq) {
+              console.log(module["Module code"] + ": " + reqs);
+              if (requireAll) {
+                if (!reqs.every(modAvailable)) {
+                  console.log("Not alla vailable")
+                  available = false;
+                }
+              } else {
+                if (!reqs.some(modAvailable)) {
+                  console.log("None a vailable")
+                  available = false;
+                }
+                reqs = reqs.filter(modAvailable)
+              }
+              if (available) reqs.forEach(function (req) {
+                box.classList.add("requires-" + req);
+                requisite[req] = true;
+              })
+            }
 
             const selected = module.selected || false;
 
             modules[module["Module code"]] = {
-              available: required != "O",
+              available: available,
               required: required,
               credits: module.Credits,
               level: module.Level,
@@ -298,11 +320,27 @@ async function updateParams() {
               }
             }
             makeRequired(box, required == "X")
-            makeAvailable(box, required != "O")
+            makeAvailable(box, available)
           }
         })
       });
 
+      const levelDiv = $("#level" + level);
+      const sortedModules = levelDiv.children().sort(function(a, b) {
+        const ma = modules[a.id];
+        const mb = modules[b.id];
+        console.log(ma);
+        console.log(mb);
+        if (ma.credits != mb.credits) {
+          return ma.credits < mb.credits ? 1 : -1;
+        }
+        if (ma.credits == 10) {
+          if (ma.mich && !mb.mich) return -1;
+          if (mb.mich && !ma.mich) return 1;
+        }
+        return a.id.localeCompare(b.id);
+      });
+      levelDiv.append(sortedModules);
   };
 
   var n = 0;
