@@ -95,6 +95,11 @@ h2 {
   height: 108px;
 }
 
+.module-box.glowing {
+  outline: 5px solid #68246DDD;
+  opacity: 80%;
+}
+
 .module-box input[type="checkbox"] {
   display: table-cell;
   transform: scale(2);

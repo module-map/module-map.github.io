@@ -72,10 +72,21 @@ function addNote(element, note) {
   $(element).append("<p class='invalid'>" + note + "</p>");
 }
 
+function glow(code) {
+  $("#" + code).addClass("glowing");
+}
+
+function deglow(code) {
+  $("#" + code).removeClass("glowing");
+}
+
 function addModuleSpan(code) {
-  return "<span onclick=\"choose(\'" + code + "\');\" title=\"" +
-    $("#" + code + " .module-name").text() +
-    "\">" + code + " [add]</span>";
+  return "<span onclick=\"deglow(\'" + code + "\'); " +
+    "choose(\'" + code + "\');\" " +
+    "title=\"" + $("#" + code + " .module-name").text() + "\"" +
+    "onmouseover=\"glow(\'" + code + "\');\" " +
+    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    ">" + code + " [add]</span>";
 }
 
 function updateChoices() {
