@@ -6,7 +6,10 @@ const chem = document.getElementById("chem");
 const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
   "#CBA8B1", "#DACDA2", // sky: "#A5C8D0",
   "#B6AAA7", "#B3BDB1", // white: "#ffffff",
-  "#333132", "#002A41"];
+  "#333132", // ink: "#002A41",
+  // Run out of Durham colours; use iwanthue soft
+  "#6dbb60", "#bc6739", "#b8434e", "8650a6"
+];
 
 var modules = [];
 var chooseFrom = {};
