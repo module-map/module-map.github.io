@@ -177,6 +177,11 @@ function updateChoices() {
     $(note).prepend(credNote);
   }
 
+  if (degree.value == "F665" && !maths.checked) {
+    addNote($("#note1"),
+            "Geophysics pathway requires A-level Maths")
+  }
+
   // Check that one-of-this-list criteria are met
   for (const i in chooseFrom) {
     const el = chooseFrom[i];
@@ -406,10 +411,15 @@ async function updateParams() {
 
 
             var available = required != "O";
-            if (code == "GEOL1061" && maths.checked) { // Mathemetical methods
+            if (code == "GEOL1061" &&  // Mathemetical methods
+                        (maths.checked || degree.value == "F665")
+            ) {
               available = false;
             }
-            if (code == "GEOL1081" && !maths.checked) { // Further maths
+            if (code == "GEOL1081" &&  // Further maths
+              !maths.checked &&
+               degree.value != "F665" // Geophysicists must take this
+             ) {
               available = false;
             }
 
