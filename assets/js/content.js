@@ -282,7 +282,7 @@ async function updateParams() {
     }, {});
 
     const missedYear = level > 2 & yearOut.checked
-    await fetch(yearFile(startYear.value, level - 1 + missedYear))
+    await fetch(yearFile(startYear.value, (level - 1) + missedYear))
       .then(response => response.json())
       .then(data => {
         const dataCodes = Object.values(data).map(item => item["Module code"]);
