@@ -167,7 +167,17 @@ function updateChoices() {
         );
       }
     } else {
-      console.warn("Uncaught singleton");
+      if (filtered.length == 1) {
+        console.warn("Uncaught singleton " + i + ": " + filtered);
+      } else {
+        addNote($("#note3"),
+         "Some required modules not available. " +
+         (maths.checked ? "" : "Is A-Level Maths needed?")
+        )
+        if (maths.checked) {
+          console.warn("No modules available to meet requisite " + i);
+        }
+      }
     }
   }
 }
@@ -268,6 +278,13 @@ async function updateParams() {
     $(this).attr("class", filteredClasses.join(" "));
   })
 
+  // Check maths requirement
+  if (degree.value == "F665" && !maths.checked) {
+    $("#li-maths").addClass("invalid");
+  } else {
+    $("#li-maths").removeClass("invalid");
+  }
+
   // Reset pathway requirements
   chooseFrom = {};
   var requisite = {};
@@ -348,6 +365,7 @@ async function updateParams() {
               box.appendChild(text);
 
               document.getElementById("level" + module.Level).appendChild(box);
+
             }
 
 
