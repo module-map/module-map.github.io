@@ -317,7 +317,11 @@ async function updateParams() {
   chooseFrom = {};
   var requisite = {};
 
-  for (const level of [1, 2, 3, 4]) {
+  // Year out?
+  const levelsToShow = yearOut.checked ? [1, 2, 3] : [1, 2, 3, 4];
+  $("#col4").css("display", yearOut.checked ? "none" : "unset");
+
+  for (const level of levelsToShow) {
     // Get modules available at this level
     const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
       if (value.level === level) {
@@ -328,7 +332,12 @@ async function updateParams() {
 
     const missedYear = level > 2 & yearOut.checked
     await fetch(yearFile(startYear.value, (level - 1) + missedYear))
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Could not load data for year");
+        }
+        return response.json();
+      })
       .then(data => {
         const dataCodes = Object.values(data).map(item => item["Module code"]);
         for (const code in levelMods) {
@@ -393,7 +402,6 @@ async function updateParams() {
               box.appendChild(text);
 
               document.getElementById("level" + module.Level).appendChild(box);
-
             }
 
 
@@ -483,6 +491,11 @@ async function updateParams() {
             makeAvailable(box, available, false)
           }
         })
+      })
+      .catch(error => {
+        addNote($("#level" + level),
+                "Could not load data for this year");
+
       });
 
       const levelDiv = $("#level" + level);
