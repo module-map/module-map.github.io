@@ -89,6 +89,14 @@ function addModuleSpan(code) {
     ">" + code + " [add]</span>";
 }
 
+function moduleSpan(code) {
+  return "<span onclick=\"deglow(\'" + code + "\');\" " +
+    "title=\"" + $("#" + code + " .module-name").text() + "\"" +
+    "onmouseover=\"glow(\'" + code + "\');\" " +
+    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    ">" + code + "</span>";
+}
+
 function updateChoices() {
   for (const level of [1, 2, 3]) {
     let credits = 0;
@@ -123,10 +131,11 @@ function updateChoices() {
           }
 
           // Check for excluded combinations
-          if (mod.excludes) {
-            if (moduleChosen(mod.excludes)) {
+          for (const i in mod.excludes) {
+            const ex = mod.excludes[i];
+            if (moduleChosen(ex)) {
               addNote(note,
-                "Cannot take " + mod.excludes + " with " + code);
+                "Cannot take " + moduleSpan(ex) + " with " + moduleSpan(code));
             }
           }
 
@@ -442,7 +451,8 @@ async function updateParams() {
             modules[code] = {
               available: available,
               required: required,
-              excludes: module["Excluded Combn"],
+              excludes: module["Excluded Combn"] ?
+                module["Excluded Combn"].split(",") : [],
               credits: module.Credits,
               level: module.Level,
               mich: module.Mich,
