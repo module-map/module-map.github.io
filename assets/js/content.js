@@ -1,15 +1,17 @@
 "use strict";
-const startYear = document.getElementById("startYear");
-const degree = document.getElementById("degree");
-const maths = document.getElementById("maths");
-const chem = document.getElementById("chem");
 const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
   "#CBA8B1", "#DACDA2", // sky: "#A5C8D0",
   "#B6AAA7", "#B3BDB1", // white: "#ffffff",
   "#333132", // ink: "#002A41",
-  // Run out of Durham colours; use iwanthue soft
+  // Exhausted palette; select more from iwanthue soft
   "#6dbb60", "#bc6739", "#b8434e", "8650a6"
 ];
+
+const startYear = document.getElementById("startYear");
+const yearOut = document.getElementById("yearOut");
+const degree = document.getElementById("degree");
+const maths = document.getElementById("maths");
+const chem = document.getElementById("chem");
 
 var modules = [];
 var chooseFrom = {};
@@ -272,7 +274,6 @@ async function updateParams() {
 
   for (const level of [1, 2, 3, 4]) {
     // Get modules available at this level
-    // Get modules available at this level
     const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
       if (value.level === level) {
         result[key] = value;
@@ -280,7 +281,8 @@ async function updateParams() {
       return result;
     }, {});
 
-    await fetch(yearFile(startYear.value, level - 1))
+    const missedYear = level > 2 & yearOut.checked
+    await fetch(yearFile(startYear.value, level - 1 + missedYear))
       .then(response => response.json())
       .then(data => {
         const dataCodes = Object.values(data).map(item => item["Module code"]);
@@ -499,6 +501,7 @@ fetch("data/years.json")
   .catch(error => console.error("Error fetching years.json: ", error))
 
 startYear.addEventListener("change", updateParams)
+yearOut.addEventListener("change", updateParams)
 degree.addEventListener("change", updateParams)
 maths.addEventListener("change", updateParams)
 chem.addEventListener("change", updateParams)
