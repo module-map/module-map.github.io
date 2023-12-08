@@ -419,6 +419,8 @@ async function updateParams() {
               }
             }
 
+
+            // Check module's requisites are available
             if (modReq) {
               if (requireAll) {
                 if (!reqs.every(modAvailable)) {
@@ -482,10 +484,18 @@ async function updateParams() {
       levelDiv.append(sortedModules);
   };
 
+  const requiredMods = Object.keys(modules)
+    .filter(code => modules[code].required == "X");
+
   for (const code in modules) {
     // Reset side paint
     $("#" + code).css("box-shadow", "none");
     $(".requires-" + code).css("box-shadow", "none");
+
+    // Check module is not excluded by required combination
+    if (requiredMods.some(i => modules[code].excludes.some(j => i == j))) {
+      makeAvailable(modules[code].box, false, false);
+    }
   }
 
   var n = 0;
