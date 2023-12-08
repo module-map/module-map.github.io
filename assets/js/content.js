@@ -300,6 +300,7 @@ async function updateParams() {
             const code = module["Module code"];
             let required = (module[degree.value] === undefined ?
               false : module[degree.value].toUpperCase());
+
             // Maths / further maths
             if (code == "GEOL1061" && required) {
               required = maths.checked ? "O" : "X";
@@ -357,7 +358,6 @@ async function updateParams() {
             if (code == "GEOL1081" && !maths.checked) { // Further maths
               available = false;
             }
-
 
             // Mark module requirements
             var modReq = module.Requisites;
