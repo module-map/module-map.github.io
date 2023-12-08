@@ -22,6 +22,7 @@ h2 {
 
 .module-box {
   background-color: #A5C8D0;
+  color: #002A41AA;
 
   margin: 8px 0;
   height: 36px;
@@ -29,6 +30,10 @@ h2 {
   width: 100%;
   display: flex;
   align-items: center;
+}
+
+.module-box.chosen {
+  color: #002A41;
 }
 
 .module-box.required {

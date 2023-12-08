@@ -243,6 +243,12 @@ function choose(id, chosen = true, requiresUpdate = true) {
   }
   modules[code].selected = chosen;
   document.getElementById("check" + code).checked = chosen;
+  if (chosen) {
+    $("#" + code).addClass("chosen");
+  } else {
+    $("#" + code).removeClass("chosen");
+  }
+
 
   if (start != chosen && requiresUpdate) updateChoices();
 }
