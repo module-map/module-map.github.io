@@ -467,15 +467,16 @@ async function updateParams() {
     }
   }
 
-    chooseFrom = Object.fromEntries(
+  chooseFrom = Object.fromEntries(
     Object.entries(chooseFrom).map(([i, el]) => {
       const filtered = el.filter(modAvailable).sort(moduleCompare);
       if (filtered.length == 1) {
-        makeRequired(modules[filtered].box, update = false);
+        makeRequired(modules[filtered].box, true, false);
         return undefined;
       }
       return [i, filtered];
     })
+    .filter(entry => entry !== undefined)
   );
 
   updateChoices();
