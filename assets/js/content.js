@@ -73,7 +73,9 @@ function addNote(element, note) {
 }
 
 function addModuleSpan(code) {
-  return "<span onclick=\"choose(\'" + code + "\');\">" + code + " [add]</span>";
+  return "<span onclick=\"choose(\'" + code + "\');\" title=\"" +
+    $("#" + code + " .module-name").text() +
+    "\">" + code + " [add]</span>";
 }
 
 function updateChoices() {
