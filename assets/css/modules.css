@@ -136,3 +136,56 @@ input[type="checkbox"]:checked {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+#legend {
+  margin-top: 48px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.legend-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.legend-row .module-box {
+  width: 35%;
+  margin-right: 5%;
+  display: block;
+  align-items: center;
+  font-weight: bold;
+  text-align: center;
+  line-height: 36px;
+  padding: 0 5px;
+}
+
+.legend-row .legend-entry {
+  width: 70%;
+  display: block;
+}
+
+.legend-row .half {
+  width: 15%;
+}
+
+.legend-row .epip {
+  margin-left: 0;
+  width: 17.5%;
+}
+.legend-row .mich {
+  margin-right: 0;
+  width: 17.5%;
+}
+
+.legend-row .requisite {
+  width: 15%;
+  text-align: left;
+  box-shadow: rgb(104, 36, 109) -12px 0px 0px 0px inset;
+}
+
+.legend-row .requirer {
+  width: 15%;
+  box-shadow: rgb(104, 36, 109) 12px 0px 0px 0px inset;
+  text-align: right;
+}
