@@ -289,6 +289,10 @@ function moduleCompare(a, b) {
   const idB = typeof(b) === "string" ? b : b.id;
   const ma = modules[idA];
   const mb = modules[idB];
+  if (ma.box.classList.contains("required") +
+    mb.box.classList.contains("required") == 1) {
+    return ma.box.classList.contains("required") ? -1 : 1;
+  }
   if (ma.credits != mb.credits) {
     return ma.credits < mb.credits ? 1 : -1;
   }
@@ -507,10 +511,6 @@ async function updateParams() {
                 "Could not load data for this year");
 
       });
-
-      const levelDiv = $("#level" + level);
-      const sortedModules = levelDiv.children().sort(moduleCompare);
-      levelDiv.append(sortedModules);
   };
 
   const requiredMods = Object.keys(modules)
@@ -563,6 +563,12 @@ async function updateParams() {
     })
     .filter(entry => entry !== undefined)
   );
+
+ for (const level in [1, 2, 3, 4]) {
+   const levelDiv = $("#level" + level);
+   const sortedModules = levelDiv.children().sort(moduleCompare);
+   levelDiv.append(sortedModules);
+ }
 
   updateChoices();
 }
