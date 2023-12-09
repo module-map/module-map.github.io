@@ -113,7 +113,7 @@ function updateChoices() {
             if (mod.allReqs) {
               if (!mod.req.every(moduleChosen)) {
                 addNote(note,
-                  code + " requires " +
+                  moduleSpan(code) + " requires " +
                   mod.req.filter(m => !moduleChosen(m))
                     .sort(moduleCompare)
                     .map(addModuleSpan)
@@ -122,7 +122,7 @@ function updateChoices() {
             } else {
               if (!mod.req.some(moduleChosen)) {
                 addNote(note,
-                  code + " requires " +
+                  moduleSpan(code) + " requires " +
                   mod.req.sort(moduleCompare)
                   .map(addModuleSpan)
                   .join(" or "));
@@ -157,7 +157,7 @@ function updateChoices() {
     }
     const credNote = document.createElement("p");
     const credTot = document.createElement("span");
-    credTot.innerHTML = credits + "/120";
+    credTot.innerHTML = credits + " of 120";
     if (credits != 120) {
       credTot.classList.add("invalid");
     }
@@ -172,7 +172,7 @@ function updateChoices() {
       epipTot.classList.add("invalid");
     }
 
-    $(credNote).prepend(credTot, "&nbsp;credits (", michTot,
+    $(credNote).prepend("Chosen ", credTot, "&nbsp;credits (", michTot,
                        " Michaelmas; ", epipTot, " Epiphany)");
     $(note).prepend(credNote);
   }
