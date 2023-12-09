@@ -86,7 +86,7 @@ function addModuleSpan(code) {
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
     "onmouseover=\"glow(\'" + code + "\');\" " +
     "onmouseout=\"deglow(\'" + code + "\');\" " +
-    ">" + code + " [add]</span>";
+    ">" + code + " <span class='button'>Add</span></span>";
 }
 
 function moduleSpan(code) {
