@@ -593,6 +593,37 @@ fetch("data/years.json")
       option.value = year.substring(0, 4);
       startYear.appendChild(option);
     })
+
+    // Get values for SELECT elements from search parameters
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const yoe = urlParams.get("year") ||
+      urlParams.get("start") ||
+      urlParams.get("entry");
+    if (yoe) {
+      console.log(yoe.match(/\b2\d{3}\b/)[0]);
+      console.log(startYear)
+      startYear.value = yoe.match(/\b2\d{3}\b/)[0];
+      console.log(startYear.value)
+    }
+
+    const degr = urlParams.get("degree") ||
+      urlParams.get("pathway") ||
+      urlParams.get("stream") ||
+      urlParams.get("program") ||
+      urlParams.get("programme");
+    if (degr) {
+      degree.value = degr.toUpperCase();
+    }
+
+    if (urlParams.get("maths")) {
+      maths.checked = true;
+    }
+
+    if (urlParams.get("chemistry") || urlParams.get("chem")) {
+      chem.checked = true;
+    }
+
     updateParams();
   })
   .catch(error => console.error("Error fetching years.json: ", error))
@@ -602,34 +633,3 @@ yearOut.addEventListener("change", updateParams)
 degree.addEventListener("change", updateParams)
 maths.addEventListener("change", updateParams)
 chem.addEventListener("change", updateParams)
-
-window.onload = function() {
-  // Get parameters from the URL
-  const urlParams = new URLSearchParams(window.location.search);
-
-  // Get values for SELECT elements from parameters
-  const degr = urlParams.get("degree") ||
-    urlParams.get("pathway") ||
-    urlParams.get("stream") ||
-    urlParams.get("program") ||
-    urlParams.get("programme");
-  const yoe = urlParams.get("year") ||
-    urlParams.get("start") ||
-    urlParams.get("entry");
-  const mths = urlParams.get("maths");
-  const chm = urlParams.get("chemistry") || urlParams.get("chem");
-
-  // Update SELECT elements if values are found in parameters
-  if (yoe) {
-    startYear.value = yoe.match(/\b2\d{3}\b/)[0];
-  }
-  if (degr) {
-    degree.value = degr.toUpperCase();
-  }
-  if (mths) {
-    maths.checked = true;
-  }
-  if (chm) {
-    chem.checked = true;
-  }
-};
