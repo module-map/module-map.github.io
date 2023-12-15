@@ -269,10 +269,10 @@ function updateChoices() {
     const epipTot = document.createElement("span");
     michTot.innerHTML = michCredits;
     epipTot.innerHTML = epipCredits;
-    if (michCredits > 70 || michCredits < 50) {
+    if (michCredits > 70) {
       michTot.classList.add("invalid");
     }
-    if (epipCredits > 70 || epipCredits < 50) {
+    if (epipCredits > 70) {
       epipTot.classList.add("invalid");
     }
 
