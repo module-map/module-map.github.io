@@ -601,10 +601,7 @@ fetch("data/years.json")
       urlParams.get("start") ||
       urlParams.get("entry");
     if (yoe) {
-      console.log(yoe.match(/\b2\d{3}\b/)[0]);
-      console.log(startYear)
       startYear.value = yoe.match(/\b2\d{3}\b/)[0];
-      console.log(startYear.value)
     }
 
     const degr = urlParams.get("degree") ||
