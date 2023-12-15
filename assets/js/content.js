@@ -483,20 +483,6 @@ async function updateParams() {
             allReqs: requireAll,
             box: box
           }
-
-          box.getElementsByTagName("input")[0].checked = selected;
-          if (module.Credits == 10) {
-            if (module.Epip) {
-              setTerm(box, "epip")
-            } else if (module.Mich) {
-              setTerm(box, "mich")
-            }
-          }
-          makeRequired(box, required == "X", false)
-          if (log && !available) {
-            console.log("Unavailable: " + code + " " + name);
-          };
-          makeAvailable(box, available, false)
         });
 
         // Once modules loaded, check requisites are available
@@ -546,6 +532,26 @@ async function updateParams() {
             }
           }
         });
+
+        // Update box visibility
+        thisLevel.forEach(module => {
+          const code = module["Module code"];
+          const mod = modules[code];
+          const box = mod.box;
+          box.getElementsByTagName("input")[0].checked = mod.selected;
+          if (module.Credits == 10) {
+            if (module.Epip) {
+              setTerm(box, "epip")
+            } else if (module.Mich) {
+              setTerm(box, "mich")
+            }
+          }
+          makeRequired(box, mod.required == "X", false)
+          if (log && !modules[code].available) {
+            console.log("Unavailable: " + code + " " + mod.name);
+          };
+          makeAvailable(box, modules[code].available, false)
+        })
       })
       .catch(error => {
         console.error(error);
