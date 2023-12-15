@@ -1,5 +1,23 @@
 "use strict";
 const log = false;
+
+const minESCredits = {
+  F600: [120, 100, 100, 100],
+  F630: [120, 100, 100, 100],
+  F643: [120, 100, 100, 100],
+  F645: [ 60,  40,   0, 120],
+  F665: [120, 100, 100, 100],
+  CFG0: [0, 0, 0, 0]
+};
+const maxESCredits = {
+  F600: [120, 120, 120, 120],
+  F630: [120, 120, 120, 120],
+  F643: [120, 120, 120, 120],
+  F645: [100, 120, 120, 120],
+  F665: [120, 120, 120, 120],
+  CFG0: [80, 80, 100, 120]
+};
+
 const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
   "#CBA8B1", "#DACDA2", // sky: "#A5C8D0",
   "#B6AAA7", "#B3BDB1", // white: "#ffffff",
@@ -37,7 +55,7 @@ function paintSide(selector, left, col) {
 
     const matches = existing.match(/\) \d0px /g);
     const nExisting = matches ? matches.length : 0;
-    
+
     $(this).css(
       "box-shadow",
        (existing == "none" ? "" : existing + ", ") +
@@ -206,6 +224,8 @@ function moduleCompare(a, b) {
 function updateChoices() {
   for (const level of [1, 2, 3]) {
     let credits = 0;
+    const minCredits = minESCredits[degree.value][level - 1];
+    const maxCredits = maxESCredits[degree.value][level - 1];
     let michCredits = 0;
     let epipCredits = 0;
     const note = document.getElementById("note" + level);
@@ -264,7 +284,7 @@ function updateChoices() {
     const credNote = document.createElement("p");
     const credTot = document.createElement("span");
     credTot.innerHTML = credits + " of 120";
-    if (credits != 120) {
+    if (credits < minCredits || credits > maxCredits) {
       credTot.classList.add("invalid");
     }
     const michTot = document.createElement("span");
@@ -277,9 +297,16 @@ function updateChoices() {
     if (epipCredits > 70) {
       epipTot.classList.add("invalid");
     }
+    const extCred = Math.max(120 - maxCredits, 120 - credits);
+    const externalCred = credits > 120 ? "" : (credits > maxCredits ? (
+      "; <span class='why-invalid'>" + extCred +
+      " external credits required</span>"
+    ) : (credits >= minCredits && credits < 120 ?
+     ("; assumes <span class='alert'>" + extCred + " external credits</span>")
+      : ""));
 
     $(credNote).prepend("Chosen ", credTot, "&nbsp;credits (", michTot,
-                       " Michaelmas; ", epipTot, " Epiphany)");
+                       " Michaelmas; ", epipTot, " Epiphany)", externalCred);
     $(note).prepend(credNote);
   }
 

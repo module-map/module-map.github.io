@@ -14,10 +14,18 @@ h2 {
   margin-bottom: 0;
 }
 
-.invalid{
+.alert {
   font-weight: bold;
-  background: #FFD53A;
+  color: rgb(0, 174, 239);
+}
+
+.why-invalid, .invalid {
   color: #BE1E2D;
+  font-weight: bold;
+}
+
+.invalid {
+  background: #FFD53A;
 }
 
 .module-box {
