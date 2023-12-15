@@ -4,7 +4,7 @@ const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
   "#B6AAA7", "#B3BDB1", // white: "#ffffff",
   "#333132", // ink: "#002A41",
   // Exhausted palette; select more from iwanthue soft
-  "#6dbb60", "#bc6739", "#b8434e", "8650a6"
+  "#6dbb60", "#bc6739", "#b8434e", "#8650a6", "#b74d86", "#607fe6", "#5d7321"
 ];
 
 const startYear = document.getElementById("startYear");
