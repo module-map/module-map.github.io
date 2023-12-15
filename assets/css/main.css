@@ -2525,19 +2525,6 @@ input::-moz-focus-inner {
 				max-width: 35%;
 			}
 
-		/* Button */
-
-			input[type="button"],
-			input[type="submit"],
-			input[type="reset"],
-			button,
-			.button {
-				letter-spacing: 2px;
-				display: block;
-				padding: 1em 0 1em 0;
-				width: 100%;
-			}
-
 		/* Actions */
 
 			ul.actions li {
