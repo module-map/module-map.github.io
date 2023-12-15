@@ -199,7 +199,8 @@ function makeRequired(box, req = true, update = true) {
 }
 
 function mandatory(code) {
-  return modules.hasOwnProperty(code) && modules[code].required;
+  return modules.hasOwnProperty(code) &&
+    modules[code].box.classList.contains("required");
 }
 
 function moduleCompare(a, b) {
