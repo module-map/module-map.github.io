@@ -35,12 +35,14 @@ function paintSide(selector, left, col) {
     const existing = $(this).css("box-shadow");
     if (existing.includes(hexToRgb(col))) return;
 
-    const existingWidth = existing.match(/\) (\d)0px /);
+    const matches = existing.match(/\) \d0px /g);
+    const nExisting = matches ? matches.length : 0;
+    
     $(this).css(
       "box-shadow",
        (existing == "none" ? "" : existing + ", ") +
        "inset " + (left ? "" : "-") +
-       (left && existingWidth ? parseInt(existingWidth[1]) + 2 : "2") +
+       (left && nExisting ? (nExisting + 1) * 2 : "2") +
        "0px 0 0 0 " +
        col);
   });
