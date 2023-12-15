@@ -97,6 +97,100 @@ function moduleSpan(code) {
     ">" + code + "</span>";
 }
 
+function setTerm(box, term) {
+  box.classList.add(term);
+  if (term == "mich") {
+    box.classList.remove("epip");
+    const check = box.getElementsByTagName("input")[0];
+    const text = check.previousElementSibling;
+    if (check && text) {
+      const container = check.parentNode;
+      container.insertBefore(check, text);
+    }
+  } else {
+    box.classList.remove("mich");
+    const check = box.getElementsByTagName("input")[0];
+    const text = check.nextElementSibling;
+    if (check && text) {
+      const container = check.parentNode;
+      container.insertBefore(text, check);
+    }
+  }
+}
+
+function choose(id, chosen = true, requiresUpdate = true) {
+  var code, box;
+  if (typeof(id) === "string") {
+    code = id;
+    box = modules[code].box;
+  } else {
+    box = id;
+    code = $(box).attr("id");
+  }
+  const mod = modules[code];
+  const start = modules[code].selected;
+  if (!mod.available) {
+    chosen = false;
+  } else if (mandatory(mod)) {
+    chosen = true;
+  }
+  modules[code].selected = chosen;
+  document.getElementById("check" + code).checked = chosen;
+  if (chosen) {
+    $("#" + code).addClass("chosen");
+  } else {
+    $("#" + code).removeClass("chosen");
+  }
+
+
+  if (start != chosen && requiresUpdate) updateChoices();
+}
+
+function makeAvailable(box, avail = true, update = true) {
+  if (avail) {
+    box.classList.remove("unavailable");
+  } else {
+    box.classList.add("unavailable");
+    makeRequired(box, false, false);
+    choose(box, false, update);
+  }
+}
+
+function makeRequired(box, req = true, update = true) {
+  if (req) {
+    makeAvailable(box);
+    box.classList.add("required");
+    box.getElementsByTagName("input")[0].disabled = true;
+    choose(box, undefined, update);
+  } else {
+    box.classList.remove("required");
+    box.getElementsByTagName("input")[0].disabled = false;
+  }
+}
+
+function mandatory(code) {
+  return modules.hasOwnProperty(code) && modules[code].required;
+}
+
+function moduleCompare(a, b) {
+  const idA = typeof(a) === "string" ? a : a.id;
+  const idB = typeof(b) === "string" ? b : b.id;
+  const ma = modules[idA];
+  const mb = modules[idB];
+  if (ma.box.classList.contains("required") +
+    mb.box.classList.contains("required") == 1) {
+    return ma.box.classList.contains("required") ? -1 : 1;
+  }
+  if (ma.credits != mb.credits) {
+    return ma.credits < mb.credits ? 1 : -1;
+  }
+  if (ma.credits == 10) {
+    if (ma.mich && !mb.mich) return -1;
+    if (mb.mich && !ma.mich) return 1;
+  }
+  return idA.localeCompare(idB);
+}
+
 function updateChoices() {
   for (const level of [1, 2, 3]) {
     let credits = 0;
@@ -207,100 +301,6 @@ function updateChoices() {
       }
     }
   }
-}
-
-function setTerm(box, term) {
-  box.classList.add(term);
-  if (term == "mich") {
-    box.classList.remove("epip");
-    const check = box.getElementsByTagName("input")[0];
-    const text = check.previousElementSibling;
-    if (check && text) {
-      const container = check.parentNode;
-      container.insertBefore(check, text);
-    }
-  } else {
-    box.classList.remove("mich");
-    const check = box.getElementsByTagName("input")[0];
-    const text = check.nextElementSibling;
-    if (check && text) {
-      const container = check.parentNode;
-      container.insertBefore(text, check);
-    }
-  }
-}
-
-function choose(id, chosen = true, requiresUpdate = true) {
-  var code, box;
-  if (typeof(id) === "string") {
-    code = id;
-    box = modules[code].box;
-  } else {
-    box = id;
-    code = $(box).attr("id");
-  }
-  const mod = modules[code];
-  const start = modules[code].selected;
-  if (!mod.available) {
-    chosen = false;
-  } else if (mandatory(mod)) {
-    chosen = true;
-  }
-  modules[code].selected = chosen;
-  document.getElementById("check" + code).checked = chosen;
-  if (chosen) {
-    $("#" + code).addClass("chosen");
-  } else {
-    $("#" + code).removeClass("chosen");
-  }
-
-
-  if (start != chosen && requiresUpdate) updateChoices();
-}
-
-function makeAvailable(box, avail = true, update = true) {
-  if (avail) {
-    box.classList.remove("unavailable");
-  } else {
-    box.classList.add("unavailable");
-    makeRequired(box, false, false);
-    choose(box, false, update);
-  }
-}
-
-function makeRequired(box, req = true, update = true) {
-  if (req) {
-    makeAvailable(box);
-    box.classList.add("required");
-    box.getElementsByTagName("input")[0].disabled = true;
-    choose(box, undefined, update);
-  } else {
-    box.classList.remove("required");
-    box.getElementsByTagName("input")[0].disabled = false;
-  }
-}
-
-function mandatory(code) {
-  return modules.hasOwnProperty(code) && modules[code].required;
-}
-
-function moduleCompare(a, b) {
-  const idA = typeof(a) === "string" ? a : a.id;
-  const idB = typeof(b) === "string" ? b : b.id;
-  const ma = modules[idA];
-  const mb = modules[idB];
-  if (ma.box.classList.contains("required") +
-    mb.box.classList.contains("required") == 1) {
-    return ma.box.classList.contains("required") ? -1 : 1;
-  }
-  if (ma.credits != mb.credits) {
-    return ma.credits < mb.credits ? 1 : -1;
-  }
-  if (ma.credits == 10) {
-    if (ma.mich && !mb.mich) return -1;
-    if (mb.mich && !ma.mich) return 1;
-  }
-  return idA.localeCompare(idB);
 }
 
 async function updateParams() {
