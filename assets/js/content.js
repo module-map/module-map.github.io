@@ -627,14 +627,6 @@ async function updateParams() {
     delete requisite.Chemistry;
   }
 
-  for (var req in requisite) {
-    if (modAvailable(req) && !mandatory(req)) {
-      paintSide("#" + req, 0, palette[n]);
-      paintSide(".requires-" + req, 1, palette[n]);
-      ++n;
-    }
-  }
-
   chooseFrom = Object.fromEntries(
     Object.entries(chooseFrom).map(([i, el]) => {
       const filtered = el.filter(modAvailable).sort(moduleCompare);
@@ -647,11 +639,20 @@ async function updateParams() {
     .filter(entry => entry !== undefined)
   );
 
- for (const level in [1, 2, 3, 4]) {
-   const levelDiv = $("#level" + level);
-   const sortedModules = levelDiv.children().sort(moduleCompare);
-   levelDiv.append(sortedModules);
- }
+  // Now that all requirements are established, paint sides
+  for (var req in requisite) {
+    if (modAvailable(req) && !mandatory(req)) {
+      paintSide("#" + req, 0, palette[n]);
+      paintSide(".requires-" + req, 1, palette[n]);
+      ++n;
+    }
+  }
+
+  for (const level in [1, 2, 3, 4]) {
+    const levelDiv = $("#level" + level);
+    const sortedModules = levelDiv.children().sort(moduleCompare);
+    levelDiv.append(sortedModules);
+  }
 
   updateChoices();
 }
