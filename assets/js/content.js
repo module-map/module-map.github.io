@@ -89,6 +89,15 @@ function addModuleSpan(code) {
     ">" + code + " <span class='button'>Add</span></span>";
 }
 
+function dropModuleSpan(code) {
+  return "<span onclick=\"deglow(\'" + code + "\'); " +
+    "choose(\'" + code + "\', false);\" " +
+    "title=\"" + $("#" + code + " .module-name").text() + "\"" +
+    "onmouseover=\"glow(\'" + code + "\');\" " +
+    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    ">" + code + " <span class='button'>Drop</span></span>";
+}
+
 function moduleSpan(code) {
   return "<span onclick=\"deglow(\'" + code + "\');\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
@@ -229,7 +238,7 @@ function updateChoices() {
             const ex = mod.excludes[i];
             if (moduleChosen(ex)) {
               addNote(note,
-                "Cannot take " + moduleSpan(ex) + " with " + moduleSpan(code));
+                moduleSpan(ex) + " precludes " + dropModuleSpan(code));
             }
           }
 
@@ -403,7 +412,6 @@ async function updateParams() {
               code.innerHTML = module["Module code"];
               code.classList.add("module-code");
               const name = document.createElement("span");
-              name.innerHTML = module["Module name"];
               name.id = "name-" + module["Module code"];
               name.classList.add("module-name");
               text.classList.add("module-text");
