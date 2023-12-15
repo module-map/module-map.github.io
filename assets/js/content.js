@@ -1,4 +1,5 @@
 "use strict";
+const log = false;
 const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
   "#CBA8B1", "#DACDA2", // sky: "#A5C8D0",
   "#B6AAA7", "#B3BDB1", // white: "#ffffff",
@@ -360,6 +361,9 @@ async function updateParams() {
         const dataCodes = Object.values(data).map(item => item["Module code"]);
         for (const code in levelMods) {
           if (!(dataCodes.includes(code))) {
+            if (log) {
+              console.log("Hiding " + code);
+            }
             makeAvailable(levelMods[code].box, false, false);
             modules[code].required = "O";
             modules[code].selected = false;
@@ -367,157 +371,184 @@ async function updateParams() {
         }
 
         // Work through each module available this year at this level
-        data.forEach(module => {
-          if (module.Level == level) {
-            const code = module["Module code"];
-            const name = module["Module name"];
-            let required = (module[degree.value] === undefined ?
-              false : module[degree.value].toUpperCase());
+        const thisLevel = data.filter((module) => module.Level == level);
 
-            // Maths / further maths
-            if (code == "GEOL1061" && required) {
-              required = maths.checked ? "O" : "X";
-            } else if (code == "GEOL1081" && required) {
-              required = maths.checked ? "X" : "O";
-            }
+        // Create modules
+        thisLevel.forEach(module => {
+          const code = module["Module code"];
+          const name = module["Module name"];
+          let required = (module[degree.value] === undefined ?
+            false : module[degree.value].toUpperCase());
 
-            const moduleExists = modules.hasOwnProperty(code);
-            const box = moduleExists ? modules[code].box :
-                        document.createElement("div");
-
-            if (!moduleExists) {
-              box.classList.add("module-box");
-              box.setAttribute("id", module["Module code"]);
-              if (module.Credits == 40) {
-                box.classList.add("double");
-              } else if (module.Credits == 60) {
-                box.classList.add("triple");
-              }
-
-              const check = document.createElement("input");
-              check.type = "checkbox";
-              check.id = "check" + module["Module code"];
-
-              box.appendChild(check);
-              box.addEventListener("click", function(e) {
-                if (e.srcElement != check && !check.disabled) {
-                  check.checked = !check.checked;
-                }
-                choose(box, check.checked);
-                updateChoices();
-              })
-
-              const text = document.createElement("div");
-              const code = document.createElement("span");
-              code.innerHTML = module["Module code"];
-              code.classList.add("module-code");
-              const name = document.createElement("span");
-              name.id = "name-" + module["Module code"];
-              name.classList.add("module-name");
-              text.classList.add("module-text");
-              text.appendChild(name);
-              text.appendChild(code);
-              box.appendChild(text);
-
-              document.getElementById("level" + module.Level).appendChild(box);
-            }
-
-            box.setAttribute("title", name);
-            $("#name-" + code).html(name);
-
-            var available = required != "O";
-            if (code == "GEOL1061" &&  // Mathemetical methods
-                        (maths.checked || degree.value == "F665")
-            ) {
-              available = false;
-            }
-            if (code == "GEOL1081" &&  // Further maths
-              !maths.checked &&
-               degree.value != "F665" // Geophysicists must take this
-             ) {
-              available = false;
-            }
-
-            // Mark module requirements
-            var modReq = module.Requisites;
-            const requireAll = modReq ? modReq.includes("&") : null;
-            var reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
-            if (reqs) {
-                reqs = reqs.map(r => {
-                if (r == "Chemistry") {
-                  return hasChemistry() ? undefined : "GEOL2171";
-                }
-                if (r == "Maths") {
-                  return hasMaths() ? undefined : "GEOL1061";
-                }
-                return r;
-              }).filter(el => el !== undefined);
-              if (!reqs.length) {
-                reqs = null;
-                modReq = false;
-              }
-            }
-
-
-            // Check module's requisites are available
-            if (modReq) {
-              if (requireAll) {
-                if (!reqs.every(modAvailable)) {
-                  available = false;
-                }
-              } else {
-                if (!reqs.some(modAvailable)) {
-                  available = false;
-                }
-                reqs = reqs.filter(modAvailable)
-              }
-              if (available) reqs.forEach(function (req) {
-                box.classList.add("requires-" + req);
-                requisite[req] = true;
-              })
-            }
-
-            // Pathway one-of requirement lists
-            if (required && required != "X" && required != "O") {
-              if (chooseFrom.hasOwnProperty(required)) {
-                chooseFrom[required].push(code);
-              } else {
-                chooseFrom[required] = [code];
-              }
-            }
-
-            const selected = (modules[code] &&
-               modules[code].selected &&
-               modules[code].required != "X") || false;
-            modules[code] = {
-              available: available,
-              required: required,
-              excludes: module["Excluded Combn"] ?
-                module["Excluded Combn"].split(",") : [],
-              credits: module.Credits,
-              level: module.Level,
-              mich: module.Mich,
-              epip: module.Epip,
-              selected: selected,
-              req: reqs,
-              allReqs: requireAll,
-              box: box
-            }
-
-            box.getElementsByTagName("input")[0].checked = selected;
-            if (module.Credits == 10) {
-              if (module.Epip) {
-                setTerm(box, "epip")
-              } else if (module.Mich) {
-                setTerm(box, "mich")
-              }
-            }
-            makeRequired(box, required == "X", false)
-            makeAvailable(box, available, false)
+          // Maths / further maths
+          if (code == "GEOL1061" && required) {
+            required = maths.checked ? "O" : "X";
+          } else if (code == "GEOL1081" && required) {
+            required = maths.checked ? "X" : "O";
           }
-        })
+
+          const moduleExists = modules.hasOwnProperty(code);
+          const box = moduleExists ? modules[code].box :
+                      document.createElement("div");
+
+          if (!moduleExists) {
+            box.classList.add("module-box");
+            box.setAttribute("id", module["Module code"]);
+            if (module.Credits == 40) {
+              box.classList.add("double");
+            } else if (module.Credits == 60) {
+              box.classList.add("triple");
+            }
+
+            const check = document.createElement("input");
+            check.type = "checkbox";
+            check.id = "check" + module["Module code"];
+
+            box.appendChild(check);
+            box.addEventListener("click", function(e) {
+              if (e.srcElement != check && !check.disabled) {
+                check.checked = !check.checked;
+              }
+              choose(box, check.checked);
+              updateChoices();
+            })
+
+            const text = document.createElement("div");
+            const code = document.createElement("span");
+            code.innerHTML = module["Module code"];
+            code.classList.add("module-code");
+            const name = document.createElement("span");
+            name.id = "name-" + module["Module code"];
+            name.classList.add("module-name");
+            text.classList.add("module-text");
+            text.appendChild(name);
+            text.appendChild(code);
+            box.appendChild(text);
+
+            document.getElementById("level" + module.Level).appendChild(box);
+          }
+
+          box.setAttribute("title", name);
+          $("#name-" + code).html(name);
+
+          var available = required != "O";
+          if (code == "GEOL1061" &&  // Mathemetical methods
+                      (maths.checked || degree.value == "F665")
+          ) {
+            available = false;
+          }
+          if (code == "GEOL1081" &&  // Further maths
+            !maths.checked &&
+             degree.value != "F665" // Geophysicists must take this
+           ) {
+            available = false;
+          }
+
+          // Mark module requirements
+          var modReq = module.Requisites;
+          const requireAll = modReq ? modReq.includes("&") : null;
+          var reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
+          if (reqs) {
+              reqs = reqs.map(r => {
+              if (r == "Chemistry") {
+                return hasChemistry() ? undefined : "GEOL2171";
+              }
+              if (r == "Maths") {
+                return hasMaths() ? undefined : "GEOL1061";
+              }
+              return r;
+            }).filter(el => el !== undefined);
+            if (!reqs.length) {
+              reqs = null;
+              modReq = false;
+            }
+          }
+
+          const selected = (modules[code] &&
+             modules[code].selected &&
+             modules[code].required != "X") || false;
+
+          modules[code] = {
+            available: available,
+            name: name,
+            required: required,
+            excludes: module["Excluded Combn"] ?
+              module["Excluded Combn"].split(",") : [],
+            credits: module.Credits,
+            level: module.Level,
+            mich: module.Mich,
+            epip: module.Epip,
+            selected: selected,
+            req: reqs,
+            allReqs: requireAll,
+            box: box
+          }
+
+          box.getElementsByTagName("input")[0].checked = selected;
+          if (module.Credits == 10) {
+            if (module.Epip) {
+              setTerm(box, "epip")
+            } else if (module.Mich) {
+              setTerm(box, "mich")
+            }
+          }
+          makeRequired(box, required == "X", false)
+          if (log && !available) {
+            console.log("Unavailable: " + code + " " + name);
+          };
+          makeAvailable(box, available, false)
+        });
+
+        // Once modules loaded, check requisites are available
+        thisLevel.filter((module) => module.Requisites).forEach(module => {
+          const code = module["Module code"];
+          const mod = modules[code];
+          var available = mod.available;
+
+          // Check module's requisites are available
+          var reqs = mod.req;
+          if (mod.allReqs) {
+            if (!reqs.every(modAvailable)) {
+              if (log) {
+                console.log(reqs);
+              }
+              available = false;
+            }
+          } else {
+            if (!reqs.some(modAvailable)) {
+              if (log) {
+                console.log(reqs);
+              }
+              available = false;
+            }
+            modules[code].req = reqs.filter(modAvailable);
+          }
+          if (available) reqs.forEach(function (req) {
+            mod.box.classList.add("requires-" + req);
+            requisite[req] = true;
+          })
+          modules[code].available = available;
+        });
+
+        // Pathway one-of requirement lists
+        thisLevel
+        .filter((module) => modules[module["Module code"]].required)
+        .forEach(module => {
+          const code = module["Module code"];
+          const required = modules[code].required;
+
+          // Pathway one-of requirement lists
+          if (required && required != "X" && required != "O") {
+            if (chooseFrom.hasOwnProperty(required)) {
+              chooseFrom[required].push(code);
+            } else {
+              chooseFrom[required] = [code];
+            }
+          }
+        });
       })
       .catch(error => {
+        console.error(error);
         addNote($("#level" + level),
                 "Could not load data for this year");
 
@@ -534,6 +565,9 @@ async function updateParams() {
 
     // Check module is not excluded by required combination
     if (requiredMods.some(i => modules[code].excludes.some(j => i == j))) {
+      if (log) {
+        console.log("Excluded: " + code);
+      }
       makeAvailable(modules[code].box, false, false);
     }
   }
