@@ -628,7 +628,7 @@ async function updateParams() {
   }
 
   for (var req in requisite) {
-    if (!mandatory(req)) {
+    if (modAvailable(req) && !mandatory(req)) {
       paintSide("#" + req, 0, palette[n]);
       paintSide(".requires-" + req, 1, palette[n]);
       ++n;
