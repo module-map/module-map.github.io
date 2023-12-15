@@ -285,7 +285,9 @@ function updateChoices() {
 
   if (degree.value == "F665" && !maths.checked) {
     addNote($("#note1"),
-            "Geophysics pathway requires A-level Maths")
+            "Geophysics pathway requires A-level Maths" +
+            "<span onclick=\"maths.checked = true; updateParams();\" " +
+            "title=\"Add A-level Maths\" class='button'>Add</span>");
   }
 
   // Check that one-of-this-list criteria are met
