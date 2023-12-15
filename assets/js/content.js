@@ -361,6 +361,7 @@ async function updateParams() {
         data.forEach(module => {
           if (module.Level == level) {
             const code = module["Module code"];
+            const name = module["Module name"];
             let required = (module[degree.value] === undefined ?
               false : module[degree.value].toUpperCase());
 
@@ -383,7 +384,6 @@ async function updateParams() {
               } else if (module.Credits == 60) {
                 box.classList.add("triple");
               }
-              box.setAttribute("title", module["Module name"]);
 
               const check = document.createElement("input");
               check.type = "checkbox";
@@ -404,6 +404,7 @@ async function updateParams() {
               code.classList.add("module-code");
               const name = document.createElement("span");
               name.innerHTML = module["Module name"];
+              name.id = "name-" + module["Module code"];
               name.classList.add("module-name");
               text.classList.add("module-text");
               text.appendChild(name);
@@ -413,6 +414,8 @@ async function updateParams() {
               document.getElementById("level" + module.Level).appendChild(box);
             }
 
+            box.setAttribute("title", name);
+            $("#name-" + code).html(name);
 
             var available = required != "O";
             if (code == "GEOL1061" &&  // Mathemetical methods
