@@ -2,11 +2,11 @@
 const log = false;
 
 const minESCredits = {
-  F600: [120, 100, 100, 100],
-  F630: [120, 100, 100, 100],
-  F643: [120, 100, 100, 100],
+  F600: [120, 100, 100, 120],
+  F630: [120, 100, 100, 120],
+  F643: [120, 100, 100, 120],
   F645: [ 60,  40,   0, 120],
-  F665: [120, 100, 100, 100],
+  F665: [120, 100, 100, 120],
   CFG0: [0, 0, 0, 0]
 };
 const maxESCredits = {
@@ -223,7 +223,7 @@ function moduleCompare(a, b) {
 }
 
 function updateChoices() {
-  for (const level of [1, 2, 3]) {
+  for (const level of [1, 2, 3, 4]) {
     let credits = 0;
     const minCredits = minESCredits[degree.value][level - 1];
     const maxCredits = maxESCredits[degree.value][level - 1];
@@ -625,6 +625,16 @@ async function updateParams() {
       $(".requires-Chemistry").addClass("requires-GEOL2171");
     }
     delete requisite.Chemistry;
+  }
+
+  // Rewrite "Two of" requirements
+  console.log(chooseFrom);
+  if (chooseFrom.hasOwnProperty("2")) {
+    for (var i = 0; i < chooseFrom["2"].length; ++i) {
+      chooseFrom["2-" + i] = chooseFrom["2"].filter((element, index) => index !== i);
+    }
+    delete chooseFrom["2"];
+    console.log(chooseFrom);
   }
 
   chooseFrom = Object.fromEntries(
