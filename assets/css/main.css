@@ -95,7 +95,7 @@ input::-moz-focus-inner {
 		font-weight: 300;
 		color: #002A41; /* ink */
 		line-height: 24px;
-		font-size: 12pt;
+		font-size: 10pt;
 	}
 
 	h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
@@ -2054,7 +2054,7 @@ input::-moz-focus-inner {
 		overflow: hidden;
 		background: #fff;
 		text-align: center;
-		padding: 2em 0;
+		padding: 0;
 	}
 
 		#features p {
@@ -2175,7 +2175,7 @@ input::-moz-focus-inner {
 		overflow: hidden;
 		border-top: solid 2px #e5e5e5;
 		background: #f0f0f0;
-		padding: 6em 0 8em 0;
+		padding: 0;
 	}
 
 		#footer form input[type="text"],
@@ -2201,10 +2201,8 @@ input::-moz-focus-inner {
 /* Copyright */
 
 	#copyright {
-		border-top: solid 2px #e5e5e5;
 		text-align: center;
-		margin-top: 6em;
-		padding-top: 4em;
+		margin-top: 2em;
 	}
 
 /* XLarge */
@@ -2214,7 +2212,7 @@ input::-moz-focus-inner {
 		/* Basic */
 
 			body, input, textarea, select {
-				font-size: 11pt;
+				font-size: 10pt;
 			}
 
 	}
@@ -2268,13 +2266,6 @@ input::-moz-focus-inner {
 					#banner > .container br {
 						display: none;
 					}
-
-		/* Copyright */
-
-			#copyright {
-				margin-top: 2em;
-				padding-top: 2em;
-			}
 
 	}
 
