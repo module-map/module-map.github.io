@@ -1404,7 +1404,7 @@ input::-moz-focus-inner {
 				}
 
 					.row > * {
-						padding: 30px 0 0 30px;
+						padding: 15px 0 0 30px;
 					}
 
 					.row.gtr-uniform {
@@ -2286,7 +2286,7 @@ input::-moz-focus-inner {
 		/* Header */
 
 			#header > .container {
-				padding: 10em 0 7em 0;
+				padding: 1em 0 1em 0;
 			}
 
 		/* Nav */
@@ -2536,7 +2536,7 @@ input::-moz-focus-inner {
 		/* Header */
 
 			#header > .container {
-				padding: 6em 0 4em 0;
+				padding: 3em 0 1em 0;
 			}
 
 			#header h1 {
@@ -2572,9 +2572,9 @@ input::-moz-focus-inner {
 				padding: 2em 0;
 			}
 
-				#features ul.actions {
-					margin-top: 0;
-				}
+      #features ul.actions {
+        margin: 0;
+      }
 
 		/* Main */
 
