@@ -371,6 +371,12 @@ async function updateParams() {
   // Year out?
   const levelsToShow = yearOut.checked ? [1, 2, 3] : [1, 2, 3, 4];
   $("#col4").css("display", yearOut.checked ? "none" : "unset");
+  var levelCache = $("<div>").css("display", "none");
+  levelCache.append($("<div>"))
+    .append($("<div>"))
+    .append($("<div>"))
+    .append($("<div>"));
+  $("body").append(levelCache);
 
   for (const level of levelsToShow) {
     // Get modules available at this level
@@ -457,7 +463,7 @@ async function updateParams() {
             text.appendChild(code);
             box.appendChild(text);
 
-            document.getElementById("level" + module.Level).appendChild(box);
+            levelCache.children(":nth-child(" + module.Level + ")").append(box);
           }
 
           box.setAttribute("title", name);
@@ -524,27 +530,29 @@ async function updateParams() {
           var available = mod.available;
 
           // Check module's requisites are available
-          var reqs = mod.req;
-          if (mod.allReqs) {
-            if (!reqs.every(modAvailable)) {
-              if (log) {
-                console.log(reqs);
+          const reqs = mod.req;
+          if (reqs !== null) {
+            if (mod.allReqs) {
+              if (!reqs.every(modAvailable)) {
+                if (log) {
+                  console.log(reqs);
+                }
+                available = false;
               }
-              available = false;
-            }
-          } else {
-            if (!reqs.some(modAvailable)) {
-              if (log) {
-                console.log(reqs);
+            } else {
+              if (!reqs.some(modAvailable)) {
+                if (log) {
+                  console.log(reqs);
+                }
+                available = false;
               }
-              available = false;
+              modules[code].req = reqs.filter(modAvailable);
             }
-            modules[code].req = reqs.filter(modAvailable);
+            if (available) reqs.forEach(function (req) {
+              mod.box.classList.add("requires-" + req);
+              requisite[req] = true;
+            })
           }
-          if (available) reqs.forEach(function (req) {
-            mod.box.classList.add("requires-" + req);
-            requisite[req] = true;
-          })
           modules[code].available = available;
         });
 
@@ -658,9 +666,13 @@ async function updateParams() {
 
   for (const level in [1, 2, 3, 4]) {
     const levelDiv = $("#level" + level);
-    const sortedModules = levelDiv.children().sort(moduleCompare);
-    levelDiv.append(sortedModules);
+    const sortedModules = levelCache
+      .children(":nth-child(" + level + ")")
+      .children()
+      .sort(moduleCompare);
+    $("#level" + level).append(sortedModules);
   }
+  levelCache.remove();
 
   updateChoices();
 }
