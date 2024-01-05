@@ -676,6 +676,7 @@ fetch("data/years.json")
       option.value = year.substring(0, 4);
       startYear.appendChild(option);
     })
+    updateParams();
   })
   .catch(error => console.error("Error fetching years.json: ", error))
 
