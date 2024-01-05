@@ -165,7 +165,7 @@ function choose(id, chosen = true, requiresUpdate = true) {
     chosen = true;
   }
   modules[code].selected = chosen;
-  document.getElementById("check" + code).checked = chosen;
+  $("#check" + code).prop("checked", chosen);
   if (chosen) {
     $("#" + code).addClass("chosen");
   } else {
@@ -262,7 +262,7 @@ function updateChoices() {
             const ex = mod.excludes[i];
             if (moduleChosen(ex)) {
               addNote(note,
-                moduleSpan(ex) + " precludes " + dropModuleSpan(code));
+                dropModuleSpan(ex) + " precludes " + dropModuleSpan(code));
             }
           }
 
@@ -373,6 +373,7 @@ async function updateParams() {
   $("#col4").css("display", yearOut.checked ? "none" : "unset");
   var levelCache = $("<div>").css("display", "none");
   levelCache.append($("<div>"))
+    .append($("<div>"))
     .append($("<div>"))
     .append($("<div>"))
     .append($("<div>"));
@@ -664,13 +665,13 @@ async function updateParams() {
     }
   }
 
-  for (const level in [1, 2, 3, 4]) {
-    const levelDiv = $("#level" + level);
-    const sortedModules = levelCache
-      .children(":nth-child(" + level + ")")
-      .children()
-      .sort(moduleCompare);
-    $("#level" + level).append(sortedModules);
+  for (let level = 1; level <=4; ++level) {
+    $.merge(
+      levelCache.children(":nth-child(" + level + ")").children(),
+      $("#level" + level).children()
+    )
+    .sort(moduleCompare)
+    .appendTo($("#level" + level));
   }
   levelCache.remove();
 
