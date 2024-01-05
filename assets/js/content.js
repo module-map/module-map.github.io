@@ -419,11 +419,9 @@ async function updateParams() {
           let required = (module[degree.value] === undefined ?
             false : module[degree.value].toUpperCase());
 
-          // Maths / further maths
+          // Maths required if marked so, AND lacking A-level
           if (code == "GEOL1061" && required) {
             required = maths.checked ? "O" : "X";
-          } else if (code == "GEOL1081" && required) {
-            required = maths.checked ? "X" : "O";
           }
 
           const moduleExists = modules.hasOwnProperty(code);
