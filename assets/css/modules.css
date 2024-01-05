@@ -1,9 +1,16 @@
 #main {
-  margin-top: 2em;
+  padding-top: 2em;
 }
 #features {
+  position: sticky;
   border-bottom: 1px solid;
+  top: -5px;
+  z-index: 10;
 }
+#features ul.actions {
+  margin-bottom: 10px;
+}
+
 #header, #features {
   background: #f0f0f0;
 }
