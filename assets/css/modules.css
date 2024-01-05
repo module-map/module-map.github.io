@@ -1,3 +1,23 @@
+#main {
+  margin-top: 2em;
+}
+#features {
+  border-bottom: 1px solid;
+}
+#header, #features {
+  background: #f0f0f0;
+}
+
+#header h1 {
+  letter-spacing: 4px;
+}
+
+@media screen and (max-width: 736px) {
+  #header h1 {
+    letter-spacing: 2px;
+  }
+}
+
 h2 {
   text-align: center;
   line-height: 24px;
