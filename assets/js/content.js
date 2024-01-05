@@ -665,7 +665,7 @@ async function updateParams() {
     }
   }
 
-  for (let level = 1; level <=4; ++level) {
+  for (const level of [1, 2, 3, 4]) {
     $.merge(
       levelCache.children(":nth-child(" + level + ")").children(),
       $("#level" + level).children()
