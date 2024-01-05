@@ -628,13 +628,11 @@ async function updateParams() {
   }
 
   // Rewrite "Two of" requirements
-  console.log(chooseFrom);
   if (chooseFrom.hasOwnProperty("2")) {
     for (var i = 0; i < chooseFrom["2"].length; ++i) {
       chooseFrom["2-" + i] = chooseFrom["2"].filter((element, index) => index !== i);
     }
     delete chooseFrom["2"];
-    console.log(chooseFrom);
   }
 
   chooseFrom = Object.fromEntries(
@@ -676,6 +674,13 @@ fetch("data/years.json")
       option.value = year.substring(0, 4);
       startYear.appendChild(option);
     })
+    const urlParams = new URLSearchParams(window.location.search);
+    const yoe = urlParams.get("year") ||
+      urlParams.get("start") ||
+      urlParams.get("entry");
+    if (yoe) {
+      startYear.value = yoe.match(/\b2\d{3}\b/)[0];
+    }
     updateParams();
   })
   .catch(error => console.error("Error fetching years.json: ", error))
