@@ -234,50 +234,65 @@ function updateChoices() {
     for (const code in modules) {
       if (modules.hasOwnProperty(code)) {
         const mod = modules[code];
-        if (mod.level == level && mod.selected) {
+        if (mod.level == level) {
           // Check requisites
           if (mod.req) {
             if (mod.allReqs) {
               if (!mod.req.every(moduleChosen)) {
-                addNote(note,
-                  moduleSpan(code) + " requires " +
-                  mod.req.filter(m => !moduleChosen(m))
-                    .sort(moduleCompare)
-                    .map(addModuleSpan)
-                    .join(" + "));
+                if (mod.selected) {
+                  console.log("Argh!")
+                  addNote(note,
+                    moduleSpan(code) + " requires " +
+                    mod.req.filter(m => !moduleChosen(m))
+                      .sort(moduleCompare)
+                      .map(addModuleSpan)
+                      .join(" + "));
+                }
+                $(mod.box).addClass("cantdo")
+              } else {
+                $(mod.box).removeClass("cantdo")
               }
             } else {
               if (!mod.req.some(moduleChosen)) {
-                addNote(note,
-                  moduleSpan(code) + " requires " +
-                  mod.req.sort(moduleCompare)
-                  .map(addModuleSpan)
-                  .join(" or "));
+                if (mod.selected) {
+                  console.log("Argh")
+                  addNote(note,
+                    moduleSpan(code) + " requires " +
+                    mod.req.sort(moduleCompare)
+                    .map(addModuleSpan)
+                    .join(" or "));
+                }
+                $(mod.box).addClass("cantdo")
+              } else {
+                $(mod.box).removeClass("cantdo")
               }
             }
           }
 
-          // Check for excluded combinations
-          for (const i in mod.excludes) {
-            const ex = mod.excludes[i];
-            if (moduleChosen(ex)) {
-              addNote(note,
-                dropModuleSpan(ex) + " precludes " + dropModuleSpan(code));
-            }
-          }
+          if (mod.selected) {
 
-          // Count credit splits
-          const modCreds = mod.credits;
-          credits += mod.credits;
-          if (mod.mich && mod.epip) {
-            michCredits += mod.credits / 2;
-            epipCredits += mod.credits / 2;
-          } else if (mod.mich) {
-            michCredits += mod.credits;
-          } else if (mod.epip) {
-            epipCredits += mod.credits;
-          } else {
-            console.error("Module seems not to run in either term: ", code);
+            // Check for excluded combinations
+            for (const i in mod.excludes) {
+              const ex = mod.excludes[i];
+              if (moduleChosen(ex)) {
+                addNote(note,
+                  dropModuleSpan(ex) + " precludes " + dropModuleSpan(code));
+              }
+            }
+
+            // Count credit splits
+            const modCreds = mod.credits;
+            credits += mod.credits;
+            if (mod.mich && mod.epip) {
+              michCredits += mod.credits / 2;
+              epipCredits += mod.credits / 2;
+            } else if (mod.mich) {
+              michCredits += mod.credits;
+            } else if (mod.epip) {
+              epipCredits += mod.credits;
+            } else {
+              console.error("Module seems not to run in either term: ", code);
+            }
           }
         }
       }
