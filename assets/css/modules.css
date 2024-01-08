@@ -38,6 +38,7 @@ h2 {
   text-align: center;
   line-height: 24px;
   margin: 0 0 12px 0;
+  height: 32px;
 }
 
 .note {
@@ -89,7 +90,7 @@ h2 {
 }
 
 .module-box.double {
-  height: 72px;
+  height: calc((36px * 2) + 8px);
 }
 
 .module-box.epip .module-code, .module-box.epip .module-name,
@@ -141,7 +142,7 @@ h2 {
   }
 
 .module-box.triple {
-  height: 108px;
+  height: calc((36px * 3) + (8px * 2));
 }
 
 .module-box.glowing {
