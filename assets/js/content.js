@@ -232,10 +232,8 @@ function highlight(code) {
       $box.addClass("pulsating");
       const tint = col[0].replace("rgb", "rgba").replace(")", ", 1)");
       console.log($box.css("background", "linear-gradient(90deg, " +
-        tint + "8%, 15%, " +
-        $box.css("background-color") + " 35%, " +
-        $box.css("background-color") + " 65%, 85%, " +
-        tint + "92%" +
+        $box.css("background-color") + ", 85%, " +
+         tint + " 92%" +
         ")"));
     }
   }
