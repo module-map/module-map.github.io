@@ -222,6 +222,30 @@ function moduleCompare(a, b) {
   return idA.localeCompare(idB);
 }
 
+function highlight(code) {
+  const $box = $("#" + code);
+  const borders = $box[0].style.boxShadow.split("inset,");
+  for (const border of borders) {
+    const col = border.split(" -20px");
+    if (col.length) {
+
+      $box.addClass("pulsating");
+      const tint = col[0].replace("rgb", "rgba").replace(")", ", 1)");
+      console.log($box.css("background", "linear-gradient(90deg, " +
+        tint + "8%, 15%, " +
+        $box.css("background-color") + " 35%, " +
+        $box.css("background-color") + " 65%, 85%, " +
+        tint + "92%" +
+        ")"));
+    }
+  }
+}
+
+function unlight(code) {
+  $("#" + code).removeClass("pulsating").css("background", "");
+
+}
+
 function updateChoices() {
   for (const level of [1, 2, 3, 4]) {
     let credits = 0;
@@ -237,21 +261,21 @@ function updateChoices() {
         if (mod.level == level) {
           // Check requisites
           if (mod.req) {
+            const missing = mod.req.filter(m => !moduleChosen(m))
+              .sort(moduleCompare);
+            $(mod.box).off("mouseover");
+            $(mod.box).off("mouseout");
+            $(mod.box).mouseover(function() {missing.forEach(highlight);});
+            $(mod.box).mouseout(function() {missing.forEach(unlight);});
             if (mod.allReqs) {
               if (!mod.req.every(moduleChosen)) {
                 if (mod.selected) {
                   addNote(note,
                     moduleSpan(code) + " requires " +
-                    mod.req.filter(m => !moduleChosen(m))
-                      .sort(moduleCompare)
-                      .map(addModuleSpan)
-                      .join(" + "));
+                    missing.map(addModuleSpan).join(" + "));
                 }
                 $(mod.box).addClass("cantdo")
-                mod.box.title = mod.name + "\nRequires " +
-                  mod.req.filter(m => !moduleChosen(m))
-                    .sort(moduleCompare)
-                    .join(" + ");
+                mod.box.title = mod.name + "\nRequires " + missing.join(" + ");
               } else {
                 $(mod.box).removeClass("cantdo")
                 mod.box.title = mod.name;
@@ -261,16 +285,10 @@ function updateChoices() {
                 if (mod.selected) {
                   addNote(note,
                     moduleSpan(code) + " requires " +
-                    mod.req.sort(moduleCompare)
-                    .map(addModuleSpan)
-                    .join(" or "));
+                    missing.map(addModuleSpan).join(" or "));
                 }
                 $(mod.box).addClass("cantdo")
-                console.log(mod.name)
-                mod.box.title = mod.name + "\nRequires " +
-                  mod.req.filter(m => !moduleChosen(m))
-                    .sort(moduleCompare)
-                    .join(" or ");
+                mod.box.title = mod.name + "\nRequires " + missing.join(" or ");
               } else {
                 $(mod.box).removeClass("cantdo")
                 mod.box.title = mod.name;

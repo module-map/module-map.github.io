@@ -76,7 +76,7 @@ h2 {
   align-items: center;
 }
 
-.module-box.chosen {
+.module-box.chosen, .module-box.cantdo {
   color: #002A41;
 }
 
@@ -89,7 +89,7 @@ h2 {
 }
 
 .module-box.cantdo {
-  opacity: 45%;
+  opacity: 50%;
 }
 
 .module-box.double {
@@ -151,6 +151,19 @@ h2 {
 .module-box.glowing {
   outline: 5px solid #FFD53ADD;
   opacity: 80%;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.04);
+  }
+}
+
+.pulsating {
+  animation: pulse 0.75s infinite alternate;
 }
 
 .module-box input[type="checkbox"] {
