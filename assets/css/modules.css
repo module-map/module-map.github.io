@@ -1,12 +1,21 @@
 #main {
   padding-top: 2em;
 }
+
 #features {
   position: sticky;
   border-bottom: 1px solid;
   top: -5px;
   z-index: 10;
 }
+
+@media screen and (max-height: 980px) {
+  #features {
+    position: inherit;
+    top: 0;
+  }
+}
+
 #features ul.actions {
   margin-bottom: 10px;
 }
