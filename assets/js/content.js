@@ -240,7 +240,6 @@ function updateChoices() {
             if (mod.allReqs) {
               if (!mod.req.every(moduleChosen)) {
                 if (mod.selected) {
-                  console.log("Argh!")
                   addNote(note,
                     moduleSpan(code) + " requires " +
                     mod.req.filter(m => !moduleChosen(m))
@@ -249,13 +248,17 @@ function updateChoices() {
                       .join(" + "));
                 }
                 $(mod.box).addClass("cantdo")
+                mod.box.title = mod.name + "\nRequires " +
+                  mod.req.filter(m => !moduleChosen(m))
+                    .sort(moduleCompare)
+                    .join(" + ");
               } else {
                 $(mod.box).removeClass("cantdo")
+                mod.box.title = mod.name;
               }
             } else {
               if (!mod.req.some(moduleChosen)) {
                 if (mod.selected) {
-                  console.log("Argh")
                   addNote(note,
                     moduleSpan(code) + " requires " +
                     mod.req.sort(moduleCompare)
@@ -263,8 +266,14 @@ function updateChoices() {
                     .join(" or "));
                 }
                 $(mod.box).addClass("cantdo")
+                console.log(mod.name)
+                mod.box.title = mod.name + "\nRequires " +
+                  mod.req.filter(m => !moduleChosen(m))
+                    .sort(moduleCompare)
+                    .join(" or ");
               } else {
                 $(mod.box).removeClass("cantdo")
+                mod.box.title = mod.name;
               }
             }
           }
