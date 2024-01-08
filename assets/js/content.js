@@ -228,13 +228,12 @@ function highlight(code) {
   for (const border of borders) {
     const col = border.split(" -20px");
     if (col.length) {
-
       $box.addClass("pulsating");
       const tint = col[0].replace("rgb", "rgba").replace(")", ", 1)");
-      console.log($box.css("background", "linear-gradient(90deg, " +
+      $box.css("background", "linear-gradient(90deg, " +
         $box.css("background-color") + ", 85%, " +
          tint + " 92%" +
-        ")"));
+        ")");
     }
   }
 }
