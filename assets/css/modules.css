@@ -88,6 +88,10 @@ h2 {
   display: none;
 }
 
+.module-box.cantdo {
+  opacity: 45%;
+}
+
 .module-box.double {
   height: 72px;
 }
@@ -201,7 +205,8 @@ input[type="checkbox"]:checked {
   align-items: center;
   font-weight: bold;
   text-align: center;
-  line-height: 36px;
+  line-height: 24px;
+  max-height: 24px;
   padding: 0 5px;
 }
 
