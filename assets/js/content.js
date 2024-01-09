@@ -252,7 +252,8 @@ function highlight(code) {
       $box.addClass("pulsating");
       const tint = col[0].replace("rgb", "rgba").replace(")", ", 1)");
       $box.css("background", "linear-gradient(90deg, " +
-        $box.css("background-color") + ", 85%, " +
+      //$box.css("background-color") + ", 85%, " +
+        "#A5C8D0, 85%, " +
          tint + " 92%" +
         ")");
     }
