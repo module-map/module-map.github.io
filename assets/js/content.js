@@ -419,9 +419,13 @@ async function updateParams() {
           let required = (module[degree.value] === undefined ?
             false : module[degree.value].toUpperCase());
 
-          // Maths required if marked so, AND lacking A-level
-          if (code == "GEOL1061" && required) {
-            required = maths.checked ? "O" : "X";
+          // Maths required if required by pathway, AND lacking A-level
+          if (required) {
+            if (code == "GEOL1061") {
+              required = maths.checked ? false : "X";
+            } else if (code == "GEOL1081") {
+              required = maths.checked ? "X" : false;
+            }
           }
 
           const moduleExists = modules.hasOwnProperty(code);
@@ -468,19 +472,6 @@ async function updateParams() {
           box.setAttribute("title", name);
           $("#name-" + code).html(name);
 
-          var available = required != "O";
-          if (code == "GEOL1061" &&  // Mathemetical methods
-                      (maths.checked || degree.value == "F665")
-          ) {
-            available = false;
-          }
-          if (code == "GEOL1081" &&  // Further maths
-            !maths.checked &&
-             degree.value != "F665" // Geophysicists must take this
-           ) {
-            available = false;
-          }
-
           // Mark module requirements
           var modReq = module.Requisites;
           const requireAll = modReq ? modReq.includes("&") : null;
@@ -506,7 +497,7 @@ async function updateParams() {
              modules[code].required != "X") || false;
 
           modules[code] = {
-            available: available,
+            available: required != "O",
             name: name,
             required: required,
             excludes: module["Excluded Combn"] ?
@@ -613,7 +604,10 @@ async function updateParams() {
       if (log) {
         console.log("Excluded: " + code);
       }
-      makeAvailable(modules[code].box, false, false);
+      if (code != "GEOL1061" && code != "GEOL1081") {
+        // Always display maths so students can see what they are missing
+        makeAvailable(modules[code].box, false, false);
+      }
     }
   }
 
