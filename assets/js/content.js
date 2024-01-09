@@ -102,28 +102,28 @@ function deglow(code) {
 }
 
 function addModuleSpan(code) {
-  return "<span onclick=\"deglow(\'" + code + "\'); " +
+  return "<span onclick=\"unlight(\'" + code + "\'); " +
     "choose(\'" + code + "\');\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"glow(\'" + code + "\');\" " +
-    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    "onmouseover=\"highlight(\'" + code + "\');\" " +
+    "onmouseout=\"unlight(\'" + code + "\');\" " +
     ">" + code + " <span class='button'>Add</span></span>";
 }
 
 function dropModuleSpan(code) {
-  return "<span onclick=\"deglow(\'" + code + "\'); " +
+  return "<span onclick=\"unlight(\'" + code + "\'); " +
     "choose(\'" + code + "\', false);\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"glow(\'" + code + "\');\" " +
-    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    "onmouseover=\"highlight(\'" + code + "\');\" " +
+    "onmouseout=\"unlight(\'" + code + "\');\" " +
     ">" + code + " <span class='button'>Drop</span></span>";
 }
 
 function moduleSpan(code) {
-  return "<span onclick=\"deglow(\'" + code + "\');\" " +
+  return "<span onclick=\"unlight(\'" + code + "\');\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"glow(\'" + code + "\');\" " +
-    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    "onmouseover=\"highlight(\'" + code + "\');\" " +
+    "onmouseout=\"unlight(\'" + code + "\');\" " +
     ">" + code + "</span>";
 }
 
