@@ -427,7 +427,9 @@ function updateChoices() {
    (maths.checked ? "&maths=A" : "") +
    (chem.checked ? "&chemistry=A" : "") +
    (yearOut.checked ? "&inset=yes" : "") +
-   "&modules="
+   "&modules=" + Object.keys(modules).filter((code) => {
+     return modules[code].selected && modules[code].required != "X";
+   }).sort(moduleCompare).join(",");
   ;
   history.pushState(null, null, permalink);
   $("#permalink")[0].href = permalink;
