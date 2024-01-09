@@ -215,7 +215,14 @@ function moduleCompare(a, b) {
   const idB = typeof(b) === "string" ? b : b.id;
   const ma = modules[idA];
   const mb = modules[idB];
-  if (ma && ma.box.classList.contains("required") +
+  if (ma === undefined) {
+    console.warn("Sorting non-existent module " + idA)
+    return 0;
+  } else if (mb === undefined) {
+    console.warn("Sorting non-existent module " + idb)
+    return 0;
+  }
+  if (ma.box.classList.contains("required") +
     mb.box.classList.contains("required") == 1) {
     return ma.box.classList.contains("required") ? -1 : 1;
   }
