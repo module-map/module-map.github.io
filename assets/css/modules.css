@@ -9,6 +9,20 @@
   z-index: 10;
 }
 
+#features header {
+  padding: 5em 0 5em;
+}
+
+#features footer {
+  padding: 5em 0 35em;
+}
+
+#features .button {
+  padding: 1.5em 5em;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
 @media screen and (max-height: 980px) {
   #features {
     position: inherit;
@@ -38,6 +52,7 @@ h2 {
   text-align: center;
   line-height: 24px;
   margin: 0 0 12px 0;
+  height: 32px;
 }
 
 .note {
@@ -93,7 +108,7 @@ h2 {
 }
 
 .module-box.double {
-  height: 72px;
+  height: calc((36px * 2) + 8px);
 }
 
 .module-box.epip .module-code, .module-box.epip .module-name,
@@ -145,7 +160,7 @@ h2 {
   }
 
 .module-box.triple {
-  height: 108px;
+  height: calc((36px * 3) + (8px * 2));
 }
 
 .module-box.glowing {
@@ -164,7 +179,7 @@ h2 {
 
 .pulsating {
   opacity: 100% !important;
-  animation: pulse 0.75s infinite alternate;
+  animation: pulse 0.75s ease-in-out 0.3s infinite alternate;
 }
 
 .module-box input[type="checkbox"] {
@@ -199,8 +214,9 @@ input[type="checkbox"]:checked {
   white-space: nowrap;
 }
 
-#legend {
+.legend-box {
   margin-top: 24px;
+  margin-bottom: 24px;
   width: 100%;
   border: 1px solid;
   padding: 15px 24px 0;
@@ -210,6 +226,15 @@ input[type="checkbox"]:checked {
   display: flex;
   width: 100%;
   align-items: center;
+}
+
+.legend-text {
+  border-top: 1px solid;
+  padding: 1em 0;
+}
+
+.legend-text p {
+  margin-bottom: 0;
 }
 
 .legend-row .module-box {

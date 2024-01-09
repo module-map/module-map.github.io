@@ -34,6 +34,7 @@ const chem = document.getElementById("chem");
 
 var modules = [];
 var chooseFrom = {};
+var initialized = false;
 
 function yearFile(year, plus = 0) {
   const y = parseInt(year) + plus;
@@ -111,12 +112,19 @@ function addModuleSpan(code) {
 }
 
 function dropModuleSpan(code) {
-  return "<span onclick=\"depulse(\'" + code + "\'); " +
-    "choose(\'" + code + "\', false);\" " +
-    "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"pulse(\'" + code + "\');\" " +
-    "onmouseout=\"depulse(\'" + code + "\');\" " +
-    ">" + code + " <span class='button'>Drop</span></span>";
+  if (modules[code].required) {
+    return "<span onmouseover=\"pulse(\'" + code +  "\');\" " +
+     "onmouseout=\"depulse(\'" + code +  "\');\">" +
+    code + "</span>"
+    ;
+  } else {
+    return "<span onclick=\"depulse(\'" + code + "\'); " +
+      "choose(\'" + code + "\', false);\" " +
+      "title=\"" + $("#" + code + " .module-name").text() + "\"" +
+      "onmouseover=\"pulse(\'" + code + "\');\" " +
+      "onmouseout=\"depulse(\'" + code + "\');\" " +
+      ">" + code + " <span class='button'>Drop</span></span>";
+  }
 }
 
 function moduleSpan(code) {
@@ -151,7 +159,11 @@ function setTerm(box, term) {
 function choose(id, chosen = true, requiresUpdate = true) {
   var code, box;
   if (typeof(id) === "string") {
-    code = id;
+    code = id.trim();
+    if (!modules.hasOwnProperty(code)) {
+      console.warn("Could not find module " + code);
+      return;
+    }
     box = modules[code].box;
   } else {
     box = id;
@@ -208,6 +220,13 @@ function moduleCompare(a, b) {
   const idB = typeof(b) === "string" ? b : b.id;
   const ma = modules[idA];
   const mb = modules[idB];
+  if (ma === undefined) {
+    console.warn("Sorting non-existent module " + idA)
+    return 0;
+  } else if (mb === undefined) {
+    console.warn("Sorting non-existent module " + idb)
+    return 0;
+  }
   if (ma.box.classList.contains("required") +
     mb.box.classList.contains("required") == 1) {
     return ma.box.classList.contains("required") ? -1 : 1;
@@ -291,10 +310,23 @@ function updateChoices() {
                 mod.box.title = mod.name;
               }
             }
+          } else if (code == "GEOL1061") {
+            if (hasMaths()) {
+              $(mod.box).addClass("cantdo")
+            } else {
+              $(mod.box).removeClass("cantdo")
+            }
+            mod.box.title = mod.name + "\nUnavailable to students with A-level Maths";
+          } else if (code == "GEOL1081") {
+            if (hasMaths()) {
+              $(mod.box).removeClass("cantdo")
+            } else {
+              $(mod.box).addClass("cantdo")
+            }
+            mod.box.title = mod.name + "\nRequires A-level Maths @ Grade B+";
           }
 
           if (mod.selected) {
-
             // Check for excluded combinations
             for (const i in mod.excludes) {
               const ex = mod.excludes[i];
@@ -382,6 +414,30 @@ function updateChoices() {
       }
     }
   }
+  if (!initialized) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const chosen = urlParams.get("modules") ||
+        urlParams.get("module") ||
+        urlParams.get("mods") ||
+        urlParams.get("mod");
+    if (chosen) {
+      chosen.toUpperCase().replace(";", ",").split(",").forEach((mod) => choose(mod, true));
+    }
+    initialized = true;
+  }
+  const permalink = ".?" +
+   ("year=" + startYear.value.match(/\b2\d{3}\b/)[0]) +
+   ("&pathway=" + degree.value) +
+   (maths.checked ? "&maths=A" : "") +
+   (chem.checked ? "&chemistry=A" : "") +
+   (yearOut.checked ? "&inset=yes" : "") +
+   "&modules=" + Object.keys(modules).filter((code) => {
+     return modules[code].selected && modules[code].required != "X";
+   }).sort(moduleCompare).join(",");
+  ;
+  history.pushState(null, null, permalink);
+  $("#permalink")[0].href = permalink;
+
 }
 
 async function updateParams() {
@@ -396,7 +452,7 @@ async function updateParams() {
     $(this).attr("class", filteredClasses.join(" "));
   })
 
-  // Check maths requirement
+  // Check geophysicists have required maths
   if (degree.value == "F665" && !maths.checked) {
     $("#li-maths").addClass("invalid");
   } else {
@@ -409,7 +465,12 @@ async function updateParams() {
 
   // Year out?
   const levelsToShow = yearOut.checked ? [1, 2, 3] : [1, 2, 3, 4];
-  $("#col4").css("display", yearOut.checked ? "none" : "unset");
+  $("#col4").css("display", yearOut.checked ? "none" : "");
+  if (yearOut.checked) {
+    $("#col1, #col2, #col3").addClass("col-4").removeClass("col-3");
+  } else {
+    $("#col1, #col2, #col3").addClass("col-3").removeClass("col-4");
+  }
   var levelCache = $("<div>").css("display", "none");
   levelCache.append($("<div>"))
     .append($("<div>"))
@@ -458,9 +519,13 @@ async function updateParams() {
           let required = (module[degree.value] === undefined ?
             false : module[degree.value].toUpperCase());
 
-          // Maths required if marked so, AND lacking A-level
-          if (code == "GEOL1061" && required) {
-            required = maths.checked ? "O" : "X";
+          // Maths required if required by pathway, AND lacking A-level
+          if (required && required !== "O") {
+            if (code == "GEOL1061") {
+              required = maths.checked ? false : "X";
+            } else if (code == "GEOL1081") {
+              required = maths.checked ? "X" : false;
+            }
           }
 
           const moduleExists = modules.hasOwnProperty(code);
@@ -507,19 +572,6 @@ async function updateParams() {
           box.setAttribute("title", name);
           $("#name-" + code).html(name);
 
-          var available = required != "O";
-          if (code == "GEOL1061" &&  // Mathemetical methods
-                      (maths.checked || degree.value == "F665")
-          ) {
-            available = false;
-          }
-          if (code == "GEOL1081" &&  // Further maths
-            !maths.checked &&
-             degree.value != "F665" // Geophysicists must take this
-           ) {
-            available = false;
-          }
-
           // Mark module requirements
           var modReq = module.Requisites;
           const requireOne = modReq ? modReq.includes("/") : null;
@@ -545,7 +597,7 @@ async function updateParams() {
              modules[code].required != "X") || false;
 
           modules[code] = {
-            available: available,
+            available: required != "O",
             name: name,
             required: required,
             excludes: module["Excluded Combn"] ?
@@ -580,7 +632,7 @@ async function updateParams() {
               // Add requisites of any requisites
               for (const req of reqs) {
                 if (modules[req] === undefined) {
-                  console.warn("Module " + req + " not yet defined; re-order in spreadsheet?")
+                  console.warn(code + " requires unavailable module " + req)
                   continue;
                 }
                 if (modules[req].allReqs) {
@@ -672,7 +724,10 @@ async function updateParams() {
       if (log) {
         console.log("Excluded: " + code);
       }
-      makeAvailable(modules[code].box, false, false);
+      if (code != "GEOL1061" && code != "GEOL1081") {
+        // Always display maths so students can see what they are missing
+        makeAvailable(modules[code].box, false, false);
+      }
     }
   }
 
@@ -731,7 +786,6 @@ async function updateParams() {
     .appendTo($("#level" + level));
   }
   levelCache.remove();
-
   updateChoices();
 }
 
@@ -751,6 +805,7 @@ fetch("data/years.json")
     if (yoe) {
       startYear.value = yoe.match(/\b2\d{3}\b/)[0];
     }
+
     updateParams();
   })
   .catch(error => console.error("Error fetching years.json: ", error))
@@ -765,6 +820,9 @@ chem.addEventListener("change", updateParams)
 window.onload = function() {
   // Get parameters from the URL
   const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.size > 0) {
+    $('#features header, footer').hide();
+  }
 
   // Get values for SELECT elements from parameters
   const degr = urlParams.get("degree") ||
@@ -777,6 +835,7 @@ window.onload = function() {
     urlParams.get("entry");
   const mths = urlParams.get("maths");
   const chm = urlParams.get("chemistry") || urlParams.get("chem");
+  const inset = urlParams.get("inset");
 
   // Update SELECT elements if values are found in parameters
   if (yoe) {
@@ -790,5 +849,8 @@ window.onload = function() {
   }
   if (chm) {
     chem.checked = true;
+  }
+  if (inset) {
+    yearOut.checked = true;
   }
 };

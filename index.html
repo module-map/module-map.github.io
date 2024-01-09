@@ -24,6 +24,9 @@
 			<!-- Main -->
       <section id="features">
         <div class="container">
+          <header class="row aln-center">
+						<h2>Specify your details</h2>
+					</header>
           <div class="row aln-center">
             <div class="col-4 col-4-medium col-12-small">
 							<ul class="actions">
@@ -72,6 +75,9 @@
               </ul>
             </div-->
           </div>
+					<footer>
+						<span class="button" onclick="$('#features header, footer').slideUp()">Done</span>
+					</footer>
         </div>
       </section>
 
@@ -83,15 +89,15 @@
               <h2>Level 1</h2>
 							<div id="note1" class="note"></div>
 							<div id="level1"></div>
-							<div id="legend">
+							<div id="legend" class="legend-box">
 								<header><h2>Legend</h2></header>
 								<div class="legend-row">
 									<div class="module-box required">&nbsp;</div>
-									<div class="legend-entry">Compulsory module</div>
+									<div class="legend-entry">Compulsory</div>
 								</div>
 								<div class="legend-row">
 									<div class="module-box">&nbsp;</div>
-									<div class="legend-entry">Optional module</div>
+									<div class="legend-entry">Optional</div>
 								</div>
 								<div class="legend-row">
 									<div class="module-box mich">&nbsp;</div>
@@ -109,13 +115,24 @@
 									<div class="module-box cantdo">&nbsp;</div>
 									<div class="legend-entry">Unavailable; hover for requirements</div>
 								</div>
-								<div class="legend-row">
+								<div class="legend-row legend-text" style="margin-top: 1em;">
 									<p>
 										Select 120 credits per year, up to 70 credits/term.
 										Level 2 &amp; 3 Earth Science students may take 20 credits
 										from another department, or from the Level below
 										(not shown).
 									</p>
+								</div>
+								<div class="legend-row legend-text">
+									<p>
+										Bookmark this link to save your choices:
+									</p>
+									<a id="permalink" href=".">
+										<button style="padding: 6px 24px">
+											<i class="fas fa-link"></i> Bookmark
+										</button>
+									</a>
+
 								</div>
 
 							</div>
@@ -124,14 +141,14 @@
               <h2>Level 2</h2>
 							<div id="note2" class="note"></div>
 							<div id="level2"></div>
-              </div>
+            </div>
             <div id="col3" class="col-3 col-4-large col-6-medium col-12-small">
               <h2>Level 3</h2>
 							<div id="note3" class="note"></div>
 							<div id="level3"></div>
             </div>
 						<div id="col4" class="col-3 col-6-large col-6-medium col-12-small">
-              <h2>Level 4 (F644 / FGC0)</h2>
+              <h2>Level 4<span style="font-size: 0.6em; letter-spacing: normal"> (F644 / FGC0)</span></h2>
 							<div id="note4" class="note"></div>
 							<div id="level4"></div>
             </div>
