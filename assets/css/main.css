@@ -192,14 +192,14 @@ input::-moz-focus-inner {
 
 	.container {
 		margin: 0 auto;
-		max-width: 100%;
-		width: 90em;
+		max-width: calc(100% - 80px);
+		width: 110em;
 	}
 
 		@media screen and (max-width: 1680px) {
 
 			.container {
-				width: 88em;
+				width: 99em;
 			}
 
 		}
