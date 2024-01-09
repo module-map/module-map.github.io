@@ -522,8 +522,8 @@ async function updateParams() {
 
           // Mark module requirements
           var modReq = module.Requisites;
-          const requireAll = modReq ? modReq.includes("&") : null;
-          var reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
+          const requireOne = modReq ? modReq.includes("/") : null;
+          var reqs = modReq ? modReq.split(requireOne ? "/" : "&") : null;
           if (reqs) {
               reqs = reqs.map(r => {
               if (r == "Chemistry") {
@@ -556,7 +556,7 @@ async function updateParams() {
             epip: module.Epip,
             selected: selected,
             req: reqs,
-            allReqs: requireAll,
+            allReqs: requireOne ? false : true,
             box: box
           }
         });
@@ -567,15 +567,34 @@ async function updateParams() {
           const mod = modules[code];
           var available = mod.available;
 
-          // Check module's requisites are available
           const reqs = mod.req;
           if (reqs !== null) {
+            // Check module's requisites are available
             if (mod.allReqs) {
               if (!reqs.every(modAvailable)) {
                 if (log) {
                   console.log(reqs);
                 }
                 available = false;
+              }
+              // Add requisites of any requisites
+              for (const req of reqs) {
+                if (modules[req] === undefined) {
+                  console.warn("Module " + req + " not yet defined; re-order in spreadsheet?")
+                  continue;
+                }
+                if (modules[req].allReqs) {
+                  let toAdd = modules[req].req;
+                  if (!toAdd) continue;
+                  if (typeof toAdd === "string") {
+                    toAdd = [toAdd];
+                  }
+
+                  const set1 = new Set(Array.isArray(mod.req) ? mod.req : [mod.req]);
+                  const set2 = new Set(Array.isArray(toAdd) ? toAdd : [toAdd]);
+                  const newReq = new Set([...set1, ...set2]);
+                  mod.req = [...newReq];
+                }
               }
             } else {
               if (!reqs.some(modAvailable)) {
@@ -586,10 +605,11 @@ async function updateParams() {
               }
               modules[code].req = reqs.filter(modAvailable);
             }
-            if (available) reqs.forEach(function (req) {
+            if (available) mod.req.forEach(function (req) {
               mod.box.classList.add("requires-" + req);
               requisite[req] = true;
             })
+
           }
           modules[code].available = available;
         });
