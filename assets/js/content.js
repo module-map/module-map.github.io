@@ -160,9 +160,6 @@ function choose(id, chosen = true, requiresUpdate = true) {
   var code, box;
   if (typeof(id) === "string") {
     code = id.trim();
-    console.log (code)
-    console.log (modules)
-    console.log (modules[code])
     box = modules[code].box;
   } else {
     box = id;
@@ -624,7 +621,6 @@ async function updateParams() {
               // Add requisites of any requisites
               for (const req of reqs) {
                 if (modules[req] === undefined) {
-                  console.log(mod);
                   console.warn(code + " requires unavailable module " + req)
                   continue;
                 }
