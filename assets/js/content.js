@@ -160,6 +160,10 @@ function choose(id, chosen = true, requiresUpdate = true) {
   var code, box;
   if (typeof(id) === "string") {
     code = id.trim();
+    if (!modules.hasOwnProperty(code)) {
+      console.warn("Could not find module " + code);
+      return;
+    }
     box = modules[code].box;
   } else {
     box = id;

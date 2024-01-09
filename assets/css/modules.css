@@ -216,6 +216,7 @@ input[type="checkbox"]:checked {
 
 .legend-box {
   margin-top: 24px;
+  margin-bottom: 24px;
   width: 100%;
   border: 1px solid;
   padding: 15px 24px 0;
@@ -225,6 +226,15 @@ input[type="checkbox"]:checked {
   display: flex;
   width: 100%;
   align-items: center;
+}
+
+.legend-text {
+  border-top: 1px solid;
+  padding: 1em 0;
+}
+
+.legend-text p {
+  margin-bottom: 0;
 }
 
 .legend-row .module-box {
