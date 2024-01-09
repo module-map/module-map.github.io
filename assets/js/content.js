@@ -34,6 +34,7 @@ const chem = document.getElementById("chem");
 
 var modules = [];
 var chooseFrom = {};
+var initialized = false;
 
 function yearFile(year, plus = 0) {
   const y = parseInt(year) + plus;
@@ -158,7 +159,7 @@ function setTerm(box, term) {
 function choose(id, chosen = true, requiresUpdate = true) {
   var code, box;
   if (typeof(id) === "string") {
-    code = id;
+    code = id.trim();
     box = modules[code].box;
   } else {
     box = id;
@@ -408,6 +409,17 @@ function updateChoices() {
         }
       }
     }
+  }
+  if (!initialized) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const chosen = urlParams.get("modules") ||
+        urlParams.get("module") ||
+        urlParams.get("mods") ||
+        urlParams.get("mod");
+    if (chosen) {
+      chosen.toUpperCase().replace(";", ",").split(",").forEach((mod) => choose(mod, true));
+    }
+    initialized = true;
   }
 }
 
@@ -772,6 +784,7 @@ fetch("data/years.json")
     if (yoe) {
       startYear.value = yoe.match(/\b2\d{3}\b/)[0];
     }
+
     updateParams();
   })
   .catch(error => console.error("Error fetching years.json: ", error))
