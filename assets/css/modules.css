@@ -179,7 +179,7 @@ h2 {
 
 .pulsating {
   opacity: 100% !important;
-  animation: pulse 0.75s infinite alternate;
+  animation: pulse 0.75s ease-in-out 0.3s infinite alternate;
 }
 
 .module-box input[type="checkbox"] {
