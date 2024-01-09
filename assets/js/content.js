@@ -279,7 +279,9 @@ function updateChoices() {
         if (mod.level == level) {
           // Check requisites
           if (mod.req) {
-            const missing = mod.req.filter(m => !moduleChosen(m))
+            const missing = mod.req
+              .filter(modAvailable)
+              .filter(m => !moduleChosen(m))
               .sort(moduleCompare);
             $(mod.box).off("mouseover");
             $(mod.box).off("mouseout");
