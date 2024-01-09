@@ -794,6 +794,7 @@ window.onload = function() {
     urlParams.get("entry");
   const mths = urlParams.get("maths");
   const chm = urlParams.get("chemistry") || urlParams.get("chem");
+  const inset = urlParams.get("inset");
 
   // Update SELECT elements if values are found in parameters
   if (yoe) {
@@ -807,5 +808,8 @@ window.onload = function() {
   }
   if (chm) {
     chem.checked = true;
+  }
+  if (inset) {
+    yearOut.checked = true;
   }
 };
