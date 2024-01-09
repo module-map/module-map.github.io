@@ -111,12 +111,19 @@ function addModuleSpan(code) {
 }
 
 function dropModuleSpan(code) {
-  return "<span onclick=\"depulse(\'" + code + "\'); " +
-    "choose(\'" + code + "\', false);\" " +
-    "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"pulse(\'" + code + "\');\" " +
-    "onmouseout=\"depulse(\'" + code + "\');\" " +
-    ">" + code + " <span class='button'>Drop</span></span>";
+  if (modules[code].required) {
+    return "<span onmouseover=\"pulse(\'" + code +  "\');\" " +
+     "onmouseout=\"depulse(\'" + code +  "\');\">" +
+    code + "</span>"
+    ;
+  } else {
+    return "<span onclick=\"depulse(\'" + code + "\'); " +
+      "choose(\'" + code + "\', false);\" " +
+      "title=\"" + $("#" + code + " .module-name").text() + "\"" +
+      "onmouseover=\"pulse(\'" + code + "\');\" " +
+      "onmouseout=\"depulse(\'" + code + "\');\" " +
+      ">" + code + " <span class='button'>Drop</span></span>";
+  }
 }
 
 function moduleSpan(code) {
@@ -291,6 +298,20 @@ function updateChoices() {
                 mod.box.title = mod.name;
               }
             }
+          } else if (code == "GEOL1061") {
+            if (hasMaths()) {
+              $(mod.box).addClass("cantdo")
+            } else {
+              $(mod.box).removeClass("cantdo")
+            }
+            mod.box.title = mod.name + "\nUnavailable to students with A-level Maths";
+          } else if (code == "GEOL1081") {
+            if (hasMaths()) {
+              $(mod.box).removeClass("cantdo")
+            } else {
+              $(mod.box).addClass("cantdo")
+            }
+            mod.box.title = mod.name + "\nRequires A-level Maths @ Grade B+";
           }
 
           if (mod.selected) {
@@ -459,7 +480,7 @@ async function updateParams() {
             false : module[degree.value].toUpperCase());
 
           // Maths required if required by pathway, AND lacking A-level
-          if (required) {
+          if (required && required !== "O") {
             if (code == "GEOL1061") {
               required = maths.checked ? false : "X";
             } else if (code == "GEOL1081") {
