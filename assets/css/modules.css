@@ -9,6 +9,20 @@
   z-index: 10;
 }
 
+#features header {
+  padding: 5em 0 5em;
+}
+
+#features footer {
+  padding: 5em 0 35em;
+}
+
+#features .button {
+  padding: 1.5em 5em;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
 @media screen and (max-height: 980px) {
   #features {
     position: inherit;

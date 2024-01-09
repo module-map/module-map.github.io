@@ -215,7 +215,7 @@ function moduleCompare(a, b) {
   const idB = typeof(b) === "string" ? b : b.id;
   const ma = modules[idA];
   const mb = modules[idB];
-  if (ma.box.classList.contains("required") +
+  if (ma && ma.box.classList.contains("required") +
     mb.box.classList.contains("required") == 1) {
     return ma.box.classList.contains("required") ? -1 : 1;
   }
@@ -779,6 +779,9 @@ chem.addEventListener("change", updateParams)
 window.onload = function() {
   // Get parameters from the URL
   const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.size > 0) {
+    $('#features header, footer').hide();
+  }
 
   // Get values for SELECT elements from parameters
   const degr = urlParams.get("degree") ||
