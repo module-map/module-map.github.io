@@ -591,7 +591,7 @@ async function updateParams() {
               // Add requisites of any requisites
               for (const req of reqs) {
                 if (modules[req] === undefined) {
-                  console.warn("Module " + req + " not yet defined; re-order in spreadsheet?")
+                  console.warn(code + " requires unavailable module " + req)
                   continue;
                 }
                 if (modules[req].allReqs) {
