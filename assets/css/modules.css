@@ -214,7 +214,7 @@ input[type="checkbox"]:checked {
   white-space: nowrap;
 }
 
-#legend {
+.legend-box {
   margin-top: 24px;
   width: 100%;
   border: 1px solid;
