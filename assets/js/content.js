@@ -93,37 +93,37 @@ function addNote(element, note) {
   $(element).append("<p class='invalid'>" + note + "</p>");
 }
 
-function glow(code) {
-  $("#" + code).addClass("glowing");
+function pulse(code) {
+  $("#" + code).addClass("pulsating");
 }
 
-function deglow(code) {
-  $("#" + code).removeClass("glowing");
+function depulse(code) {
+  $("#" + code).removeClass("pulsating");
 }
 
 function addModuleSpan(code) {
-  return "<span onclick=\"deglow(\'" + code + "\'); " +
+  return "<span onclick=\"depulse(\'" + code + "\'); " +
     "choose(\'" + code + "\');\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"glow(\'" + code + "\');\" " +
-    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    "onmouseover=\"pulse(\'" + code + "\');\" " +
+    "onmouseout=\"depulse(\'" + code + "\');\" " +
     ">" + code + " <span class='button'>Add</span></span>";
 }
 
 function dropModuleSpan(code) {
-  return "<span onclick=\"deglow(\'" + code + "\'); " +
+  return "<span onclick=\"depulse(\'" + code + "\'); " +
     "choose(\'" + code + "\', false);\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"glow(\'" + code + "\');\" " +
-    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    "onmouseover=\"pulse(\'" + code + "\');\" " +
+    "onmouseout=\"depulse(\'" + code + "\');\" " +
     ">" + code + " <span class='button'>Drop</span></span>";
 }
 
 function moduleSpan(code) {
-  return "<span onclick=\"deglow(\'" + code + "\');\" " +
+  return "<span onclick=\"depulse(\'" + code + "\');\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"glow(\'" + code + "\');\" " +
-    "onmouseout=\"deglow(\'" + code + "\');\" " +
+    "onmouseover=\"pulse(\'" + code + "\');\" " +
+    "onmouseout=\"depulse(\'" + code + "\');\" " +
     ">" + code + "</span>";
 }
 
@@ -222,6 +222,27 @@ function moduleCompare(a, b) {
   return idA.localeCompare(idB);
 }
 
+function highlight(code) {
+  const $box = $("#" + code);
+  const borders = $box[0].style.boxShadow.split("inset,");
+  for (const border of borders) {
+    const col = border.split(" -20px");
+    if (col.length) {
+      $box.addClass("pulsating");
+      const tint = col[0].replace("rgb", "rgba").replace(")", ", 1)");
+      $box.css("background", "linear-gradient(90deg, " +
+        $box.css("background-color") + ", 85%, " +
+         tint + " 92%" +
+        ")");
+    }
+  }
+}
+
+function unlight(code) {
+  $("#" + code).removeClass("pulsating").css("background", "");
+
+}
+
 function updateChoices() {
   for (const level of [1, 2, 3, 4]) {
     let credits = 0;
@@ -234,50 +255,68 @@ function updateChoices() {
     for (const code in modules) {
       if (modules.hasOwnProperty(code)) {
         const mod = modules[code];
-        if (mod.level == level && mod.selected) {
+        if (mod.level == level) {
           // Check requisites
           if (mod.req) {
+            const missing = mod.req.filter(m => !moduleChosen(m))
+              .sort(moduleCompare);
+            $(mod.box).off("mouseover");
+            $(mod.box).off("mouseout");
+            $(mod.box).mouseover(function() {missing.forEach(highlight);});
+            $(mod.box).mouseout(function() {missing.forEach(unlight);});
             if (mod.allReqs) {
               if (!mod.req.every(moduleChosen)) {
-                addNote(note,
-                  moduleSpan(code) + " requires " +
-                  mod.req.filter(m => !moduleChosen(m))
-                    .sort(moduleCompare)
-                    .map(addModuleSpan)
-                    .join(" + "));
+                if (mod.selected) {
+                  addNote(note,
+                    moduleSpan(code) + " requires " +
+                    missing.map(addModuleSpan).join(" + "));
+                }
+                $(mod.box).addClass("cantdo")
+                mod.box.title = mod.name + "\nRequires " + missing.join(" + ");
+              } else {
+                $(mod.box).removeClass("cantdo")
+                mod.box.title = mod.name;
               }
             } else {
               if (!mod.req.some(moduleChosen)) {
-                addNote(note,
-                  moduleSpan(code) + " requires " +
-                  mod.req.sort(moduleCompare)
-                  .map(addModuleSpan)
-                  .join(" or "));
+                if (mod.selected) {
+                  addNote(note,
+                    moduleSpan(code) + " requires " +
+                    missing.map(addModuleSpan).join(" or "));
+                }
+                $(mod.box).addClass("cantdo")
+                mod.box.title = mod.name + "\nRequires " + missing.join(" or ");
+              } else {
+                $(mod.box).removeClass("cantdo")
+                mod.box.title = mod.name;
               }
             }
           }
 
-          // Check for excluded combinations
-          for (const i in mod.excludes) {
-            const ex = mod.excludes[i];
-            if (moduleChosen(ex)) {
-              addNote(note,
-                dropModuleSpan(ex) + " precludes " + dropModuleSpan(code));
-            }
-          }
+          if (mod.selected) {
 
-          // Count credit splits
-          const modCreds = mod.credits;
-          credits += mod.credits;
-          if (mod.mich && mod.epip) {
-            michCredits += mod.credits / 2;
-            epipCredits += mod.credits / 2;
-          } else if (mod.mich) {
-            michCredits += mod.credits;
-          } else if (mod.epip) {
-            epipCredits += mod.credits;
-          } else {
-            console.error("Module seems not to run in either term: ", code);
+            // Check for excluded combinations
+            for (const i in mod.excludes) {
+              const ex = mod.excludes[i];
+              if (moduleChosen(ex)) {
+                addNote(note,
+                  dropModuleSpan(ex) + " precludes " + dropModuleSpan(code));
+              }
+            }
+
+            // Count credit splits
+            const modCreds = mod.credits;
+            credits += mod.credits;
+            if (mod.mich && mod.epip) {
+              michCredits += mod.credits / 2;
+              epipCredits += mod.credits / 2;
+            } else if (mod.mich) {
+              michCredits += mod.credits;
+            } else if (mod.epip) {
+              epipCredits += mod.credits;
+            } else {
+              console.error("Module seems not to run in either term: ", code);
+            }
           }
         }
       }
@@ -483,8 +522,8 @@ async function updateParams() {
 
           // Mark module requirements
           var modReq = module.Requisites;
-          const requireAll = modReq ? modReq.includes("&") : null;
-          var reqs = modReq ? modReq.split(requireAll ? "&" : "/") : null;
+          const requireOne = modReq ? modReq.includes("/") : null;
+          var reqs = modReq ? modReq.split(requireOne ? "/" : "&") : null;
           if (reqs) {
               reqs = reqs.map(r => {
               if (r == "Chemistry") {
@@ -517,7 +556,7 @@ async function updateParams() {
             epip: module.Epip,
             selected: selected,
             req: reqs,
-            allReqs: requireAll,
+            allReqs: requireOne ? false : true,
             box: box
           }
         });
@@ -528,15 +567,34 @@ async function updateParams() {
           const mod = modules[code];
           var available = mod.available;
 
-          // Check module's requisites are available
           const reqs = mod.req;
           if (reqs !== null) {
+            // Check module's requisites are available
             if (mod.allReqs) {
               if (!reqs.every(modAvailable)) {
                 if (log) {
                   console.log(reqs);
                 }
                 available = false;
+              }
+              // Add requisites of any requisites
+              for (const req of reqs) {
+                if (modules[req] === undefined) {
+                  console.warn("Module " + req + " not yet defined; re-order in spreadsheet?")
+                  continue;
+                }
+                if (modules[req].allReqs) {
+                  let toAdd = modules[req].req;
+                  if (!toAdd) continue;
+                  if (typeof toAdd === "string") {
+                    toAdd = [toAdd];
+                  }
+
+                  const set1 = new Set(Array.isArray(mod.req) ? mod.req : [mod.req]);
+                  const set2 = new Set(Array.isArray(toAdd) ? toAdd : [toAdd]);
+                  const newReq = new Set([...set1, ...set2]);
+                  mod.req = [...newReq];
+                }
               }
             } else {
               if (!reqs.some(modAvailable)) {
@@ -547,10 +605,11 @@ async function updateParams() {
               }
               modules[code].req = reqs.filter(modAvailable);
             }
-            if (available) reqs.forEach(function (req) {
+            if (available) mod.req.forEach(function (req) {
               mod.box.classList.add("requires-" + req);
               requisite[req] = true;
             })
+
           }
           modules[code].available = available;
         });

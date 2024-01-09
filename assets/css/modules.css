@@ -77,7 +77,7 @@ h2 {
   align-items: center;
 }
 
-.module-box.chosen {
+.module-box.chosen, .module-box.cantdo {
   color: #002A41;
 }
 
@@ -87,6 +87,10 @@ h2 {
 
 .module-box.unavailable {
   display: none;
+}
+
+.module-box.cantdo {
+  opacity: 50%;
 }
 
 .module-box.double {
@@ -150,6 +154,20 @@ h2 {
   opacity: 80%;
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.04);
+  }
+}
+
+.pulsating {
+  opacity: 100% !important;
+  animation: pulse 0.75s infinite alternate;
+}
+
 .module-box input[type="checkbox"] {
   display: table-cell;
   transform: scale(2);
@@ -202,7 +220,8 @@ input[type="checkbox"]:checked {
   align-items: center;
   font-weight: bold;
   text-align: center;
-  line-height: 36px;
+  line-height: 24px;
+  max-height: 24px;
   padding: 0 5px;
 }
 
