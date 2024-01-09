@@ -163,6 +163,7 @@ h2 {
 }
 
 .pulsating {
+  opacity: 100% !important;
   animation: pulse 0.75s infinite alternate;
 }
 
