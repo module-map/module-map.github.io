@@ -417,7 +417,7 @@ async function updateParams() {
     $(this).attr("class", filteredClasses.join(" "));
   })
 
-  // Check geophysicists have required maths
+  // Check maths requirement
   if (degree.value == "F665" && !maths.checked) {
     $("#li-maths").addClass("invalid");
   } else {
