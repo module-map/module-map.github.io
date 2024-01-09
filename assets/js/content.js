@@ -461,7 +461,12 @@ async function updateParams() {
 
   // Year out?
   const levelsToShow = yearOut.checked ? [1, 2, 3] : [1, 2, 3, 4];
-  $("#col4").css("display", yearOut.checked ? "none" : "unset");
+  $("#col4").css("display", yearOut.checked ? "none" : "");
+  if (yearOut.checked) {
+    $("#col1, #col2, #col3").addClass("col-4").removeClass("col-3");
+  } else {
+    $("#col1, #col2, #col3").addClass("col-3").removeClass("col-4");
+  }
   var levelCache = $("<div>").css("display", "none");
   levelCache.append($("<div>"))
     .append($("<div>"))
