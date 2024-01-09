@@ -87,7 +87,9 @@ function moduleChosen(code) {
 
 function modAvailable(code) {
   if (code == "Maths" || code == "Chemistry") return true;
-  return modules.hasOwnProperty(code) && modules[code].available;
+  return modules.hasOwnProperty(code) &&
+    modules[code].available &&
+    modules[code].required != "O";
 }
 
 function addNote(element, note) {
