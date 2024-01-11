@@ -602,16 +602,18 @@ async function updateParams() {
 
           // Mark module requirements
           var modReq = module.Requisites;
-          const requireOne = modReq ? modReq.includes("/") : null;
+          const requireOne = modReq ?
+            modReq.includes("/") || modReq.includes("*") :
+            null;
           var reqs = modReq ? modReq.split(requireOne ? "/" : "&") : null;
           if (reqs) {
               reqs = reqs.map(r => {
               if (r == "Chemistry") {
                 return hasChemistry() ? undefined : "GEOL2171";
-              }
-              if (r == "Maths") {
+              } else if (r == "Maths") {
                 return hasMaths() ? undefined : "GEOL1061";
               }
+
               return r;
             }).filter(el => el !== undefined);
             if (!reqs.length) {
@@ -641,7 +643,7 @@ async function updateParams() {
           }
         });
 
-        // Once modules loaded, check requisites are available
+        // Now all modules loaded, check requisites are available
         thisLevel.filter((module) => module.Requisites).forEach(module => {
           const code = module["Module code"];
           const mod = modules[code];
