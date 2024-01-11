@@ -82,6 +82,9 @@ function moduleChosen(code) {
   if (code == "Chemistry") {
     return hasChemistry() ? true : moduleChosen("GEOL2171");
   }
+  if (code == "GEOG2XXX") {
+    return $("[id^=GEOG2] > input").filter(":checked").length > 0;
+  }
   return $("#" + code + " > input").is(":checked");
 }
 
