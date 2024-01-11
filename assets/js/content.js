@@ -285,8 +285,12 @@ function moduleCompare(a, b) {
   return idA.localeCompare(idB);
 }
 
+function selector(code) {
+  return code == "GEOG2XXX" ? "[id^=GEOG2]" : "#" + code;
+}
+
 function highlight(code) {
-  const $box = $("#" + code);
+  const $box = $(selector(code));
   const borders = $box[0].style.boxShadow.split("inset,");
   for (const border of borders) {
     const col = border.split(" -20px");
@@ -303,7 +307,7 @@ function highlight(code) {
 }
 
 function unlight(code) {
-  $("#" + code).removeClass("pulsating").css("background", "");
+  $(selector(code)).removeClass("pulsating").css("background", "");
 }
 
 function toolTipText(code) {
