@@ -86,7 +86,7 @@ function moduleChosen(code) {
 }
 
 function modAvailable(code) {
-  if (code == "Maths" || code == "Chemistry") return true;
+  if (["Maths", "Chemistry", "GEOG2XXX", "ARCH2XXX"].includes(code)) return true;
   // only show NatScis GEOL modules
   if (degree.value == "CFG0" && code.substr(0, 4) != "GEOL") {
     return false;
@@ -100,44 +100,65 @@ function addNote(element, note) {
   $(element).append("<p class='invalid'>" + note + "</p>");
 }
 
-function pulse(code) {
-  $("#" + code).addClass("pulsating");
+function pulse(selector) {
+  $(selector).addClass("pulsating");
 }
 
-function depulse(code) {
-  $("#" + code).removeClass("pulsating");
+function depulse(selector) {
+  $(selector).removeClass("pulsating");
+}
+
+function handbookYear() {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  return currentMonth > 5 ? currentYear : currentYear - 1;
+}
+
+function handbook(code) {
+  return "https://apps.dur.ac.uk/faculty.handbook/"
+   + handbookYear() + "/UG/search?module=" + code;
 }
 
 function addModuleSpan(code) {
-  return "<span onclick=\"depulse(\'" + code + "\'); " +
+  if (code == "GEOG2XXX") {
+    return "<span onmouseover=\"pulse(\'[id^=GEOG2]\')\" " +
+      "onmouseout=\"depulse(\'[id^=GEOG2]\')\"><a href=\"" +
+      handbook("GEOG2") +
+      "\" target=\"_blank\">L2 GEOG module</a></span>";
+  } else if (code == "ARCH2XXX") {
+    return "<a href=\"" + handbook("ARCH2") +
+      "\" target=\"_blank\">L2 ARCH module</a>";
+  }
+  return "<span onclick=\"depulse(\'#" + code + "\'); " +
     "choose(\'" + code + "\');\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"pulse(\'" + code + "\');\" " +
-    "onmouseout=\"depulse(\'" + code + "\');\" " +
+    "onmouseover=\"pulse(\'#" + code + "\');\" " +
+    "onmouseout=\"depulse(\'#" + code + "\');\" " +
     ">" + code + " <span class='button'>Add</span></span>";
 }
 
 function dropModuleSpan(code) {
   if (modules[code].required) {
-    return "<span onmouseover=\"pulse(\'" + code +  "\');\" " +
-     "onmouseout=\"depulse(\'" + code +  "\');\">" +
+    return "<span onmouseover=\"pulse(\'#" + code +  "\');\" " +
+     "onmouseout=\"depulse(\'#" + code +  "\');\">" +
     code + "</span>"
     ;
   } else {
-    return "<span onclick=\"depulse(\'" + code + "\'); " +
+    return "<span onclick=\"depulse(\'#" + code + "\'); " +
       "choose(\'" + code + "\', false);\" " +
       "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-      "onmouseover=\"pulse(\'" + code + "\');\" " +
-      "onmouseout=\"depulse(\'" + code + "\');\" " +
+      "onmouseover=\"pulse(\'#" + code + "\');\" " +
+      "onmouseout=\"depulse(\'#" + code + "\');\" " +
       ">" + code + " <span class='button'>Drop</span></span>";
   }
 }
 
 function moduleSpan(code) {
-  return "<span onclick=\"depulse(\'" + code + "\');\" " +
+  return "<span onclick=\"depulse(\'#" + code + "\');\" " +
     "title=\"" + $("#" + code + " .module-name").text() + "\"" +
-    "onmouseover=\"pulse(\'" + code + "\');\" " +
-    "onmouseout=\"depulse(\'" + code + "\');\" " +
+    "onmouseover=\"pulse(\'#" + code + "\');\" " +
+    "onmouseout=\"depulse(\'#" + code + "\');\" " +
     ">" + code + "</span>";
 }
 
@@ -280,7 +301,13 @@ function highlight(code) {
 
 function unlight(code) {
   $("#" + code).removeClass("pulsating").css("background", "");
+}
 
+function toolTipText(code) {
+  if (code.match("2XXX")) {
+    return ("L2 " + code.replace("2XXX", "") + " module");
+  }
+  return code;
 }
 
 function updateChoices() {
@@ -327,7 +354,8 @@ function updateChoices() {
                     missing.map(addModuleSpan).join(" or "));
                 }
                 $(mod.box).addClass("cantdo")
-                mod.box.title = mod.name + "\nRequires " + missing.join(" or ");
+                mod.box.title = mod.name + "\nRequires " +
+                  missing.map(toolTipText).join(" or ");
               } else {
                 $(mod.box).removeClass("cantdo")
                 mod.box.title = mod.name;
@@ -603,7 +631,7 @@ async function updateParams() {
           // Mark module requirements
           var modReq = module.Requisites;
           const requireOne = modReq ?
-            modReq.includes("/") || modReq.includes("*") :
+            modReq.includes("/") || modReq.includes("XXX") :
             null;
           var reqs = modReq ? modReq.split(requireOne ? "/" : "&") : null;
           if (reqs) {
@@ -679,7 +707,7 @@ async function updateParams() {
                 }
               }
             } else {
-              if (!reqs.some(modAvailable)) {
+              if (!reqs.some(modAvailable) && reqs.every(x => !x.match("XXX"))) {
                 if (log) {
                   console.log(reqs);
                 }
@@ -801,7 +829,13 @@ async function updateParams() {
   // Now that all requirements are established, paint sides
   for (var req in requisite) {
     if (modAvailable(req) && !mandatory(req)) {
-      paintSide("#" + req, 0, palette[n]);
+      paintSide("#" +
+        (req == "GEOG2XXX" ?
+          Object.keys(modules)
+          .filter(key => key.substr(0, 5) == "GEOG2")
+          .join(", #")
+          : req), 0, palette[n]
+      );
       paintSide(".requires-" + req, 1, palette[n]);
       ++n;
     }
