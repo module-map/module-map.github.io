@@ -290,7 +290,11 @@ function selector(code) {
 }
 
 function highlight(code) {
+  if (code == "ARCH2XXX") return;
   const $box = $(selector(code));
+  if ($box.length == 0) {
+    console.error("No modules match selector " + selector(code));
+  }
   const borders = $box[0].style.boxShadow.split("inset,");
   for (const border of borders) {
     const col = border.split(" -20px");
@@ -835,7 +839,7 @@ async function updateParams() {
 
   // Now that all requirements are established, paint sides
   for (var req in requisite) {
-    if (modAvailable(req) && !mandatory(req)) {
+    if (modAvailable(req) && !mandatory(req) && req != "ARCH2XXX") {
       paintSide("#" +
         (req == "GEOG2XXX" ?
           Object.keys(modules)
