@@ -4,8 +4,8 @@ const log = false;
 const minESCredits = {
   F600: [120, 100, 100, 120],
   F630: [120, 100, 100, 120],
-  F643: [120, 100, 100, 120],
-  F645: [ 60,  40,   0, 120],
+  F643: [120,  80,  80, 120], // Under review 2024-01
+  F645: [100, 100, 100, 120], // GEOG & ARCH modules included
   F665: [120, 100, 100, 120],
   CFG0: [0, 0, 0, 0]
 };
@@ -87,6 +87,10 @@ function moduleChosen(code) {
 
 function modAvailable(code) {
   if (code == "Maths" || code == "Chemistry") return true;
+  // only show NatScis GEOL modules
+  if (degree.value == "CFG0" && code.substr(0, 4) != "GEOL") {
+    return false;
+  }
   return modules.hasOwnProperty(code) &&
     modules[code].available &&
     modules[code].required != "O";
@@ -240,6 +244,20 @@ function moduleCompare(a, b) {
     if (ma.mich && !mb.mich) return -1;
     if (mb.mich && !ma.mich) return 1;
   }
+
+  const deptA = idA.substr(0, 4);
+  const deptB = idB.substr(0, 4);
+  if (deptA != deptB) {
+    // GEOL modules first
+    if (deptA == "GEOL") return -1;
+    if (deptB == "GEOL") return 1;
+    // GEOG modules second
+    if (deptA == "GEOG") return -1;
+    if (deptB == "GEOG") return 1;
+    // Other departments alphabetically
+    return deptA > deptB ? 1 : -1;
+  }
+
   return idA.localeCompare(idB);
 }
 
@@ -447,9 +465,9 @@ function updateChoices() {
 
 async function updateParams() {
   // Reset box classes
-  const regex = /requires\-GEOL\d+/;
+  const regex = /requires\-[A-Z]{4}\d+/;
   $(".module-box").each(function () {
-    var classes = $(this).attr('class').split(" ");
+    var classes = $(this).attr("class").split(" ");
     var filteredClasses = classes.filter(function (className) {
       return !regex.test(className);
     });
@@ -485,7 +503,7 @@ async function updateParams() {
   $("body").append(levelCache);
 
   for (const level of levelsToShow) {
-    // Get modules available at this level
+    // Modules already available at this level
     const levelMods = Object.entries(modules).reduce((result, [key, value]) => {
       if (value.level === level) {
         result[key] = value;
@@ -504,7 +522,8 @@ async function updateParams() {
       .then(data => {
         const dataCodes = Object.values(data).map(item => item["Module code"]);
         for (const code in levelMods) {
-          if (!(dataCodes.includes(code))) {
+          if (!(dataCodes.includes(code))
+        || (degree.value == "CFG0" && code.substr(0, 4) != "GEOL")) {
             if (log) {
               console.log("Hiding " + code);
             }
@@ -515,7 +534,11 @@ async function updateParams() {
         }
 
         // Work through each module available this year at this level
-        const thisLevel = data.filter((module) => module.Level == level);
+        const thisLevel = data.filter(module =>
+          module.Level == level &&
+          (degree.value != "CFG0" || // Only show GEOL under Natural Sciences
+           module["Module code"].substr(0, 4) == "GEOL")
+        );
 
         // Create modules
         thisLevel.forEach(module => {
