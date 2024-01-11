@@ -214,6 +214,11 @@ input[type="checkbox"]:checked {
   white-space: nowrap;
 }
 
+.module-link {
+  margin-left: 0.5em;
+  margin-right: -0.5em;
+}
+
 .legend-box {
   margin-top: 24px;
   margin-bottom: 24px;

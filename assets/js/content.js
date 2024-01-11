@@ -123,6 +123,12 @@ function handbook(code) {
    + handbookYear() + "/UG/search?module=" + code;
 }
 
+function moduleURL(code, level) {
+  return "https://apps.dur.ac.uk/faculty.handbook/" +
+    Math.min(handbookYear(), parseInt(startYear.value) + level - 1)
+    + "/UG/module/" + code;
+}
+
 function addModuleSpan(code) {
   if (code == "GEOG2XXX") {
     return "<span onmouseover=\"pulse(\'[id^=GEOG2]\')\" " +
@@ -628,7 +634,14 @@ async function updateParams() {
             const name = document.createElement("span");
             name.id = "name-" + module["Module code"];
             name.classList.add("module-name");
+            const link = document.createElement("a");
+            link.innerHTML = "<i class=\"fa fa-info-circle\" " +
+              "title=\"Module proforma\"></i>"
+            link.href = moduleURL(module["Module code"], level);
+            link.target = "_blank";
+            link.classList.add("module-link");
             text.classList.add("module-text");
+            code.appendChild(link);
             text.appendChild(name);
             text.appendChild(code);
             box.appendChild(text);
