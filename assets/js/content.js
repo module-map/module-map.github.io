@@ -124,9 +124,11 @@ function handbook(code) {
 }
 
 function moduleURL(code, level) {
-  return "https://apps.dur.ac.uk/faculty.handbook/" +
-    Math.min(handbookYear(), parseInt(startYear.value) + level - 1)
-    + "/UG/module/" + code;
+  const year = Math.min(handbookYear(), parseInt(startYear.value) + level - 1)
+  return year < 2023 ? "https://apps.dur.ac.uk/faculty.handbook/" +
+    year + "/UG/module/" + code :
+    "https://www.durham.ac.uk/study/modules/undergraduate/" +
+    code.toLowerCase() + ".php";
 }
 
 function addModuleSpan(code) {
