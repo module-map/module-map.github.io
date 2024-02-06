@@ -496,7 +496,7 @@ function updateChoices() {
     initialized = true;
   }
   const permalink = ".?" +
-   ("year=" + startYear.value.match(/\b2\d{3}\b/)[0]) +
+   ("entry=" + startYear.value.match(/\b2\d{3}\b/)[0]) +
    ("&pathway=" + degree.value) +
    (maths.checked ? "&maths=A" : "") +
    (chem.checked ? "&chemistry=A" : "") +
