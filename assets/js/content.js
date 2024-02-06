@@ -80,7 +80,7 @@ function moduleChosen(code) {
     return hasMaths() ? true : moduleChosen("GEOL1061");
   }
   if (code == "Chemistry") {
-    return hasChemistry() ? true : moduleChosen("GEOL2171");
+    return hasChemistry();
   }
   if (code == "GEOG2XXX") {
     return $("[id^=GEOG2] > input").filter(":checked").length > 0;
@@ -661,15 +661,19 @@ async function updateParams() {
             null;
           var reqs = modReq ? modReq.split(requireOne ? "/" : "&") : null;
           if (reqs) {
+            if (requireOne && reqs.includes("Chemistry") && hasChemistry()) {
+              reqs = [];
+            } else {
               reqs = reqs.map(r => {
-              if (r == "Chemistry") {
-                return hasChemistry() ? undefined : "GEOL2171";
-              } else if (r == "Maths") {
-                return hasMaths() ? undefined : "GEOL1061";
-              }
+                if (r == "Chemistry") {
+                  return undefined;
+                } else if (r == "Maths") {
+                  return hasMaths() ? undefined : "GEOL1061";
+                }
 
-              return r;
-            }).filter(el => el !== undefined);
+                return r;
+              }).filter(el => el !== undefined);
+            }
             if (!reqs.length) {
               reqs = null;
               modReq = false;
