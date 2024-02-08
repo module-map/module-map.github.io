@@ -18,6 +18,21 @@ const maxESCredits = {
   CFG0: [80, 80, 100, 120]
 };
 
+const oc2020 = "Levels 2 &amp; 3 may include up to 20 credits " +
+  "from another department, or from the Level immediately above or below " +
+  " (not shown).";
+const otherCredits = {
+  F600: oc2020,
+  F630: oc2020,
+  F643: "Levels 2 &amp; 3 may include up to 40 credits from any department, " +
+    "of which 30 may be from the Level immediately above or below " +
+    " (not shown).",
+  F645: "Levels 2 &amp; 3 may include up to 20 credits from any department, " +
+    "or from the Level immediately above or below (not shown).",
+  F665: oc2020,
+  CFG0: "This must include modules from other departments (not shown)."
+};
+
 const palette = ["#68246D", "#FFD53A", "#00AEEF", "#BE1E2D", "#AFA961",
   "#CBA8B1", "#DACDA2", // sky: "#A5C8D0",
   "#B6AAA7", "#B3BDB1", // white: "#ffffff",
@@ -511,6 +526,9 @@ function updateChoices() {
 }
 
 async function updateParams() {
+  // Update other credits note
+  $("#other-credits").html(otherCredits[degree.value]);
+
   // Reset box classes
   const regex = /requires\-[A-Z]{4}\d+/;
   $(".module-box").each(function () {
