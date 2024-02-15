@@ -763,16 +763,13 @@ async function updateParams() {
                 available = false;
               }
               modules[code].req = reqs.filter(modAvailable);
-
-              // If any requisites are compulsory, we can ignore others
-              if (reqs.some(mandatory)) {
-                modules[code].req = reqs.filter(mandatory);
-              }
             }
-            if (available) mod.req.forEach(function (req) {
-              mod.box.classList.add("requires-" + req);
-              requisite[req] = true;
-            })
+            if (available && !reqs.some(mandatory)) {
+              mod.req.forEach(function (req) {
+                mod.box.classList.add("requires-" + req);
+                requisite[req] = true;
+              })
+            }
 
           }
           modules[code].available = available;
@@ -850,14 +847,6 @@ async function updateParams() {
       $(".requires-Maths").addClass("requires-GEOL1061");
     }
     delete requisite.Maths;
-  }
-
-  if (requisite.Chemistry) {
-    if (!hasChemistry()) {
-      requisite.GEOL2171 = true;
-      $(".requires-Chemistry").addClass("requires-GEOL2171");
-    }
-    delete requisite.Chemistry;
   }
 
   // Rewrite "Two of" requirements
