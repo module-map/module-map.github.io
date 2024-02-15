@@ -764,7 +764,7 @@ async function updateParams() {
               }
               modules[code].req = reqs.filter(modAvailable);
             }
-            if (available && !reqs.some(mandatory)) {
+            if (available) {
               mod.req.forEach(function (req) {
                 mod.box.classList.add("requires-" + req);
                 requisite[req] = true;
