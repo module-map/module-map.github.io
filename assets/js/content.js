@@ -147,7 +147,9 @@ function moduleURL(code, level) {
 }
 
 function addModuleSpan(code) {
-  if (code == "GEOG2XXX") {
+  if (code == "Chemistry") {
+    return toolTipText(code);
+  } else if (code == "GEOG2XXX") {
     return "<span onmouseover=\"pulse(\'[id^=GEOG2]\')\" " +
       "onmouseout=\"depulse(\'[id^=GEOG2]\')\"><a href=\"" +
       handbook("GEOG2") +
@@ -271,6 +273,12 @@ function mandatory(code) {
 function moduleCompare(a, b) {
   const idA = typeof(a) === "string" ? a : a.id;
   const idB = typeof(b) === "string" ? b : b.id;
+  if (idA == "Chemistry") {
+    return 1;
+  } else if (idB == "Chemistry") {
+    return -1;
+  }
+
   const ma = modules[idA];
   const mb = modules[idB];
   if (ma === undefined) {
@@ -314,6 +322,7 @@ function selector(code) {
 
 function highlight(code) {
   if (code == "ARCH2XXX") return;
+  if (code == "Chemistry") return;
   const $box = $(selector(code));
   if ($box.length == 0) {
     console.error("No modules match selector " + selector(code));
@@ -338,7 +347,9 @@ function unlight(code) {
 }
 
 function toolTipText(code) {
-  if (code.match("2XXX")) {
+  if (code == "Chemistry") {
+    return "A-level Chemistry @ Grade B+";
+  } else if (code.match("2XXX")) {
     return ("L2 " + code.replace("2XXX", "") + " module");
   }
   return code;
@@ -681,13 +692,9 @@ async function updateParams() {
             null;
           var reqs = modReq ? modReq.split(requireOne ? "/" : "&") : null;
           if (reqs) {
-            if (requireOne && reqs.includes("Chemistry") && hasChemistry()) {
-              reqs = [];
-            } else {
+            if (!requireOne) {
               reqs = reqs.map(r => {
-                if (r == "Chemistry") {
-                  return undefined;
-                } else if (r == "Maths") {
+                if (r == "Maths") {
                   return hasMaths() ? undefined : "GEOL1061";
                 }
 
@@ -873,7 +880,8 @@ async function updateParams() {
 
   // Now that all requirements are established, paint sides
   for (var req in requisite) {
-    if (modAvailable(req) && !mandatory(req) && req != "ARCH2XXX") {
+    if (modAvailable(req) && !mandatory(req) &&
+     !["Chemistry", "ARCH2XXX"].includes(req)) {
       paintSide("#" +
         (req == "GEOG2XXX" ?
           Object.keys(modules)
