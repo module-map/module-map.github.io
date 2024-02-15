@@ -357,14 +357,16 @@ function updateChoices() {
       if (modules.hasOwnProperty(code)) {
         const mod = modules[code];
         if (mod.level == level) {
+          // Reset hover-pulsation
+          $(mod.box).off("mouseover");
+          $(mod.box).off("mouseout");
+
           // Check requisites
           if (mod.req) {
             const missing = mod.req
               .filter(modAvailable)
               .filter(m => !moduleChosen(m))
               .sort(moduleCompare);
-            $(mod.box).off("mouseover");
-            $(mod.box).off("mouseout");
             $(mod.box).mouseover(function() {missing.forEach(highlight);});
             $(mod.box).mouseout(function() {missing.forEach(unlight);});
             if (mod.allReqs) {
