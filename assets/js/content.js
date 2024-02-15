@@ -755,6 +755,7 @@ async function updateParams() {
                 }
               }
             } else {
+              // If no requisites are available, neither is this module
               if (!reqs.some(modAvailable) && reqs.every(x => !x.match("XXX"))) {
                 if (log) {
                   console.log(reqs);
@@ -762,6 +763,11 @@ async function updateParams() {
                 available = false;
               }
               modules[code].req = reqs.filter(modAvailable);
+
+              // If any requisites are compulsory, we can ignore others
+              if (reqs.some(mandatory)) {
+                modules[code].req = reqs.filter(mandatory);
+              }
             }
             if (available) mod.req.forEach(function (req) {
               mod.box.classList.add("requires-" + req);
