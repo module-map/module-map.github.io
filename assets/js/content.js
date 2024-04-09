@@ -139,11 +139,39 @@ function handbook(code) {
 }
 
 function moduleURL(code, level) {
+  // Temporary redirects until module information pages are approved and
+  // available
+  let linkedCode;
+  switch(code) {
+    case "GEOL2AA7":
+      linkedCode = "GEOL1131";
+      break;
+    case "GEOL2317":
+    case "GEOL2347":
+      linkedCode = "GEOL2301";
+      break;
+    case "GEOL2FF7":
+    case "GEOL2MM7":
+      linkedCode = "GEOL2011";
+      break;
+    case "GEOL2327": linkedCode = "GEOL2291"; break;
+    case "GEOL2337": linkedCode = "GEOL3447"; break;
+    case "GEOL2357": linkedCode = "GEOL3407"; break;
+    case "GEOL3457":
+    case "GEOL4247":
+    case "GEOL4227":
+      linkedCode = "GEOL3051";
+      break;
+    default:
+      linkedCode = code;
+  }
+
+
   const year = Math.min(handbookYear(), parseInt(startYear.value) + level - 1)
   return year < 2023 ? "https://apps.dur.ac.uk/faculty.handbook/" +
-    year + "/UG/module/" + code :
+    year + "/UG/module/" + linkedCode :
     "https://www.durham.ac.uk/study/modules/undergraduate/" +
-    code.toLowerCase() + ".php";
+    linkedCode.toLowerCase() + ".php";
 }
 
 function addModuleSpan(code) {
