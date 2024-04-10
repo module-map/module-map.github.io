@@ -450,6 +450,9 @@ function updateChoices() {
               $(mod.box).addClass("cantdo")
             }
             mod.box.title = mod.name + "\nRequires A-level Maths @ Grade B+";
+          } else {
+            $(mod.box).removeClass("cantdo")
+            mod.box.title = mod.name;
           }
 
           if (mod.selected) {
