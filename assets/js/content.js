@@ -1,5 +1,7 @@
 "use strict";
-const log = false;
+const logUnavailable = false;
+const monitor = []; // e.g. ["GEOL1051", "GEOL1021", "GEOL1111"];
+const log = logUnavailable || monitor.length > 0;
 
 const minESCredits = {
   F600: [120, 100, 100, 120],
@@ -17,6 +19,7 @@ const maxESCredits = {
   F665: [120, 120, 120, 120],
   CFG0: [80, 80, 100, 120]
 };
+const mathsMods = ["GEOL1061", "GEOL1081"]
 
 const oc2020 = "Levels 2 &amp; 3 may include up to 20 credits " +
   "from another department, or from the Level immediately above or below " +
@@ -294,8 +297,7 @@ function makeRequired(box, req = true, update = true) {
 }
 
 function mandatory(code) {
-  return modules.hasOwnProperty(code) &&
-    modules[code].box.classList.contains("required");
+  return modules.hasOwnProperty(code) && modules[code].mandatory;
 }
 
 function moduleCompare(a, b) {
@@ -399,6 +401,9 @@ function updateChoices() {
           // Reset hover-pulsation
           $(mod.box).off("mouseover");
           $(mod.box).off("mouseout");
+          if (monitor.includes(code)) {
+            console.log("Updating choices: " + code, mod);
+          }
 
           // Check requisites
           if (mod.req) {
@@ -415,10 +420,10 @@ function updateChoices() {
                     moduleSpan(code) + " requires " +
                     missing.map(addModuleSpan).join(" + "));
                 }
-                $(mod.box).addClass("cantdo")
+                $(mod.box).addClass("cantdo");
                 mod.box.title = mod.name + "\nRequires " + missing.join(" + ");
               } else {
-                $(mod.box).removeClass("cantdo")
+                $(mod.box).removeClass("cantdo");
                 mod.box.title = mod.name;
               }
             } else {
@@ -570,6 +575,12 @@ function updateChoices() {
 }
 
 async function updateParams() {
+  if (log) {
+    console.log("%cNew call to %cupdateParams()",
+    "font-size: larger; padding-top: 2em;",
+    "font-size: larger; color: cyan;")
+  }
+
   // Update other credits note
   $("#other-credits").html(otherCredits[degree.value]);
 
@@ -771,14 +782,17 @@ async function updateParams() {
             if (mod.allReqs) {
               if (!reqs.every(modAvailable)) {
                 if (log) {
-                  console.log(reqs);
+                  console.log(code + " %c" + mod.name + "%c needs all: %o",
+                  "color: grey;", "color: white", reqs);
                 }
                 available = false;
               }
               // Add requisites of any requisites
               for (const req of reqs) {
                 if (modules[req] === undefined) {
-                  console.warn(code + " requires unavailable module " + req)
+                  console.warn(code + " %c" + mod.name +
+                  "%c requires unavailable module " + req,
+                  "color: grey;", "color: white")
                   continue;
                 }
                 if (modules[req].allReqs) {
@@ -804,8 +818,15 @@ async function updateParams() {
               }
               modules[code].req = reqs.filter(modAvailable);
             }
+            if (monitor.includes(code)) {
+              console.log("%c" + code, "font-size: large", reqs);
+              console.log("%o, %o, %o", available, mod.allReqs, !reqs.some(mandatory));
+            }
             if (available && (mod.allReqs || !reqs.some(mandatory))) {
               mod.req.forEach(function (req) {
+                if (monitor.includes(code)) {
+                  console.log("%cAdding req %o", "font-size: large", req);
+                }
                 mod.box.classList.add("requires-" + req);
                 requisite[req] = true;
               })
@@ -833,6 +854,9 @@ async function updateParams() {
         });
 
         // Update box visibility
+        if (logUnavailable) {
+          console.group("Unavailable at Level " + level + ":");
+        }
         thisLevel.forEach(module => {
           const code = module["Module code"];
           const mod = modules[code];
@@ -845,12 +869,14 @@ async function updateParams() {
               setTerm(box, "mich")
             }
           }
+          modules[code].mandatory = mod.required == "X";
           makeRequired(box, mod.required == "X", false)
-          if (log && !modules[code].available) {
-            console.log("Unavailable: " + code + " " + mod.name);
+          if (logUnavailable && !modules[code].available) {
+            console.log(code + " %c" + mod.name, "color: grey;");
           };
           makeAvailable(box, modules[code].available, false)
         })
+        if (logUnavailable) console.groupEnd();
       })
       .catch(error => {
         console.error(error);
@@ -863,6 +889,7 @@ async function updateParams() {
   const requiredMods = Object.keys(modules)
     .filter(code => modules[code].required == "X");
 
+  if (log) console.group("%cExcluded:", "color: yellow;");
   for (const code in modules) {
     // Reset side paint
     $("#" + code).css("box-shadow", "none");
@@ -871,14 +898,16 @@ async function updateParams() {
     // Check module is not excluded by required combination
     if (requiredMods.some(i => modules[code].excludes.some(j => i == j))) {
       if (log) {
-        console.log("Excluded: " + code);
+        console.log("%c" + code + " %c" + modules[code].name,
+         "color: yellow;", "color: grey");
       }
-      if (code != "GEOL1061" && code != "GEOL1081") {
+      if (!mathsMods.includes(code)) {
         // Always display maths so students can see what they are missing
         makeAvailable(modules[code].box, false, false);
       }
     }
   }
+  if (log) console.groupEnd();
 
   var n = 0;
   if (requisite.Maths) {
@@ -901,6 +930,7 @@ async function updateParams() {
     Object.entries(chooseFrom).map(([i, el]) => {
       const filtered = el.filter(modAvailable).sort(moduleCompare);
       if (filtered.length == 1) {
+        modules[filtered].mandatory = true;
         makeRequired(modules[filtered].box, true, false);
         return undefined;
       }
@@ -909,8 +939,17 @@ async function updateParams() {
     .filter(entry => entry !== undefined)
   );
 
+  if (log) {
+    console.log("Requisites: %o", requisite)
+  }
   // Now that all requirements are established, paint sides
   for (var req in requisite) {
+    if (logUnavailable || monitor.includes(req)) {
+      console.log(req + ": " +
+          (modAvailable(req) ? "Available" : "Unavailable") + ", " +
+              (mandatory(req) ? "Mandatory" : "Optional"));
+    }
+
     if (modAvailable(req) && !mandatory(req) &&
      !["Chemistry", "ARCH2XXX"].includes(req)) {
       paintSide("#" +
