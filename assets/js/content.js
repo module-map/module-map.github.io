@@ -790,11 +790,17 @@ async function updateParams() {
             // Check module's requisites are available
             if (mod.allReqs) {
               if (!reqs.every(modAvailable)) {
-                if (log) {
+                if (monitor.includes(code)) {
                   console.log(code + " %c" + mod.name + "%c needs all: %o",
                   "color: grey;", "color: white", reqs);
+                  console.log(reqs)
                 }
-                available = false;
+                if (reqs.filter(m => !mathsMods.includes(m)).every(modAvailable)) {
+                  modules[code].req = ["GEOL1081"];
+                  available = true;
+                } else {
+                  available = false;
+                }
               }
               // Add requisites of any requisites
               for (const req of reqs) {
@@ -820,16 +826,16 @@ async function updateParams() {
             } else {
               // If no requisites are available, neither is this module
               if (!reqs.some(modAvailable) && reqs.every(x => !x.match("XXX"))) {
-                if (log) {
-                  console.log(reqs);
-                }
+                if (monitor.includes(code)) {
+                    console.log(code + " %c" + mod.name +
+                    "%c is %cunavailable%c; it needs: %o",
+                    "color: grey;", "color: white",
+                    "color: red;", "color: white",
+                     reqs);
+                  }
                 available = false;
               }
               modules[code].req = reqs.filter(modAvailable);
-            }
-            if (monitor.includes(code)) {
-              console.log("%c" + code, "font-size: large", reqs);
-              console.log("%o, %o, %o", available, mod.allReqs, !reqs.some(mandatory));
             }
             if (available && (mod.allReqs || !reqs.some(mandatory))) {
               mod.req.forEach(function (req) {
@@ -880,10 +886,12 @@ async function updateParams() {
           }
           modules[code].mandatory = mod.required == "X";
           makeRequired(box, mod.required == "X", false)
-          if (logUnavailable && !modules[code].available) {
-            console.log(code + " %c" + mod.name, "color: grey;");
+          if ((logUnavailable || monitor.includes(code)) &&
+              !modules[code].available) {
+            console.log(code + " %c" + mod.name + " is %cunavailable",
+             "color: grey;", "color: red");
           };
-          makeAvailable(box, modules[code].available, false)
+          makeAvailable(box, modules[code].available, false);
         })
         if (logUnavailable) console.groupEnd();
       })
@@ -898,7 +906,10 @@ async function updateParams() {
   const requiredMods = Object.keys(modules)
     .filter(code => modules[code].required == "X");
 
-  if (log) console.group("%cExcluded:", "color: yellow;");
+  if (log) {
+    console.log("Required modules:", requiredMods)
+    console.group("%cExcluded:", "color: yellow;");
+  }
   for (const code in modules) {
     // Reset side paint
     $("#" + code).css("box-shadow", "none");
@@ -908,7 +919,7 @@ async function updateParams() {
     if (requiredMods.some(i => modules[code].excludes.some(j => i == j))) {
       if (log) {
         console.log("%c" + code + " %c" + modules[code].name,
-         "color: yellow;", "color: grey");
+         "color: yellow;", "color: grey", modules[code].excludes);
       }
       if (!mathsMods.includes(code)) {
         // Always display maths so students can see what they are missing
