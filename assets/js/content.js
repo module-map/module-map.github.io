@@ -421,8 +421,17 @@ function updateChoices() {
                     missing.map(addModuleSpan).join(" + "));
                 }
                 $(mod.box).addClass("cantdo");
+                if (monitor.includes(code)) {
+                  console.log("Can't do " + code + "%c " + mod.name +
+                   "%c: not selected all reqs",
+                   "color: grey", "color: white;");
+                }
                 mod.box.title = mod.name + "\nRequires " + missing.join(" + ");
               } else {
+                if (monitor.includes(code)) {
+                  console.log("  %cCan do " + code + "%c " + mod.name,
+                   "color: green", "color: grey");
+                }
                 $(mod.box).removeClass("cantdo");
                 mod.box.title = mod.name;
               }
