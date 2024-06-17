@@ -133,7 +133,8 @@ function handbookYear() {
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth();
-  return currentMonth > 5 ? currentYear : currentYear - 1;
+  // Handbook goes online in June (month 5, counting from zero)
+  return currentMonth > 4 ? currentYear : currentYear - 1;
 }
 
 function handbook(code) {
@@ -171,7 +172,14 @@ function moduleURL(code, level) {
 
 
   const year = Math.min(handbookYear(), parseInt(startYear.value) + level - 1)
-  return year < 2023 ? "https://apps.dur.ac.uk/faculty.handbook/" +
+  
+  // Fancy new pages aren't populated promptly with new modules; 
+  // use the old pages for now.
+  return "https://apps.dur.ac.uk/faculty.handbook/" + year + "/UG/module/" +
+    linkedCode;
+  
+  // If the new pages eventually become useful:
+  return year <= handbookYear() ? "https://apps.dur.ac.uk/faculty.handbook/" +
     year + "/UG/module/" + linkedCode :
     "https://www.durham.ac.uk/study/modules/undergraduate/" +
     linkedCode.toLowerCase() + ".php";
