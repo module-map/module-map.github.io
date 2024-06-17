@@ -171,7 +171,7 @@ function moduleURL(code, level) {
   }
 
 
-  const year = Math.min(handbookYear(), parseInt(startYear.value) + level - 1)
+  const year = Math.min(handbookYear(), parseInt(startYear.value) + level - 1);
   
   // Fancy new pages aren't populated promptly with new modules; 
   // use the old pages for now.
@@ -697,7 +697,11 @@ async function updateParams() {
           const box = moduleExists ? modules[code].box :
                       document.createElement("div");
 
-          if (!moduleExists) {
+          if (moduleExists) {
+            $(box)
+              .find(".module-link")
+              .attr("href", moduleURL(module["Module code"], level));
+          } else {
             box.classList.add("module-box");
             box.setAttribute("id", module["Module code"]);
             if (module.Credits == 40) {
