@@ -106,7 +106,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2MM7",
+    "Module code": "GEOL2367",
     "Module name": "Structural Geology",
     "Level": 2,
     "Credits": 10,
@@ -163,7 +163,7 @@
     "Credits": 20,
     "F600": "X",
     "F645": "O",
-    "Requisites": "GEOL1051&GEOL2031&GEOL2MM7",
+    "Requisites": "GEOL1051&GEOL2031&GEOL2367",
     "Excluded Combn": "GEOL2241",
     "Mich": true,
     "Epip": true
