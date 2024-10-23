@@ -216,7 +216,7 @@
     "Module name": "Environmental Management",
     "Level": 3,
     "Credits": 20,
-    "F630": "E",
+    "F630": "X",
     "Mich": true,
     "Epip": true
   },
@@ -271,7 +271,7 @@
     "Module name": "Environmental Geochemistry",
     "Level": 3,
     "Credits": 20,
-    "F630": "G",
+    "F630": "X",
     "Requisites": "GEOL1111/GEOL2201/Chemistry",
     "Mich": true,
     "Epip": true

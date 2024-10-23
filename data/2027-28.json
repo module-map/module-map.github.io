@@ -29,7 +29,7 @@
   },
   {
     "Module code": "GEOL1061",
-    "Module name": "Mathematical Methods in Geosci",
+    "Module name": "Mathematical Methods in Geosciences",
     "Level": 1,
     "Credits": 20,
     "F600": "M",
@@ -230,16 +230,8 @@
     "Module name": "Environmental Management",
     "Level": 3,
     "Credits": 20,
-    "F630": "E",
+    "F630": "X",
     "Mich": true,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3417",
-    "Module name": "Habitable Environments (Astrobiology)",
-    "Level": 3,
-    "Credits": 10,
-    "Mich": false,
     "Epip": true
   },
   {
@@ -261,6 +253,16 @@
     "Requisites": "GEOL1081",
     "Mich": false,
     "Epip": true
+  },
+  {
+    "Module code": "GEOL3GG7",
+    "Module name": "Seismics",
+    "Level": 3,
+    "Credits": 10,
+    "F645": "O",
+    "F665": "D",
+    "Mich": true,
+    "Epip": false
   },
   {
     "Module code": "GEOL3427",
@@ -285,15 +287,24 @@
     "Module name": "Environmental Geochemistry",
     "Level": 3,
     "Credits": 20,
-    "F630": "G",
+    "F630": "X",
     "Requisites": "GEOL1111/GEOL2201/Chemistry",
     "Mich": true,
     "Epip": true
   },
   {
-    "Module code": "GEOL2317",
+    "Module code": "GEOL3AA1",
+    "Module name": "Modelling Earth Processes",
+    "Level": 3,
+    "Credits": 20,
+    "Requisites": "GEOL1081&GEOL1151",
+    "Mich": true,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL3CC7",
     "Module name": "Frontiers in Palaeontology",
-    "Level": 2,
+    "Level": 3,
     "Credits": 10,
     "Requisites": "GEOL2347",
     "Mich": false,
@@ -305,15 +316,6 @@
     "Level": 2,
     "Credits": 10,
     "F645": "X",
-    "Mich": false,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3BB7",
-    "Module name": "Advanced Geospatial Modelling",
-    "Level": 3,
-    "Credits": 10,
-    "Requisites": "GEOL2AA7",
     "Mich": false,
     "Epip": true
   },
@@ -611,6 +613,17 @@
     "Excluded Combn": "GEOL3327",
     "Mich": false,
     "Epip": true
+  },
+  {
+    "Module code": "GEOL4GG7",
+    "Module name": "Seismics IV",
+    "Level": 4,
+    "Credits": 10,
+    "F645": "O",
+    "F665": "D",
+    "Excluded Combn": "GEOL3GG7",
+    "Mich": true,
+    "Epip": false
   },
   {
     "Module code": "GEOL4221",
