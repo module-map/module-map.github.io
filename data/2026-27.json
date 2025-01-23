@@ -683,17 +683,6 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4FF7",
-    "Module name": "Geophysical Data Applications for the Workplace IV",
-    "Level": 4,
-    "Credits": 10,
-    "F665": "X",
-    "Requisites": "GEOL2327",
-    "Excluded Combn": "GEOL3AA7",
-    "Mich": true,
-    "Epip": false
-  },
-  {
     "Module code": "GEOL4207",
     "Module name": "Monitoring the Oceans: Geohazards & Climate Change IV",
     "Level": 4,
