@@ -649,7 +649,8 @@ async function updateParams() {
     }, {});
 
     const missedYear = level > 2 & yearOut.checked
-    await fetch(yearFile(startYear.value, (level - 1) + missedYear))
+    const yearJson = yearFile(startYear.value, (level - 1) + missedYear);
+    await fetch(yearJson)
       .then(response => {
         if (!response.ok) {
           throw new Error("Could not load data for year");
@@ -862,6 +863,78 @@ async function updateParams() {
           }
           modules[code].available = available;
         });
+        // Temporary hard-coding of MEP GEOL2251 workaround
+        // We want to display this L2 module as an L3 option in AY25/26
+        if (yearJson == "data/2025-26.json" && level == 3) {
+          console.log(modules);
+
+          const moduleExists = modules.hasOwnProperty("GEOL2251L3");
+          const box = moduleExists ? modules["GEOL2251L3"].box :
+                      document.createElement("div");
+
+          if (moduleExists) {
+            $(box)
+              .find(".module-link")
+              .attr("href", moduleURL("GEOL2251", 2));
+          } else {
+            box.classList.add("module-box");
+            box.setAttribute("id", "GEOL2251L3");
+            
+            const check = document.createElement("input");
+            check.type = "checkbox";
+            check.id = "checkGEOL2251L3";
+
+            box.appendChild(check);
+            box.addEventListener("click", function(e) {
+              if (e.srcElement != check && !check.disabled) {
+                check.checked = !check.checked;
+              }
+              choose(box, check.checked);
+              updateChoices();
+            })
+
+            const text = document.createElement("div");
+            const code = document.createElement("span");
+            code.innerHTML = "GEOL2251";
+            code.classList.add("module-code");
+            const name = document.createElement("span");
+            name.id = "name-GEOL2251L3";
+            name.innerHTML = "Modelling Earth Processes (L2)";
+            name.classList.add("module-name");
+            const link = document.createElement("a");
+            link.innerHTML = "<i class=\"fa fa-info-circle\" " +
+              "title=\"Module proforma\"></i>"
+            link.href = moduleURL("GEOL2251", 2);
+            link.target = "_blank";
+            link.classList.add("module-link");
+            text.classList.add("module-text");
+            code.appendChild(link);
+            text.appendChild(name);
+            text.appendChild(code);
+            box.appendChild(text);
+
+            levelCache.children(":nth-child(3)").append(box);
+          }
+
+          box.setAttribute("title", name);
+          modules["GEOL2251L3"] = {
+            available: true,
+            name: "Modelling Earth Processes (L2)",
+            required: false,
+            excludes: ["GEOL2251"],
+            credits: 20,
+            level: 3,
+            mich: true,
+            epip: true,
+            selected: (modules["GEOL2251L3"] &&
+             modules["GEOL2251L3"].selected) || false,
+            req: [],
+            allReqs: true,
+            box: box
+          };
+          
+          console.log(modules);
+        }
 
         // Pathway one-of requirement lists
         thisLevel
@@ -905,6 +978,16 @@ async function updateParams() {
           };
           makeAvailable(box, modules[code].available, false);
         })
+        
+        // Temporary hard-coding of MEP GEOL2251 workaround
+        // We want to display this L2 module as an L3 option in AY25/26
+        if (yearJson == "data/2025-26.json" && level == 3) {
+          const code = "GEOL2251L3";
+          const mod = modules[code];
+          const box = mod.box;
+          box.getElementsByTagName("input")[0].checked = mod.selected;
+          makeAvailable(box, modules[code].available, false);
+        }
         if (logUnavailable) console.groupEnd();
       })
       .catch(error => {
