@@ -310,7 +310,6 @@
     "Module name": "Geochemistry of the Earth",
     "Level": 3,
     "Credits": 10,
-    "F645": "O",
     "Requisites": "GEOL2231",
     "Mich": false,
     "Epip": true

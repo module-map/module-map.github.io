@@ -323,7 +323,6 @@
     "Module name": "Geochemical Evolution of the Earth",
     "Level": 3,
     "Credits": 10,
-    "F645": "O",
     "Requisites": "GEOL2231",
     "Mich": false,
     "Epip": true
@@ -637,7 +636,6 @@
     "Module name": "Geochemical Evolution of the Earth IV",
     "Level": 4,
     "Credits": 10,
-    "F645": "O",
     "Requisites": "GEOL2231",
     "Excluded Combn": "GEOL3467",
     "Mich": false,
