@@ -45,6 +45,7 @@
     "Module name": "Further Maths in Geosciences",
     "Level": 1,
     "Credits": 20,
+    "F665": "X",
     "Excluded Combn": "GEOL1061",
     "Mich": true,
     "Epip": true
