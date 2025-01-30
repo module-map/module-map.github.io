@@ -610,6 +610,17 @@
     "Epip": true
   },
   {
+    "Module code": "GEOL4111",
+    "Module name": "Environmental Geochemistry IV",
+    "Level": 4,
+    "Credits": 20,
+    "F630": "X",
+    "Requisites": "GEOL1111/GEOL2201/Chemistry",
+    "Excluded Combn": "GEOL3041",
+    "Mich": true,
+    "Epip": true
+  },
+  {
     "Module code": "GEOL4EE7",
     "Module name": "Earth System and Climate: Long-term Processes IV",
     "Level": 4,
