@@ -665,26 +665,6 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4221",
-    "Module name": "Volcanology and Magmatism IV",
-    "Level": 4,
-    "Credits": 20,
-    "F645": "O",
-    "Requisites": "GEOL2231",
-    "Excluded Combn": "GEOL3457,GEOL3051",
-    "Mich": true,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL4247",
-    "Module name": "Volcanic Hazards and Impacts IV",
-    "Level": 4,
-    "Credits": 10,
-    "Excluded Combn": "GEOL3051,GEOL3457",
-    "Mich": false,
-    "Epip": true
-  },
-  {
     "Module code": "GEOL4217",
     "Module name": "Polar Quaternary Env Proc IV",
     "Level": 4,
