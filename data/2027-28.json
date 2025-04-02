@@ -213,7 +213,7 @@
     "Epip": false
   },
   {
-    "Module code": "GEOL2AA7",
+    "Module code": "GEOL2387",
     "Module name": "Geoinformatics",
     "Level": 2,
     "Credits": 10,
@@ -225,7 +225,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3EE7",
+    "Module code": "GEOL3477",
     "Module name": "Environmental Management",
     "Level": 3,
     "Credits": 10,
@@ -291,9 +291,9 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3DD7",
+    "Module code": "GEOL2317",
     "Module name": "Frontiers in Palaeontology",
-    "Level": 3,
+    "Level": 2,
     "Credits": 10,
     "Requisites": "GEOL2347",
     "Mich": true,
@@ -309,7 +309,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3151",
+    "Module code": "GEOL3491",
     "Module name": "Earth Structure & Dynamics",
     "Level": 3,
     "Credits": 20,
@@ -624,7 +624,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4BB7",
+    "Module code": "GEOL4277",
     "Module name": "Groundwater Hydrology IV",
     "Level": 4,
     "Credits": 10,
@@ -633,7 +633,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4111",
+    "Module code": "GEOL4291",
     "Module name": "Environmental Geochemistry IV",
     "Level": 4,
     "Credits": 20,
@@ -654,14 +654,14 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4161",
+    "Module code": "GEOL4281",
     "Module name": "Earth Structure & Dynamics IV",
     "Level": 4,
     "Credits": 20,
     "F645": "O",
     "F665": "X",
     "Requisites": "GEOL1061/GEOL1081",
-    "Excluded Combn": "GEOL3151",
+    "Excluded Combn": "GEOL3491",
     "Mich": true,
     "Epip": true
   },
