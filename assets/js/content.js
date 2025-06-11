@@ -147,24 +147,9 @@ function moduleURL(code, level) {
   // available
   let linkedCode;
   switch(code) {
-    case "GEOL2AA7":
-      linkedCode = "GEOL1131";
-      break;
-    case "GEOL2317":
-    case "GEOL2347":
-      linkedCode = "GEOL2301";
-      break;
     case "GEOL2FF7":
     case "GEOL2MM7":
       linkedCode = "GEOL2011";
-      break;
-    case "GEOL2327": linkedCode = "GEOL2291"; break;
-    case "GEOL2337": linkedCode = "GEOL3447"; break;
-    case "GEOL2357": linkedCode = "GEOL3407"; break;
-    case "GEOL3457":
-    case "GEOL4247":
-    case "GEOL4227":
-      linkedCode = "GEOL3051";
       break;
     default:
       linkedCode = code;
