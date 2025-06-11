@@ -151,6 +151,8 @@ function moduleURL(code, level) {
     case "GEOL2MM7":
       linkedCode = "GEOL2011";
       break;
+    case "GEOL4DD7": linkedCode = "GEOL3407"; break;
+    case "GEOL4EE7": linkedCode = "GEOL3447"; break;
     default:
       linkedCode = code;
   }

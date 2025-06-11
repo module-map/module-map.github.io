@@ -79,19 +79,6 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL1151",
-    "Module name": "Introductory Data Science for Geoscientists",
-    "Level": 1,
-    "Credits": 20,
-    "F600": "X",
-    "F630": "X",
-    "F643": "X",
-    "F645": "X",
-    "F665": "X",
-    "Mich": true,
-    "Epip": true
-  },
-  {
     "Module code": "GEOL1141",
     "Module name": "Sustainability",
     "Level": 1,
@@ -105,15 +92,17 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2367",
-    "Module name": "Structural Geology",
-    "Level": 2,
-    "Credits": 10,
+    "Module code": "GEOL1151",
+    "Module name": "Introductory Data Science for Geoscientists",
+    "Level": 1,
+    "Credits": 20,
     "F600": "X",
-    "F645": "O",
-    "Requisites": "GEOL1101&GEOL1051",
+    "F630": "X",
+    "F643": "X",
+    "F645": "X",
+    "F665": "X",
     "Mich": true,
-    "Epip": false
+    "Epip": true
   },
   {
     "Module code": "GEOL2031",
@@ -125,14 +114,6 @@
     "Requisites": "GEOL1101",
     "Mich": true,
     "Epip": true
-  },
-  {
-    "Module code": "GEOL2347",
-    "Module name": "Ancient Life and its Environment",
-    "Level": 2,
-    "Credits": 10,
-    "Mich": true,
-    "Epip": false
   },
   {
     "Module code": "GEOL2081",
@@ -201,6 +182,24 @@
     "Epip": true
   },
   {
+    "Module code": "GEOL2251",
+    "Module name": "Modelling Earth Processes",
+    "Level": 2,
+    "Credits": 20,
+    "Requisites": "GEOL1151/MATH1587/COMP1051/PHYS1101",
+    "Mich": true,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL2317",
+    "Module name": "Frontiers in Palaeontology",
+    "Level": 2,
+    "Credits": 10,
+    "Requisites": "GEOL2347",
+    "Mich": true,
+    "Epip": false
+  },
+  {
     "Module code": "GEOL2327",
     "Module name": "Concepts in Geophysical Data Applications",
     "Level": 2,
@@ -210,6 +209,35 @@
     "Requisites": "GEOL1051&GEOL2081",
     "Mich": true,
     "Epip": false
+  },
+  {
+    "Module code": "GEOL2347",
+    "Module name": "Ancient Life and its Environment",
+    "Level": 2,
+    "Credits": 10,
+    "Mich": true,
+    "Epip": false
+  },
+  {
+    "Module code": "GEOL2367",
+    "Module name": "Structural Geology",
+    "Level": 2,
+    "Credits": 10,
+    "F600": "X",
+    "F645": "O",
+    "Requisites": "GEOL1101&GEOL1051",
+    "Mich": true,
+    "Epip": false
+  },
+  {
+    "Module code": "GEOL2377",
+    "Module name": "Tectonics",
+    "Level": 2,
+    "Credits": 10,
+    "F600": "X",
+    "F645": "O",
+    "Mich": false,
+    "Epip": true
   },
   {
     "Module code": "GEOL2387",
@@ -224,12 +252,78 @@
     "Epip": true
   },
   {
+    "Module code": "GEOL3041",
+    "Module name": "Environmental Geochemistry",
+    "Level": 3,
+    "Credits": 20,
+    "F630": "X",
+    "Requisites": "GEOL1111/GEOL2201/Chemistry",
+    "Mich": true,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL3051",
+    "Module name": "Volcanology and Magmatism",
+    "Level": 3,
+    "Credits": 20,
+    "F645": "O",
+    "Requisites": "GEOL2231",
+    "Excluded Combn": "GEOL3457",
+    "Mich": true,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL3251",
+    "Module name": "Earth Sciences into Schools",
+    "Level": 3,
+    "Credits": 20,
+    "Mich": true,
+    "Epip": true
+  },
+  {
     "Module code": "GEOL3281",
     "Module name": "Environmental Management",
     "Level": 3,
     "Credits": 20,
     "F630": "X",
     "Mich": true,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL3357",
+    "Module name": "Tectonic Processes and Renewable Geo-resources",
+    "Level": 3,
+    "Credits": 10,
+    "F645": "O",
+    "Requisites": "GEOL2367/GEOL2011",
+    "Mich": false,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL3367",
+    "Module name": "Western Alps: Subduction Zone",
+    "Level": 3,
+    "Credits": 10,
+    "F645": "O",
+    "Requisites": "GEOL2231",
+    "Mich": true,
+    "Epip": false
+  },
+  {
+    "Module code": "GEOL3377",
+    "Module name": "Monitoring the Oceans: Geohazards & Climate Change",
+    "Level": 3,
+    "Credits": 10,
+    "F665": "X",
+    "Mich": true,
+    "Epip": false
+  },
+  {
+    "Module code": "GEOL3387",
+    "Module name": "Atmospheric Circulation & Dynamics",
+    "Level": 3,
+    "Credits": 10,
+    "Mich": false,
     "Epip": true
   },
   {
@@ -250,40 +344,11 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3357",
-    "Module name": "Tectonic Processes and Renewable Geo-resources",
+    "Module code": "GEOL3437",
+    "Module name": "Polar Quaternary Env Proc",
     "Level": 3,
     "Credits": 10,
-    "F645": "O",
-    "Requisites": "GEOL2367/GEOL2011",
-    "Mich": false,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3041",
-    "Module name": "Environmental Geochemistry",
-    "Level": 3,
-    "Credits": 20,
-    "F630": "X",
-    "Requisites": "GEOL1111/GEOL2201/Chemistry",
-    "Mich": true,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL2251",
-    "Module name": "Modelling Earth Processes",
-    "Level": 2,
-    "Credits": 20,
-    "Requisites": "GEOL1151/MATH1587/COMP1051/PHYS1101",
-    "Mich": true,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL2317",
-    "Module name": "Frontiers in Palaeontology",
-    "Level": 2,
-    "Credits": 10,
-    "Requisites": "GEOL2347",
+    "Requisites": "GEOL1101",
     "Mich": true,
     "Epip": false
   },
@@ -293,6 +358,24 @@
     "Level": 3,
     "Credits": 10,
     "F645": "X",
+    "Mich": false,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL3457",
+    "Module name": "Volcanic Hazards and Impacts",
+    "Level": 3,
+    "Credits": 10,
+    "Excluded Combn": "GEOL3051",
+    "Mich": false,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL3467",
+    "Module name": "Geochemical Evolution of the Earth",
+    "Level": 3,
+    "Credits": 10,
+    "Requisites": "GEOL2231",
     "Mich": false,
     "Epip": true
   },
@@ -308,95 +391,12 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2377",
-    "Module name": "Tectonics",
-    "Level": 2,
-    "Credits": 10,
-    "F600": "X",
-    "F645": "O",
-    "Mich": false,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3467",
-    "Module name": "Geochemical Evolution of the Earth",
-    "Level": 3,
-    "Credits": 10,
-    "Requisites": "GEOL2231",
-    "Mich": false,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3367",
-    "Module name": "Western Alps: Subduction Zone",
-    "Level": 3,
-    "Credits": 10,
-    "F645": "O",
-    "Requisites": "GEOL2231",
-    "Mich": true,
-    "Epip": false
-  },
-  {
-    "Module code": "GEOL3051",
-    "Module name": "Volcanology and Magmatism",
-    "Level": 3,
-    "Credits": 20,
-    "F645": "O",
-    "Requisites": "GEOL2231",
-    "Excluded Combn": "GEOL3457",
-    "Mich": true,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3457",
-    "Module name": "Volcanic Hazards and Impacts",
-    "Level": 3,
-    "Credits": 10,
-    "Excluded Combn": "GEOL3051",
-    "Mich": false,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3437",
-    "Module name": "Polar Quaternary Env Proc",
-    "Level": 3,
-    "Credits": 10,
-    "Requisites": "GEOL1101",
-    "Mich": true,
-    "Epip": false
-  },
-  {
-    "Module code": "GEOL3387",
-    "Module name": "Atmospheric Circulation & Dynamics",
-    "Level": 3,
-    "Credits": 10,
-    "Mich": false,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL3251",
-    "Module name": "Earth Sciences into Schools",
-    "Level": 3,
-    "Credits": 20,
-    "Mich": true,
-    "Epip": true
-  },
-  {
     "Module code": "GEOL3AA7",
     "Module name": "Geophysical Data Applications for the Workplace",
     "Level": 3,
     "Credits": 10,
     "F665": "X",
     "Requisites": "GEOL2327",
-    "Mich": true,
-    "Epip": false
-  },
-  {
-    "Module code": "GEOL3377",
-    "Module name": "Monitoring the Oceans: Geohazards & Climate Change",
-    "Level": 3,
-    "Credits": 10,
-    "F665": "X",
     "Mich": true,
     "Epip": false
   },
@@ -590,6 +590,36 @@
     "Epip": true
   },
   {
+    "Module code": "GEOL4291",
+    "Module name": "Environmental Geochemistry IV",
+    "Level": 4,
+    "Credits": 20,
+    "F630": "X",
+    "Requisites": "GEOL1111/GEOL2201/Chemistry",
+    "Excluded Combn": "GEOL3041",
+    "Mich": true,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL4207",
+    "Module name": "Monitoring the Oceans: Geohazards & Climate Change IV",
+    "Level": 4,
+    "Credits": 10,
+    "F665": "X",
+    "Excluded Combn": "GEOL3377",
+    "Mich": true,
+    "Epip": false
+  },
+  {
+    "Module code": "GEOL4267",
+    "Module name": "Atmospheric Circulation & Dynamics IV",
+    "Level": 4,
+    "Credits": 10,
+    "Excluded Combn": "GEOL3387",
+    "Mich": false,
+    "Epip": true
+  },
+  {
     "Module code": "GEOL4DD7",
     "Module name": "Earth System and Climate: The Quaternary IV",
     "Level": 4,
@@ -609,15 +639,14 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4291",
-    "Module name": "Environmental Geochemistry IV",
+    "Module code": "GEOL4217",
+    "Module name": "Polar Quaternary Env Proc IV",
     "Level": 4,
-    "Credits": 20,
-    "F630": "X",
-    "Requisites": "GEOL1111/GEOL2201/Chemistry",
-    "Excluded Combn": "GEOL3041",
+    "Credits": 10,
+    "Requisites": "GEOL1101",
+    "Excluded Combn": "GEOL3437",
     "Mich": true,
-    "Epip": true
+    "Epip": false
   },
   {
     "Module code": "GEOL4EE7",
@@ -626,6 +655,16 @@
     "Credits": 10,
     "F645": "X",
     "Excluded Combn": "GEOL3447",
+    "Mich": false,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL4257",
+    "Module name": "Geochemical Evolution of the Earth IV",
+    "Level": 4,
+    "Credits": 10,
+    "Requisites": "GEOL2231",
+    "Excluded Combn": "GEOL3467",
     "Mich": false,
     "Epip": true
   },
@@ -642,35 +681,6 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4257",
-    "Module name": "Geochemical Evolution of the Earth IV",
-    "Level": 4,
-    "Credits": 10,
-    "Requisites": "GEOL2231",
-    "Excluded Combn": "GEOL3467",
-    "Mich": false,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL4217",
-    "Module name": "Polar Quaternary Env Proc IV",
-    "Level": 4,
-    "Credits": 10,
-    "Requisites": "GEOL1101",
-    "Excluded Combn": "GEOL3437",
-    "Mich": true,
-    "Epip": false
-  },
-  {
-    "Module code": "GEOL4267",
-    "Module name": "Atmospheric Circulation & Dynamics IV",
-    "Level": 4,
-    "Credits": 10,
-    "Excluded Combn": "GEOL3387",
-    "Mich": false,
-    "Epip": true
-  },
-  {
     "Module code": "GEOL4AA7",
     "Module name": "Geophysical Data Applications for the Workplace IV",
     "Level": 4,
@@ -678,16 +688,6 @@
     "F665": "X",
     "Requisites": "GEOL2327",
     "Excluded Combn": "GEOL3AA7",
-    "Mich": true,
-    "Epip": false
-  },
-  {
-    "Module code": "GEOL4207",
-    "Module name": "Monitoring the Oceans: Geohazards & Climate Change IV",
-    "Level": 4,
-    "Credits": 10,
-    "F665": "X",
-    "Excluded Combn": "GEOL3377",
     "Mich": true,
     "Epip": false
   },
