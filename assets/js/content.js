@@ -4,7 +4,7 @@ const monitor = []; // e.g. ["GEOL1051", "GEOL1021", "GEOL1111"];
 const log = logUnavailable || monitor.length > 0;
 
 const minESCredits = {
-  F600: [120, 100, 100, 120],
+  F600: [100, 100, 100, 120],
   F630: [120, 100, 100, 120],
   F643: [120,  80,  80, 120],
   F645: [100, 100, 100, 120], // GEOG & ARCH modules included
