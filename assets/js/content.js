@@ -21,17 +21,15 @@ const maxESCredits = {
 };
 const mathsMods = ["GEOL1061", "GEOL1081"]
 
-const oc2020 = "Levels 2 &amp; 3 may include up to 20 credits " +
-  "from another department, or from the Level immediately above or below " +
-  " (not shown).";
+const oc2020 = "You may include up to 20 credits from any department, " + 
+  "including from the Level immediately above or below (not shown).";
 const otherCredits = {
   F600: oc2020,
   F630: oc2020,
   F643: "Levels 2 &amp; 3 may include up to 40 credits from any department, " +
     "of which 30 may be from the Level immediately above or below " +
     " (not shown).",
-  F645: "Levels 2 &amp; 3 may include up to 20 credits from any department, " +
-    "or from the Level immediately above or below (not shown).",
+  F645: oc2020,
   F665: oc2020,
   CFG0: "This must include modules from other departments (not shown)."
 };
