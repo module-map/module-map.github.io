@@ -145,8 +145,8 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2081",
-    "Module name": "Geophysical Methods for Geoscientists",
+    "Module code": "GEOL2CC1",
+    "Module name": "Geophysical Methods",
     "Level": 2,
     "Credits": 20,
     "F600": "O",
@@ -212,21 +212,19 @@
     "F600": "X",
     "F630": "X",
     "F643": "O",
-    "F645": "O",
     "F665": "B",
     "Requisites": "GEOL1101",
     "Mich": true,
     "Epip": true
   },
   {
-    "Module code": "GEOL2CC1",
+    "Module code": "GEOL2DD1",
     "Module name": "Environmental Geophysics",
     "Level": 2,
     "Credits": 20,
     "F600": "O",
     "F630": "X",
     "F643": "X",
-    "F645": "O",
     "F665": "B",
     "Requisites": "GEOL1051",
     "Mich": true,
@@ -243,15 +241,15 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3051",
+    "Module code": "GEOL3AA7",
     "Module name": "Volcanology and Magmatism",
     "Level": 3,
-    "Credits": 20,
+    "Credits": 10,
     "F645": "O",
     "Requisites": "GEOL2231",
     "Excluded Combn": "GEOL3457",
     "Mich": true,
-    "Epip": true
+    "Epip": false
   },
   {
     "Module code": "GEOL3251",
@@ -310,13 +308,13 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3407",
-    "Module name": "Earth System and Climate: The Quaternary",
+    "Module code": "GEOL3BB1",
+    "Module name": "Earth System and Climate",
     "Level": 3,
-    "Credits": 10,
+    "Credits": 20,
     "F645": "X",
     "Mich": true,
-    "Epip": false
+    "Epip": true
   },
   {
     "Module code": "GEOL3427",
@@ -334,15 +332,6 @@
     "Requisites": "GEOL1101",
     "Mich": true,
     "Epip": false
-  },
-  {
-    "Module code": "GEOL3447",
-    "Module name": "Earth System and Climate: Long-term Processes",
-    "Level": 3,
-    "Credits": 10,
-    "F645": "X",
-    "Mich": false,
-    "Epip": true
   },
   {
     "Module code": "GEOL3457",
@@ -383,12 +372,12 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3AA7",
+    "Module code": "GEOL3507",
     "Module name": "Geophysical Data Applications for the Workplace",
     "Level": 3,
     "Credits": 10,
     "F665": "X",
-    "Requisites": "GEOL2081",
+    "Requisites": "GEOL2327",
     "Mich": true,
     "Epip": false
   },
@@ -465,18 +454,6 @@
     "F630": "O",
     "F643": "O",
     "F645": "X",
-    "F665": "O",
-    "Mich": true,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOG2651",
-    "Module name": "Carbon and Biogeochemical Cycles",
-    "Level": 2,
-    "Credits": 20,
-    "F600": "O",
-    "F630": "O",
-    "F643": "O",
     "F665": "O",
     "Mich": true,
     "Epip": true
@@ -624,14 +601,14 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4DD7",
-    "Module name": "Earth System and Climate: The Quaternary IV",
+    "Module code": "GEOL4BB1",
+    "Module name": "Earth System and Climate IV",
     "Level": 4,
-    "Credits": 10,
+    "Credits": 20,
     "F645": "X",
-    "Excluded Combn": "GEOL3407",
+    "Excluded Combn": "GEOL3BB1",
     "Mich": true,
-    "Epip": false
+    "Epip": true
   },
   {
     "Module code": "GEOL4277",
@@ -651,16 +628,6 @@
     "Excluded Combn": "GEOL3437",
     "Mich": true,
     "Epip": false
-  },
-  {
-    "Module code": "GEOL4EE7",
-    "Module name": "Earth System and Climate: Long-term Processes IV",
-    "Level": 4,
-    "Credits": 10,
-    "F645": "X",
-    "Excluded Combn": "GEOL3447",
-    "Mich": false,
-    "Epip": true
   },
   {
     "Module code": "GEOL4257",
@@ -683,17 +650,6 @@
     "Excluded Combn": "GEOL3491",
     "Mich": true,
     "Epip": true
-  },
-  {
-    "Module code": "GEOL4FF7",
-    "Module name": "Geophysical Data Applications for the Workplace IV",
-    "Level": 4,
-    "Credits": 10,
-    "F665": "X",
-    "Requisites": "GEOL2081",
-    "Excluded Combn": "GEOL3AA7",
-    "Mich": true,
-    "Epip": false
   },
   {
     "Module code": "GEOL3022",
