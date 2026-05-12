@@ -88,7 +88,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2AA1",
+    "Module code": "GEOL2341",
     "Module name": "Research Skills for Geoscientists",
     "Level": 2,
     "Credits": 20,
@@ -127,8 +127,8 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2CC1",
-    "Module name": "Geophysical Methods",
+    "Module code": "GEOL2081",
+    "Module name": "Geophysical Methods for Geoscientists",
     "Level": 2,
     "Credits": 20,
     "F600": "O",
@@ -173,7 +173,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2BB1",
+    "Module code": "GEOL2351",
     "Module name": "Lithospheric Structure & Imaging",
     "Level": 2,
     "Credits": 20,
@@ -200,7 +200,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL2DD1",
+    "Module code": "GEOL2331",
     "Module name": "Environmental Geophysics",
     "Level": 2,
     "Credits": 20,
@@ -223,7 +223,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3AA7",
+    "Module code": "GEOL3527",
     "Module name": "Volcanology and Magmatism",
     "Level": 3,
     "Credits": 10,
@@ -279,7 +279,7 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3BB1",
+    "Module code": "GEOL3501",
     "Module name": "Earth System and Climate",
     "Level": 3,
     "Credits": 20,
@@ -348,7 +348,7 @@
     "Level": 3,
     "Credits": 10,
     "F665": "X",
-    "Requisites": "GEOL2327",
+    "Requisites": "GEOL2081/GEOL2327/GEOL2291",
     "Mich": true,
     "Epip": false
   },
@@ -560,12 +560,12 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4DD1",
+    "Module code": "GEOL4141",
     "Module name": "Earth System and Climate IV",
     "Level": 4,
     "Credits": 20,
     "F645": "X",
-    "Excluded Combn": "GEOL3BB1",
+    "Excluded Combn": "GEOL3501",
     "Mich": true,
     "Epip": true
   },

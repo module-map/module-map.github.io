@@ -391,12 +391,12 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3AA7",
+    "Module code": "GEOL3507",
     "Module name": "Geophysical Data Applications for the Workplace",
     "Level": 3,
     "Credits": 10,
     "F665": "X",
-    "Requisites": "GEOL2327",
+    "Requisites": "GEOL2081&(GEOL2327/GEOL2291)",
     "Mich": true,
     "Epip": false
   },
