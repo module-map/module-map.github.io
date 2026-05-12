@@ -127,6 +127,43 @@ function depulse(selector) {
   $(selector).removeClass("pulsating");
 }
 
+// Parse a Requisites string into an array of clauses.
+// Each clause is an OR group (at least one must be chosen).
+// All clauses must be satisfied (AND logic between them).
+// Formats supported:
+//   "GEOL2081"                    → [["GEOL2081"]]
+//   "GEOL2327/GEOL2291"           → [["GEOL2327", "GEOL2291"]]  (either)
+//   "GEOL2081&GEOL2291"           → [["GEOL2081"], ["GEOL2291"]] (both)
+//   "(GEOL2327/GEOL2291)&GEOL2081"→ [["GEOL2327","GEOL2291"], ["GEOL2081"]]
+function parseRequisites(modReq) {
+  if (!modReq) return null;
+  const clauses = [];
+  let depth = 0, current = "";
+  for (const ch of modReq) {
+    if (ch === "(") { depth++; current += ch; }
+    else if (ch === ")") { depth--; current += ch; }
+    else if (ch === "&" && depth === 0) {
+      clauses.push(current.trim());
+      current = "";
+    } else {
+      current += ch;
+    }
+  }
+  if (current.trim()) clauses.push(current.trim());
+  const result = clauses.map(clause =>
+    clause.replace(/^\(|\)$/g, "").split("/").map(s => s.trim())
+  );
+  return result.length ? result : null;
+}
+
+function clauseSatisfied(clause) {
+  return clause.some(moduleChosen);
+}
+
+function clauseAvailable(clause) {
+  return clause.some(modAvailable);
+}
+
 function handbookYear() {
   const today = new Date();
   const currentYear = today.getFullYear();
@@ -400,48 +437,51 @@ function updateChoices() {
 
           // Check requisites
           if (mod.req) {
-            const missing = mod.req
-              .filter(modAvailable)
-              .filter(m => !moduleChosen(m))
-              .sort(moduleCompare);
-            $(mod.box).mouseover(function() {missing.forEach(highlight);});
-            $(mod.box).mouseout(function() {missing.forEach(unlight);});
-            if (mod.allReqs) {
-              if (!mod.req.every(moduleChosen)) {
-                if (mod.selected) {
-                  addNote(note,
-                    moduleSpan(code) + " requires " +
-                    missing.map(addModuleSpan).join(" + "));
+            // Clauses not yet satisfied by chosen modules
+            const unsatisfied = mod.req.filter(clause => !clauseSatisfied(clause));
+            // All missing modules across unsatisfied clauses (for hover highlight)
+            const missingMods = [...new Set(
+              unsatisfied.flatMap(clause => clause.filter(modAvailable))
+            )].sort(moduleCompare);
+            $(mod.box).mouseover(function() { missingMods.forEach(highlight); });
+            $(mod.box).mouseout(function() { missingMods.forEach(unlight); });
+
+            function fmtClause(clause, spanFn) {
+              const opts = clause.filter(modAvailable);
+              if (!opts.length) return null;
+              return opts.length === 1
+                ? spanFn(opts[0])
+                : "(" + opts.map(spanFn).join(" or ") + ")";
+            }
+
+            if (unsatisfied.length > 0) {
+              if (mod.selected) {
+                const clauseStr = unsatisfied
+                  .map(c => fmtClause(c, addModuleSpan))
+                  .filter(s => s !== null)
+                  .join(" + ");
+                if (clauseStr) {
+                  addNote(note, moduleSpan(code) + " requires " + clauseStr);
                 }
-                $(mod.box).addClass("cantdo");
-                if (monitor.includes(code)) {
-                  console.log("Can't do " + code + "%c " + mod.name +
-                   "%c: not selected all reqs",
-                   "color: grey", "color: white;");
-                }
-                mod.box.title = mod.name + "\nRequires " + missing.join(" + ");
-              } else {
-                if (monitor.includes(code)) {
-                  console.log("  %cCan do " + code + "%c " + mod.name,
-                   "color: green", "color: grey");
-                }
-                $(mod.box).removeClass("cantdo");
-                mod.box.title = mod.name;
               }
+              $(mod.box).addClass("cantdo");
+              if (monitor.includes(code)) {
+                console.log("Can't do " + code + "%c " + mod.name +
+                  "%c: unsatisfied clauses %o", "color: grey", "color: white;",
+                  unsatisfied);
+              }
+              const tooltipStr = mod.req
+                .map(c => fmtClause(c, toolTipText))
+                .filter(s => s !== null)
+                .join(" + ");
+              mod.box.title = mod.name + (tooltipStr ? "\nRequires " + tooltipStr : "");
             } else {
-              if (!mod.req.some(moduleChosen)) {
-                if (mod.selected) {
-                  addNote(note,
-                    moduleSpan(code) + " requires " +
-                    missing.map(addModuleSpan).join(" or "));
-                }
-                $(mod.box).addClass("cantdo")
-                mod.box.title = mod.name + "\nRequires " +
-                  missing.map(toolTipText).join(" or ");
-              } else {
-                $(mod.box).removeClass("cantdo")
-                mod.box.title = mod.name;
+              if (monitor.includes(code)) {
+                console.log("  %cCan do " + code + "%c " + mod.name,
+                  "color: green", "color: grey");
               }
+              $(mod.box).removeClass("cantdo");
+              mod.box.title = mod.name;
             }
           } else if (code == "GEOL1061") {
             if (hasMaths()) {
@@ -735,26 +775,7 @@ async function updateParams() {
           $("#name-" + code).html(name);
 
           // Mark module requirements
-          var modReq = module.Requisites;
-          const requireOne = modReq ?
-            modReq.includes("/") || modReq.includes("XXX") :
-            null;
-          var reqs = modReq ? modReq.split(requireOne ? "/" : "&") : null;
-          if (reqs) {
-            if (!requireOne) {
-              reqs = reqs.map(r => {
-                if (r == "Maths") {
-                  return hasMaths() ? undefined : "GEOL1061";
-                }
-
-                return r;
-              }).filter(el => el !== undefined);
-            }
-            if (!reqs.length) {
-              reqs = null;
-              modReq = false;
-            }
-          }
+          const reqs = parseRequisites(module.Requisites);
 
           const selected = (modules[code] &&
              modules[code].selected &&
@@ -772,7 +793,6 @@ async function updateParams() {
             epip: module.Epip,
             selected: selected,
             req: reqs,
-            allReqs: requireOne ? false : true,
             box: box
           }
         });
@@ -785,66 +805,72 @@ async function updateParams() {
 
           const reqs = mod.req;
           if (reqs !== null) {
-            // Check module's requisites are available
-            if (mod.allReqs) {
-              if (!reqs.every(modAvailable)) {
-                if (monitor.includes(code)) {
-                  console.log(code + " %c" + mod.name + "%c needs all: %o",
-                  "color: grey;", "color: white", reqs);
-                  console.log(reqs)
-                }
-                if (reqs.filter(m => !mathsMods.includes(m)).every(modAvailable)) {
-                  modules[code].req = ["GEOL1081"];
-                  available = true;
-                } else {
-                  available = false;
-                }
+            // A module is available only if every clause has at least one
+            // available option
+            if (!reqs.every(clauseAvailable)) {
+              if (monitor.includes(code)) {
+                console.log(code + " %c" + mod.name +
+                  "%c: clause(s) unavailable %o", "color: grey;", "color: white", reqs);
               }
-              // Add requisites of any requisites
-              for (const req of reqs) {
-                if (modules[req] === undefined) {
-                  console.warn(code + " %c" + mod.name +
-                  "%c requires unavailable module " + req,
-                  "color: grey;", "color: white")
-                  continue;
-                }
-                if (modules[req].allReqs) {
-                  let toAdd = modules[req].req;
-                  if (!toAdd) continue;
-                  if (typeof toAdd === "string") {
-                    toAdd = [toAdd];
-                  }
-
-                  const set1 = new Set(Array.isArray(mod.req) ? mod.req : [mod.req]);
-                  const set2 = new Set(Array.isArray(toAdd) ? toAdd : [toAdd]);
-                  const newReq = new Set([...set1, ...set2]);
-                  mod.req = [...newReq];
-                }
-              }
-            } else {
-              // If no requisites are available, neither is this module
-              if (!reqs.some(modAvailable) && reqs.every(x => !x.match("XXX"))) {
-                if (monitor.includes(code)) {
-                    console.log(code + " %c" + mod.name +
-                    "%c is %cunavailable%c; it needs: %o",
-                    "color: grey;", "color: white",
-                    "color: red;", "color: white",
-                     reqs);
-                  }
+              // Special case: if only maths clauses are unavailable,
+              // substitute GEOL1081
+              const nonMathsUnavailable = reqs.filter(clause =>
+                !clauseAvailable(clause) &&
+                !clause.every(m => mathsMods.includes(m))
+              );
+              if (nonMathsUnavailable.length === 0) {
+                modules[code].req = [["GEOL1081"]];
+                available = true;
+              } else {
                 available = false;
               }
-              modules[code].req = reqs.filter(modAvailable);
-            }
-            if (available && (mod.allReqs || !reqs.some(mandatory))) {
-              mod.req.forEach(function (req) {
-                if (monitor.includes(code)) {
-                  console.log("%cAdding req %o", "font-size: large", req);
-                }
-                mod.box.classList.add("requires-" + req);
-                requisite[req] = true;
-              })
             }
 
+            // Propagate transitive requisites for single-option (AND) clauses
+            const singleReqs = reqs
+              .filter(clause => clause.length === 1)
+              .map(clause => clause[0]);
+            for (const req of singleReqs) {
+              if (modules[req] === undefined) {
+                console.warn(code + " %c" + mod.name +
+                  "%c requires unavailable module " + req,
+                  "color: grey;", "color: white");
+                continue;
+              }
+              const reqReqs = modules[req].req;
+              if (reqReqs) {
+                const existingFlat = new Set(
+                  mod.req.filter(c => c.length === 1).map(c => c[0])
+                );
+                for (const clause of reqReqs.filter(c => c.length === 1)) {
+                  if (!existingFlat.has(clause[0])) {
+                    mod.req = [...mod.req, clause];
+                    existingFlat.add(clause[0]);
+                  }
+                }
+              }
+            }
+
+            // Filter each clause to only available options
+            modules[code].req = modules[code].req
+              .map(clause => clause.filter(modAvailable))
+              .filter(clause => clause.length > 0);
+
+            if (available) {
+              mod.req.forEach(function(clause) {
+                // Only paint requisite lines for clauses not already covered
+                // by a mandatory module
+                if (!clause.some(mandatory)) {
+                  clause.forEach(function(req) {
+                    if (monitor.includes(code)) {
+                      console.log("%cAdding req %o", "font-size: large", req);
+                    }
+                    mod.box.classList.add("requires-" + req);
+                    requisite[req] = true;
+                  });
+                }
+              });
+            }
           }
           modules[code].available = available;
         });
@@ -913,8 +939,7 @@ async function updateParams() {
             epip: true,
             selected: (modules["GEOL2251L3"] &&
              modules["GEOL2251L3"].selected) || false,
-            req: [],
-            allReqs: true,
+            req: null,
             box: box
           };
           
