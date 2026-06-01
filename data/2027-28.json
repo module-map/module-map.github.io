@@ -128,7 +128,7 @@
     "F630": "O",
     "F643": "O",
     "F645": "O",
-    "Requisites": "GEOL1051&GEOL2031&GEOL2BB1",
+    "Requisites": "GEOL1051&GEOL2031&GEOL2351",
     "Mich": true,
     "Epip": true
   },
@@ -377,7 +377,7 @@
     "Level": 3,
     "Credits": 10,
     "F665": "X",
-    "Requisites": "GEOL2CC1&(GEOL2327/GEOL2291)",
+    "Requisites": "GEOL2081&(GEOL2327/GEOL2291)",
     "Mich": true,
     "Epip": false
   },

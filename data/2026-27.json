@@ -110,7 +110,7 @@
     "F630": "O",
     "F665": "O",
     "F645": "O",
-    "Requisites": "GEOL1051&GEOL2031&GEOL2BB1",
+    "Requisites": "GEOL1051&GEOL2031&GEOL2351",
     "Mich": true,
     "Epip": true
   },
