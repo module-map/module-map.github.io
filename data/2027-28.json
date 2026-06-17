@@ -241,17 +241,6 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3527",
-    "Module name": "Volcanology and Magmatism",
-    "Level": 3,
-    "Credits": 10,
-    "F645": "O",
-    "Requisites": "GEOL2231",
-    "Excluded Combn": "GEOL3457",
-    "Mich": true,
-    "Epip": false
-  },
-  {
     "Module code": "GEOL3251",
     "Module name": "Earth Sciences into Schools",
     "Level": 3,
@@ -286,7 +275,7 @@
     "Level": 3,
     "Credits": 10,
     "F645": "O",
-    "Requisites": "GEOL2231",
+    "Requisites": "GEOL1051&GEOL2231",
     "Mich": true,
     "Epip": false
   },
@@ -308,20 +297,11 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3501",
-    "Module name": "Earth System and Climate",
-    "Level": 3,
-    "Credits": 20,
-    "F645": "X",
-    "Mich": true,
-    "Epip": true
-  },
-  {
     "Module code": "GEOL3437",
     "Module name": "Polar Quaternary Env Proc",
     "Level": 3,
     "Credits": 10,
-    "Requisites": "GEOL1101",
+    "Requisites": "GEOL2171/Chemistry",
     "Mich": true,
     "Epip": false
   },
@@ -364,12 +344,32 @@
     "Epip": true
   },
   {
+    "Module code": "GEOL3501",
+    "Module name": "Earth System and Climate",
+    "Level": 3,
+    "Credits": 20,
+    "F645": "X",
+    "Mich": true,
+    "Epip": true
+  },
+  {
     "Module code": "GEOL3507",
     "Module name": "Geophysical Data Applications for the Workplace",
     "Level": 3,
     "Credits": 10,
     "F665": "X",
     "Requisites": "GEOL2081&(GEOL2327/GEOL2291)",
+    "Mich": true,
+    "Epip": false
+  },
+  {
+    "Module code": "GEOL3527",
+    "Module name": "Volcanology and Magmatism",
+    "Level": 3,
+    "Credits": 10,
+    "F645": "O",
+    "Requisites": "GEOL2231",
+    "Excluded Combn": "GEOL3457",
     "Mich": true,
     "Epip": false
   },
@@ -593,21 +593,11 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL4141",
-    "Module name": "Earth System and Climate IV",
-    "Level": 4,
-    "Credits": 20,
-    "F645": "X",
-    "Excluded Combn": "GEOL3501",
-    "Mich": true,
-    "Epip": true
-  },
-  {
     "Module code": "GEOL4217",
     "Module name": "Polar Quaternary Env Proc IV",
     "Level": 4,
     "Credits": 10,
-    "Requisites": "GEOL1101",
+    "Requisites": "GEOL2171/Chemistry",
     "Excluded Combn": "GEOL3437",
     "Mich": true,
     "Epip": false
@@ -631,6 +621,16 @@
     "F665": "X",
     "Requisites": "GEOL1061/GEOL1081",
     "Excluded Combn": "GEOL3491",
+    "Mich": true,
+    "Epip": true
+  },
+  {
+    "Module code": "GEOL4141",
+    "Module name": "Earth System and Climate IV",
+    "Level": 4,
+    "Credits": 20,
+    "F645": "X",
+    "Excluded Combn": "GEOL3501",
     "Mich": true,
     "Epip": true
   },

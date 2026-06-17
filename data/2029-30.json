@@ -305,7 +305,7 @@
     "Level": 3,
     "Credits": 10,
     "F645": "O",
-    "Requisites": "GEOL2231",
+    "Requisites": "GEOL1051&GEOL2231",
     "Mich": true,
     "Epip": false
   },
@@ -340,7 +340,7 @@
     "Module name": "Polar Quaternary Env Proc",
     "Level": 3,
     "Credits": 10,
-    "Requisites": "GEOL1101",
+    "Requisites": "GEOL2171/Chemistry",
     "Mich": true,
     "Epip": false
   },
@@ -626,7 +626,7 @@
     "Module name": "Polar Quaternary Env Proc IV",
     "Level": 4,
     "Credits": 10,
-    "Requisites": "GEOL1101",
+    "Requisites": "GEOL2171/Chemistry",
     "Excluded Combn": "GEOL3437",
     "Mich": true,
     "Epip": false
