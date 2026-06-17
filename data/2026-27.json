@@ -288,14 +288,6 @@
     "Epip": true
   },
   {
-    "Module code": "GEOL3427",
-    "Module name": "Groundwater Hydrology",
-    "Level": 3,
-    "Credits": 10,
-    "Mich": false,
-    "Epip": true
-  },
-  {
     "Module code": "GEOL3437",
     "Module name": "Polar Quaternary Env Proc",
     "Level": 3,
@@ -567,15 +559,6 @@
     "F645": "X",
     "Excluded Combn": "GEOL3501",
     "Mich": true,
-    "Epip": true
-  },
-  {
-    "Module code": "GEOL4277",
-    "Module name": "Groundwater Hydrology IV",
-    "Level": 4,
-    "Credits": 10,
-    "Excluded Combn": "GEOL3427",
-    "Mich": false,
     "Epip": true
   },
   {
